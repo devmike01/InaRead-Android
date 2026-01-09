@@ -38,10 +38,7 @@ fun InaScaffold(inaScaffoldConfig: InaScaffoldConfig, content: @Composable (Padd
         topBar = {
             TopAppBar(
                 title = {
-                    Row(horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()) {
-                        inaScaffoldConfig.title.NullableText()
-                    }
+                    inaScaffoldConfig.title.NullableText()
                 },
                 navigationIcon = {
                     IconButton(onClick = inaScaffoldConfig.navigationClick,
@@ -54,6 +51,9 @@ fun InaScaffold(inaScaffoldConfig: InaScaffoldConfig, content: @Composable (Padd
                             contentDescription = "Go Back")
                     }
 
+                },
+                actions = {
+
                 }
             )
         }
@@ -65,7 +65,7 @@ fun InaScaffold(inaScaffoldConfig: InaScaffoldConfig, content: @Composable (Padd
 @Preview
 @Composable
 fun PreviewInaScaffold(){
-    InaScaffold(InaScaffoldConfig("Scaffold", navigationClick = {
+    InaScaffold(InaScaffoldConfig("Back", navigationClick = {
 
     })){
         Box(modifier = Modifier.padding(it))
