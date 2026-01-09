@@ -2,15 +2,17 @@ package dev.gbenga.inaread.ui.customs
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 
 
 @Composable
-fun String?.NullableText(){
+fun String?.NullableText(style: TextStyle= LocalTextStyle.current){
     this?.let {
-        Text(it)
+        Text(it, style = style)
     }
 }
 

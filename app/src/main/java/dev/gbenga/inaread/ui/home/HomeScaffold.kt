@@ -1,8 +1,9 @@
-package dev.gbenga.inaread.ui.customs
+package dev.gbenga.inaread.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,38 +20,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.gbenga.inaread.tokens.DimenTokens
+import dev.gbenga.inaread.ui.customs.NullableText
 
 
-data class InaScaffoldConfig(
+data class HomeScaffoldConfig(
     val title: String? = null,
-    val navigationClick: () -> Unit ={},
-    val actions: @Composable () -> Unit ={}
-    )
+    val navigationClick: () -> Unit
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InaScaffold(inaScaffoldConfig: InaScaffoldConfig, content: @Composable (PaddingValues) -> Unit) {
+fun HomeScaffold(inaScaffoldConfig: HomeScaffoldConfig, content: @Composable (PaddingValues) -> Unit) {
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    inaScaffoldConfig.title.NullableText()
-                },
-                navigationIcon = {
-                    IconButton(onClick = inaScaffoldConfig.navigationClick,
-                        modifier = Modifier
-                            .padding(DimenTokens.Padding.small)
-                            .border(width = 1.dp, MaterialTheme
-                                .colorScheme.primary.copy(alpha = .5f),
-                                RoundedCornerShape(DimenTokens.Radius.small))) {
-                        Icon(imageVector = Icons.Default.ChevronLeft,
-                            contentDescription = "Go Back")
+                    Column {
+                        inaScaffoldConfig.title.NullableText(
+                            style = MaterialTheme.typography.bodySmall
+                        )
                     }
-
                 },
                 actions = {
-                    inaScaffoldConfig.actions()
+
                 }
             )
         }
@@ -62,7 +55,7 @@ fun InaScaffold(inaScaffoldConfig: InaScaffoldConfig, content: @Composable (Padd
 @Preview
 @Composable
 fun PreviewInaScaffold(){
-    InaScaffold(InaScaffoldConfig("Back", navigationClick = {
+    HomeScaffold(HomeScaffoldConfig("Mon Jan, 2021", navigationClick = {
 
     })){
         Box(modifier = Modifier.padding(it).background(MaterialTheme.colorScheme.primary))
