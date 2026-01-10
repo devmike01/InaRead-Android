@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlin.serialization)
+    id("com.google.devtools.ksp") version "2.0.21-1.0.27" apply false
 }
 
 android {
@@ -9,6 +12,8 @@ android {
     compileSdk {
         version = release(36)
     }
+
+    packaging.resources.pickFirsts.add("META-INF/gradle/incremental.annotation.processors")
 
     defaultConfig {
         applicationId = "dev.gbenga.inaread"
@@ -42,10 +47,13 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.constraint.layout)
     implementation(libs.compose.icons.extention)
     implementation(libs.hilt.viewmodel)
     implementation(libs.hilt.navigation)
     implementation(libs.hilt.android)
+    implementation(libs.hilt.compiler)
+    implementation(libs.kotlinx.serialization)
     implementation(libs.androidx.camera2)
     implementation(libs.compose.viewmodel)
     implementation(libs.androidx.core.ktx)
