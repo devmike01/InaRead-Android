@@ -1,11 +1,14 @@
 package dev.gbenga.inaread.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import dev.gbenga.inaread.ui.customs.color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val Indigo800 = 0xFF283593.color()
+val Indigo400 = 0xFF5C6BC0.color()
+val Indigo700 = 0Xff303F9F.color()
+val Indigo300 = 0xFF7986CB.color()
+val Indigo200 = 0xFF7986CB.color()
+val Indigo100 = 0xffC5CAE9.color()
+val Indigo50 = 0XFFE8EAF6.color()
+val DeepOrange = 0xFFFF5722.color()
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
