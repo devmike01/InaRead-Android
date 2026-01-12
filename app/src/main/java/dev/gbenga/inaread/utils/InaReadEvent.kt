@@ -1,3 +1,4 @@
 package dev.gbenga.inaread.utils
 
-interface InaReadEvent
+
+interface InaReadUiState

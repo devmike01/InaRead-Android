@@ -1,11 +1,16 @@
 package dev.gbenga.inaread.ui.home
 
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-
 interface HomeStat {
 
     val reading: String
     val label: String
     val color: Long
+}
+
+class DefaultHomeStat(
+    override val reading: String ="",
+    override val label: String ="",
+    override val color: Long = 0L
+) : HomeStat{
+
 }

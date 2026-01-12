@@ -1,8 +1,6 @@
 package dev.gbenga.inaread.ui.home
 
-import java.net.IDN
-
-data class CalendarTileData(val month: String, val day: String, val dateInMillis: Long, val id: Int)
+data class CalendarTileData(val month: String, val day: String, val dateInMillis: Long, val selected: Boolean)
 
 internal object CalendarParamNames{
     const val ID = "id"
@@ -12,7 +10,7 @@ internal object CalendarParamNames{
 }
 
 fun CalendarTileData.asMap(): Map<String, Any>{
-    return mapOf(CalendarParamNames.ID to id,
+    return mapOf(CalendarParamNames.ID to selected,
         CalendarParamNames.MONTH to month,
         CalendarParamNames.DAY to day,
         CalendarParamNames.DAY_IN_MILLIS to dateInMillis)
@@ -20,4 +18,4 @@ fun CalendarTileData.asMap(): Map<String, Any>{
 
 
 
-typealias CalendarTileWeakDays = List<CalendarTileData>
+typealias CalendarTileWeekDays = List<CalendarTileData>

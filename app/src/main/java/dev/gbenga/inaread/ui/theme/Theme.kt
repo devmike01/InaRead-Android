@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -17,6 +18,8 @@ private val DarkColorScheme = darkColorScheme(
     tertiary = DeepOrange,
     surface = Indigo700,
     background = Indigo800,
+    primaryContainer = Indigo800,
+    surfaceVariant = Indigo700,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -25,6 +28,9 @@ private val LightColorScheme = lightColorScheme(
     tertiary = DeepOrange,
     surface = Indigo300,
     background = Indigo400,
+    primaryContainer = Indigo400,
+    surfaceVariant = Indigo300,
+
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -41,7 +47,7 @@ private val LightColorScheme = lightColorScheme(
 fun InaReadTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -57,6 +63,6 @@ fun InaReadTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }

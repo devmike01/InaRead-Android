@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Stable
 class CalendarTileState  {
 
-    private val _state = mutableStateOf(CalendarTileData("", "", 0L, -1))
+    private val _state = mutableStateOf(CalendarTileData("", "", 0L, false))
     var value by _state
         private set
     

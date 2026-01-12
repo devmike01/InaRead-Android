@@ -22,7 +22,7 @@ import dev.gbenga.inaread.tokens.DimenTokens
 import java.util.Locale
 
 @Composable
-fun HomeSummaryCard(cardItems: HomeSummaryCardItems) {
+fun HomeSummaryCard(cardItems: MeterUsageSummary) {
 
     Card {
         Row(horizontalArrangement = Arrangement.SpaceBetween,
@@ -39,7 +39,9 @@ fun HomeSummaryCard(cardItems: HomeSummaryCardItems) {
 
 @Composable
 fun HomeSummaryCardItem(data: HomeStat){
-    Column(modifier = Modifier.wrapContentSize().padding(DimenTokens.Padding.small),
+    Column(modifier = Modifier
+        .wrapContentSize()
+        .padding(DimenTokens.Padding.small),
         verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.xSmall),
         horizontalAlignment = Alignment.Start) {
         InaIcon(data = data)
@@ -54,15 +56,22 @@ fun HomeSummaryCardItem(data: HomeStat){
 @Composable
 fun InaIcon(data: HomeStat, modifier: Modifier = Modifier){
     when(data){
-        is ResIdIconItem -> Icon(painter = painterResource(data.icon),
-            contentDescription = data.label,
-            modifier = modifier,
-            tint = Color(data.color))
-        is VectorItem ->  Icon(imageVector = data.icon,
-            contentDescription = data.label,
-            modifier = modifier,
-            tint = Color(data.color)
-        )
+        is ResIdIconItem -> {
+            if (data.icon != null) { Icon(
+                    painter = painterResource(data.icon),
+                    contentDescription = data.label,
+                    modifier = modifier,
+                    tint = Color(data.color)
+                )
+            }
+        }
+        is VectorItem -> {
+            if (data.icon != null)  Icon(imageVector = data.icon,
+                contentDescription = data.label,
+                modifier = modifier,
+                tint = Color(data.color)
+            )
+        }
         else -> throw IllegalArgumentException("Unsupported version")
     }
 }

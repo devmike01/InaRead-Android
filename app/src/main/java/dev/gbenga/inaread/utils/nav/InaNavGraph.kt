@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.gbenga.inaread.ui.dashboard.DashboardScreenNavGraph
+import dev.gbenga.inaread.ui.theme.InaReadTheme
 import kotlinx.serialization.Serializable
 
 
@@ -51,5 +52,7 @@ fun InaNavGraph() {
 
 @Composable
 fun InaReadApp(){
-    InaNavGraph()
+    InaReadTheme {
+        InaNavGraph()
+    }
 }
