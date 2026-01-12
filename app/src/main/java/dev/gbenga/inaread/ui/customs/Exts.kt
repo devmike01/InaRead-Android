@@ -9,6 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import dev.gbenga.inaread.tokens.StringTokens
+import dev.gbenga.inaread.utils.UiState
 
 
 @Composable
@@ -26,6 +28,15 @@ fun IconConfig?.NullableIcon(){
             contentDescription = description
         )
     }
+}
+
+fun <T> Result<T>.toUiState(): UiState<T>{
+    return fold( onSuccess = {
+        UiState.Success(it)
+    },
+        onFailure = {
+            UiState.Error(it.message ?: StringTokens.UknownErrorOccured)
+        })
 }
 
 
