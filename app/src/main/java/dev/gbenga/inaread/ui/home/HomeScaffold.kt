@@ -21,6 +21,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +34,7 @@ import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.ui.customs.NullableText
 import dev.gbenga.inaread.ui.customs.VerticalCenter
+import dev.gbenga.inaread.ui.theme.Indigo800
 
 
 data class HomeScaffoldConfig(
@@ -46,6 +49,10 @@ fun HomeScaffold(inaScaffoldConfig: HomeScaffoldConfig, content: @Composable (Pa
     Scaffold(
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                ),
                 modifier = Modifier.height(DimenTokens.Size.topbar),
                 title = {
                     Column(
@@ -77,10 +84,10 @@ fun InitialComponent(initial: String){
         Box(modifier = Modifier.size(80.dp)
             .padding(DimenTokens.Padding.small)
             .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.tertiary)
         ) {
             initial.NullableText(modifier = Modifier.align(Alignment.Center),
-                style = MaterialTheme.typography.headlineMedium)
+                style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.W800))
         }
     }
 }
