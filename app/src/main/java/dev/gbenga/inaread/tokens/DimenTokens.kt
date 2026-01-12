@@ -28,13 +28,13 @@ object DimenTokens {
     }
 
     object Size {
-        val topbar = 100.dp
+        val topbar = 150.dp
     }
 
     object CalendarItem{
 
-        val height = 80.dp
-        val width = 70.dp
+        val height = 90.dp
+        val width = 80.dp
         val padding = 15.dp
         val outerPadding = 5.dp
     }
