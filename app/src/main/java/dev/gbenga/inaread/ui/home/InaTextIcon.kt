@@ -1,16 +1,16 @@
 package dev.gbenga.inaread.ui.home
 
-interface HomeStat {
+interface InaIcon {
 
-    val reading: String
+    val value: String
     val label: String
     val color: Long
 }
 
-class DefaultHomeStat(
-    override val reading: String ="",
+class DefaultInaIcon(
+    override val value: String ="",
     override val label: String ="",
     override val color: Long = 0L
-) : HomeStat{
+) : InaIcon{
 
 }
