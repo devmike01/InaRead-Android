@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.CandlestickChart
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.PieChartOutline
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,31 +23,30 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import dev.gbenga.inaread.data.model.MeterMonthlyStat
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.InaCard
 import dev.gbenga.inaread.ui.customs.color
 
 @Composable
-fun LifeTimeStats(lifeTimeReading: HomeStat,
-                  monthlyStat: HomeStat,
-                  costStat: HomeStat,
-                  chartData: List<Float>, modifier: Modifier = Modifier) {
+fun LifeTimeStats(meterMonthlyStat: MeterMonthlyStat, modifier: Modifier = Modifier) {
     ConstraintLayout(modifier = modifier.fillMaxWidth()) {
         val (lifetime, monthly, cost) = createRefs()
-        LifeTimeReadingCard(lifeTimeReading,
-            chartData,
+        LifeTimeReadingCard(meterMonthlyStat.lifeTimeReading,
+            meterMonthlyStat.chartData,
             modifier = Modifier.constrainAs(lifetime){
             start.linkTo(parent.start,)
         }.fillMaxWidth(.5f)
-                .fillMaxHeight(.5f))
+                .height(210.dp))
 
-        NoChartCard(monthlyStat, Modifier.constrainAs(monthly){
+        NoChartCard(meterMonthlyStat.monthlyStat,
+            Modifier.constrainAs(monthly){
             top.linkTo(parent.top)
             end.linkTo(parent.end,)
             start.linkTo(lifetime.end, margin = DimenTokens.Padding.normal)
         })
 
-        NoChartCard(costStat, Modifier
+        NoChartCard(meterMonthlyStat.costStat, Modifier
             .padding(vertical = DimenTokens.Padding.small).constrainAs(cost){
             end.linkTo(parent.end,)
             start.linkTo(lifetime.end, margin = DimenTokens.Padding.normal)
@@ -59,7 +57,7 @@ fun LifeTimeStats(lifeTimeReading: HomeStat,
 
 
 @Composable
-private fun NoChartCard(itemData: HomeStat,
+private fun NoChartCard(itemData: InaTextIcon,
                         modifier: Modifier = Modifier){
     InaCard(modifier = modifier) {
         ConstraintLayout(modifier = Modifier
@@ -72,7 +70,7 @@ private fun NoChartCard(itemData: HomeStat,
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
             }) {
-                Text(itemData.reading,
+                Text(itemData.value,
                     style = MaterialTheme.typography.headlineMedium
                         .copy(fontWeight = FontWeight.W600))
                 Text(itemData.label,
@@ -90,7 +88,7 @@ private fun NoChartCard(itemData: HomeStat,
 }
 
 @Composable
-fun LifeTimeReadingCard(lifeTimeReading: HomeStat,
+fun LifeTimeReadingCard(lifeTimeReading: InaTextIcon,
                         data: List<Float>,
                         modifier: Modifier = Modifier){
     InaCard(modifier = modifier) {
@@ -104,7 +102,7 @@ fun LifeTimeReadingCard(lifeTimeReading: HomeStat,
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         fontWeight = FontWeight.W700
                     )){
-                        append(lifeTimeReading.reading.padStart(2, '0').plus(" "))
+                        append(lifeTimeReading.value.padStart(2, '0').plus(" "))
                     }
                     append(lifeTimeReading.label)
                 }
@@ -114,8 +112,8 @@ fun LifeTimeReadingCard(lifeTimeReading: HomeStat,
             }
 
             LineChart(data,
-                lineColor = 0XFF00796B.color(),
-                fillColor = 0XFF4DB6AC.color(),
+                lineColor = MaterialTheme.colorScheme.tertiary,
+                fillColor = 0xFFFFF8A65.color(),
                 modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(.5f))
@@ -127,24 +125,26 @@ fun LifeTimeReadingCard(lifeTimeReading: HomeStat,
 @Preview
 @Composable
 fun PreviewLifeTimeReadingCard(){
-    LifeTimeStats(lifeTimeReading = VectorItem(
-        icon = Icons.Default.FavoriteBorder,
-        reading = "76",
-        label = "kWh",
-        color = 0XFF00796B,
-    ),
-        monthlyStat = VectorItem(
+    LifeTimeStats(MeterMonthlyStat(
+        lifeTimeReading = VectorInaTextIcon(
+            icon = Icons.Default.FavoriteBorder,
+            value = "76",
+            label = "kWh",
+            color = 0XFF00796B,
+        ),
+        monthlyStat = VectorInaTextIcon(
             icon = Icons.Default.BarChart,
-            reading = "76",
+            value = "76",
             label = "kWh",
             color = 0xFFAD1457,
         ),
-        costStat = VectorItem(
+        costStat = VectorInaTextIcon(
             icon = Icons.Default.CandlestickChart,
-            reading = "76",
+            value = "76",
             label = "kWh",
             color = 0xFF00796B,
         ),
         chartData = listOf(10f, 40f, 20f, 60f, 30f, 80f, 10f, 40f, 20f, 60f, 30f, 80f),
-    )
+
+        ))
 }

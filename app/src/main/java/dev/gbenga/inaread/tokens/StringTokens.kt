@@ -8,5 +8,13 @@ object StringTokens {
     const val Cost = "Cost"
     const val SelectADate = "Select a Date"
     const val MeterSummary = "Summary of Usage"
+    const val MonthlyUsageSummary = "Summary of Monthly Usage"
     const val UknownErrorOccured = "An unknown message has occurred"
+    const val UserNotAuthenticated = "User is not authenticated"
+
+    object Greetings{
+        const val GoodMorning = "morning \uD83C\uDF25\uFE0F!"
+        const val GoodAfternoon = "afternoon \uD83C\uDF1E!"
+        const val GoodEvening = "evening \uD83C\uDF19!"
+    }
 }

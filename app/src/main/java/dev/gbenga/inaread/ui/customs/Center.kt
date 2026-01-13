@@ -19,3 +19,14 @@ fun HorizontalCenter(modifier: Modifier= Modifier, content: @Composable () -> Un
         content()
     }
 }
+
+@Composable
+fun XYAxisCenter(modifier: Modifier = Modifier,
+                 content: @Composable () -> Unit) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier =modifier) {
+        content()
+    }
+}

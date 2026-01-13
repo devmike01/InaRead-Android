@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ElectricMeter
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,12 +18,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.gbenga.inaread.tokens.DimenTokens
+import dev.gbenga.inaread.ui.customs.InaCard
 import java.util.Locale
 
 @Composable
 fun HomeSummaryCard(cardItems: MeterUsageSummary) {
 
-    Card {
+    InaCard() {
         Row(horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .padding(DimenTokens.Padding.small)
@@ -38,7 +38,7 @@ fun HomeSummaryCard(cardItems: MeterUsageSummary) {
 
 
 @Composable
-fun HomeSummaryCardItem(data: HomeStat){
+fun HomeSummaryCardItem(data: InaTextIcon){
     Column(modifier = Modifier
         .wrapContentSize()
         .padding(DimenTokens.Padding.small),
@@ -46,7 +46,7 @@ fun HomeSummaryCardItem(data: HomeStat){
         horizontalAlignment = Alignment.Start) {
         InaIcon(data = data)
 
-        Text(data.reading.padStart(2, '0'),
+        Text(data.value.padStart(2, '0'),
             style = MaterialTheme.typography.headlineMedium,)
         Text(data.label, style = MaterialTheme.typography.bodySmall)
     }
@@ -54,9 +54,9 @@ fun HomeSummaryCardItem(data: HomeStat){
 
 
 @Composable
-fun InaIcon(data: HomeStat, modifier: Modifier = Modifier){
+fun InaIcon(data: InaTextIcon, modifier: Modifier = Modifier){
     when(data){
-        is ResIdIconItem -> {
+        is ResIdInaTextIcon -> {
             if (data.icon != null) { Icon(
                     painter = painterResource(data.icon),
                     contentDescription = data.label,
@@ -65,7 +65,7 @@ fun InaIcon(data: HomeStat, modifier: Modifier = Modifier){
                 )
             }
         }
-        is VectorItem -> {
+        is VectorInaTextIcon -> {
             if (data.icon != null)  Icon(imageVector = data.icon,
                 contentDescription = data.label,
                 modifier = modifier,
@@ -79,7 +79,7 @@ fun InaIcon(data: HomeStat, modifier: Modifier = Modifier){
 @Preview
 @Composable
 fun PreviewHomeSummaryCardItem(){
-    HomeSummaryCardItem(VectorItem(
+    HomeSummaryCardItem(VectorInaTextIcon(
         Icons.Outlined.ElectricMeter,
         "45.9", "Kilowatts",
         color = 0xFFF50057
@@ -93,7 +93,7 @@ fun PreviewHomeSummaryCard(){
         val nextDouble = kotlin.random
             .Random
             .nextDouble(0.1,100.0)
-        VectorItem(
+        VectorInaTextIcon(
             Icons.Outlined.ElectricMeter,
             "%.2f".format(Locale.US, nextDouble)
            , "Kilowatts",

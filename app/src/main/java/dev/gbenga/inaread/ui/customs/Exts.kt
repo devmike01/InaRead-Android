@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.ui.customs
 
+import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -9,6 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.utils.UiState
 
@@ -43,3 +47,7 @@ fun <T> Result<T>.toUiState(): UiState<T>{
 data class IconConfig(@param:DrawableRes val iconResId: Int, val description: String?)
 
 fun Long.color(): Color = Color(this)
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "store",
+)

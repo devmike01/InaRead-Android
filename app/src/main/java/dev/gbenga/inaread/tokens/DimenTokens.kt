@@ -15,6 +15,7 @@ object DimenTokens {
         val small = xSmall * 2
         val normal = small * 2
         val large = normal * 2
+        val xLarge = large * 2
     }
 
     object HomeSummaryCard{
@@ -28,7 +29,7 @@ object DimenTokens {
     }
 
     object Size {
-        val topbar = 150.dp
+        val topbar = 100.dp
     }
 
     object CalendarItem{

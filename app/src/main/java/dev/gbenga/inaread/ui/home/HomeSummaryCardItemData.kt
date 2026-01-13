@@ -4,19 +4,21 @@ import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.vector.ImageVector
 
 
-data class ResIdIconItem(
-    override val reading: String,
+data class ResIdInaTextIcon(
+    override val value: String,
     override val label: String,
     override val color: Long,
     @DrawableRes val icon: Int? =null,
-) : HomeStat
+) : InaTextIcon
 
-data class VectorItem(
+data class VectorInaTextIcon(
     val icon: ImageVector? =null,
-    override val reading: String,
+    override val value: String,
     override val label: String,
     override val color: Long,
-) : HomeStat
+) : InaTextIcon
+
+data class InaBottomNavItemData(val icon: ImageVector? =null, val label: String,)
 
 
-typealias MeterUsageSummary = List<HomeStat>
+typealias MeterUsageSummary = List<InaTextIcon>
