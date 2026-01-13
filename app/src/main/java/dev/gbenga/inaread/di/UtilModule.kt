@@ -4,10 +4,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.gbenga.inaread.utils.date.CalendarProvider
+import dev.gbenga.inaread.domain.date.CalendarProvider
 import dev.gbenga.inaread.utils.date.CalendarProviderImpl
 import dev.gbenga.inaread.utils.date.InaDateFormatter
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
 
