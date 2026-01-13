@@ -63,6 +63,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
+
     ksp(libs.hilt.compiler)
 
     // Room
@@ -83,6 +84,13 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+
+    // Datastore
+    // Preferences DataStore (SharedPreferences like APIs)
+    implementation(libs.androidx.datastore.core)
+    implementation(libs.androidx.datastore.preferences)
+    // Typed DataStore for custom data objects (for example, using Proto or JSON).
+    implementation(libs.androidx.datastore)
 
     implementation(libs.kotlinx.serialization)
     implementation(libs.androidx.camera2)
