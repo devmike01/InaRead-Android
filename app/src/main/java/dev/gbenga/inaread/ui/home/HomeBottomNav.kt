@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.gbenga.inaread.tokens.DimenTokens
+import dev.gbenga.inaread.ui.customs.color
 import dev.gbenga.inaread.ui.dashboard.DashboardScreen
 
 
@@ -82,7 +83,7 @@ fun InaBottomNavItem(inaTextIcon: InaBottomNavItemData,
                 modifier = Modifier
                     .size(26.dp)
                     .padding(end = DimenTokens.Padding.xSmall),
-                tint = Color.White.takeIf {  selected(route) } ?: MaterialTheme.colorScheme.primary
+                tint = Color.White.takeIf {  selected(route) } ?: 0xFF1A237E.color()
             )
         }
 
