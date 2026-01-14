@@ -24,11 +24,6 @@ object RepositoryModule {
                                       userDataStore: UserDataStore): MeterSummaryRepository
     = MeterSummaryRepositoryImpl(meterSummaryApiService, userDataStore)
 
-//    @Provides
-//    fun provideUserDataStore(@ApplicationContext context: Context): UserDataStore {
-//        return UserDataStoreImpl(context.dataStore)
-//    }
-
     // Todo: To be removed
     @Provides
     fun provideMeterSummaryApiService(): MeterSummaryApiService{
