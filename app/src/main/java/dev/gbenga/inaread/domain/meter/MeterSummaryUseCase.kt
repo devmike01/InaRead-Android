@@ -12,7 +12,7 @@ class MeterSummaryUseCase @Inject constructor(private val meterSummaryRepository
         return flowOf (
 
             runCatching {
-                 meterSummaryRepository.getMeterSummary()
+                 meterSummaryRepository.getMeterSummaryForDay()
             }
             )
     }

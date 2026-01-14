@@ -12,7 +12,7 @@ class MeterSummaryRepositoryImpl (
     private val userDataStore: UserDataStore,
 ) : MeterSummaryRepository {
 
-    override suspend fun getMeterSummary(): MeterResponse {
+    override suspend fun getMeterSummaryForDay(): MeterResponse {
         val profileId = userDataStore.getProfileId().firstOrNull()
         return profileId?.let {
             meterSummaryApiService.fetchMeterSummary(profileId)

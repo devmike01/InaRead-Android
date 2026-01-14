@@ -13,8 +13,12 @@ class WeekDaysUseCase @Inject constructor(private val calendarDelegate: Calendar
             .mapIndexed { index, item ->
 
                 CalendarTileData(
-                    item.month, item.day,
-                    item.timeInMillis, index == 0
+                    item.month,
+                    item.monthValue,
+                    item.dayOfMonth,
+                    false,
+                    item.timeInMillis,
+                    index == 0
                 )
             }
     }

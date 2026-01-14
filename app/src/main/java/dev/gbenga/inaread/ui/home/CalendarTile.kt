@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -18,6 +19,8 @@ import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,27 +30,43 @@ import dev.gbenga.inaread.tokens.DimenTokens.CalendarItem
 import dev.gbenga.inaread.tokens.DimenTokens.Radius
 import dev.gbenga.inaread.ui.customs.HorizontalCenter
 import dev.gbenga.inaread.ui.theme.DeepOrange
+import dev.gbenga.inaread.utils.Scada
 
 @Composable
-fun CalendarTile(weekDays: CalendarTileWeekDays, onItemClick: (Int) -> Unit) {
+fun CalendarTile(weekDays: CalendarTileWeekDays,
+                 scrollToPosition: Int,
+                 isAvailable: Boolean,
+                 onItemClick: (Int, Int) -> Unit) {
+
+    val calendarScrollState = rememberLazyListState()
+
+
+    Scada.info("CalendarTileW -> $scrollToPosition")
+
+    LaunchedEffect(scrollToPosition) {
+        Scada.info("CalendarTile -> $scrollToPosition")
+        calendarScrollState.animateScrollToItem(scrollToPosition)
+    }
 
     LazyRow(modifier = Modifier,
+        state = calendarScrollState,
         horizontalArrangement = Arrangement.spacedBy(CalendarItem.outerPadding)) {
         items(weekDays.size){ index ->
             val weekDay = weekDays[index]
              CalendarTileItem(weekDay, onItemClick = {
-                onItemClick(index)
-            })
+                onItemClick(weekDay.dayOfMonth, index)
+            }, isAvailable = isAvailable)
         }
     }
 }
 
 @Composable
 fun CalendarTileItem(item: CalendarTileData,
+                     isAvailable: Boolean = false,
                      onItemClick: () -> Unit){
     Button(
         elevation = ButtonDefaults.elevatedButtonElevation(
-            defaultElevation = 4.dp
+            defaultElevation = 4.dp.takeIf { isAvailable } ?: 1.dp
         ),
         onClick = onItemClick,
         colors = ButtonDefaults.buttonColors(
@@ -65,7 +84,7 @@ fun CalendarTileItem(item: CalendarTileData,
             Text(text =item.month,
                 style = MaterialTheme.typography.bodyMedium
                     .copy(fontWeight = FontWeight.W800))
-            Text(text =item.day.padStart(2, '0'),
+            Text(text =item.dayOfMonth.toString().padStart(2, '0'),
                 style = MaterialTheme.typography.headlineMedium)
         }
     }
@@ -77,9 +96,10 @@ fun PreviewCalendarTileItem(){
     CalendarTileItem(
         CalendarTileData(
             month = "Jan",
-            day = "12",
+            dayOfMonth = 12,
             dateInMillis = 12122L,
-            selected = false
+            selected = false,
+            monthValue = 1
         )
     ){}
 }
@@ -92,9 +112,10 @@ fun PreviewCalendarTile(){
     CalendarTile( (1..10).mapIndexed { id, i ->
         CalendarTileData(
             month = "Mon$i",
-            day = "$i",
+            dayOfMonth = i,
             dateInMillis = 12122L,
-            selected = i == 2
+            selected = i == 2,
+            monthValue = 1,
         )
-    }, onItemClick = {})
+    }, onItemClick = {data, index ->}, scrollToPosition = 0, isAvailable = false)
 }

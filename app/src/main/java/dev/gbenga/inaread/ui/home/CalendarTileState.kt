@@ -15,7 +15,12 @@ import kotlinx.coroutines.flow.StateFlow
 @Stable
 class CalendarTileState  {
 
-    private val _state = mutableStateOf(CalendarTileData("", "", 0L, false))
+    private val _state = mutableStateOf(CalendarTileData(
+        "",
+        2, 1,
+        false,
+        0L,false,
+        ))
     var value by _state
         private set
     
@@ -26,7 +31,7 @@ class CalendarTileState  {
 
 @Deprecated("Use viewmodel state")
 @Composable
-fun rememberCalendarTileState(): CalendarTileState = rememberSaveable(CalendarTileStateSaver) {
+fun rememberCalendarTileState(): CalendarTileState = rememberSaveable(saver = CalendarTileStateSaver) {
     CalendarTileState()
 }
 
@@ -43,10 +48,13 @@ val CalendarTileStateSaver = mapSaver(
     restore = {
         CalendarTileState().apply {
             select(
-                CalendarTileData(it.take(CalendarParamNames.MONTH),
+                CalendarTileData(
+                    it.take(CalendarParamNames.MONTH),
+                    it.take(CalendarParamNames.MONTH_VALUE),
                     it.take(CalendarParamNames.DAY),
                     it.take(CalendarParamNames.DAY_IN_MILLIS),
-                    it.take(CalendarParamNames.ID))
+                    it.take(CalendarParamNames.ID),
+                    it.take(CalendarParamNames.IS_AVAILABLE))
             )
         }
     }

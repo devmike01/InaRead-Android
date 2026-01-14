@@ -11,6 +11,7 @@ object StringTokens {
     const val MonthlyUsageSummary = "Summary of Monthly Usage"
     const val UknownErrorOccured = "An unknown message has occurred"
     const val UserNotAuthenticated = "User is not authenticated"
+    const val AddMeterReading = "Add meter image"
 
     object Greetings{
         const val GoodMorning = "morning \uD83C\uDF25\uFE0F!"

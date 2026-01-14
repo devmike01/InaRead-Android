@@ -12,4 +12,10 @@ interface CalendarProvider {
 
     fun greetBasedOnTime(): String
 
+    fun getCurrentDayOfMonth(): Int
+
+    fun getFullDateFrom(dayOfMonth: Int): String
+
+    fun getIndexOf(dayOfMonth: Int): Int
+
 }

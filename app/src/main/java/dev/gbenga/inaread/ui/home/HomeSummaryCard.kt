@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
@@ -18,20 +19,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.gbenga.inaread.tokens.DimenTokens
+import dev.gbenga.inaread.ui.customs.HorizontalCenter
 import dev.gbenga.inaread.ui.customs.InaCard
+import dev.gbenga.inaread.ui.customs.XYAxisCenter
 import java.util.Locale
 
 @Composable
-fun HomeSummaryCard(cardItems: MeterUsageSummary) {
+fun HomeSummaryCard(cardItems: MeterUsageSummary, monthName: String) {
 
     InaCard() {
         Row(horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .padding(DimenTokens.Padding.small)
                 .fillMaxWidth()) {
-            cardItems.forEach { item ->
-                HomeSummaryCardItem(item)
-            }
+
+//            cardItems.forEach { item ->
+//                HomeSummaryCardItem(item)
+//            }
+
+            MayBeEmptyContent(
+                data = cardItems,
+                content = { item ->
+                    HomeSummaryCardItem(item)
+                },
+                emptyContent ={
+                    XYAxisCenter (
+                        modifier = Modifier
+                            .height(DimenTokens.Size.emptyData)) {
+                        Text("You don't have any reading for the month of" +
+                                " $monthName")
+                    }
+                }
+            )
         }
     }
 }
@@ -99,5 +118,16 @@ fun PreviewHomeSummaryCard(){
            , "Kilowatts",
             color = 0xFFF50057
         )
-    })
+    }, "January")
+}
+
+@Composable
+fun <D> MayBeEmptyContent(
+    data: List<D>,
+    content: @Composable (D) -> Unit,
+    emptyContent: @Composable () -> Unit){
+    if (data.isEmpty()){
+        return emptyContent()
+    }
+    data.forEach { content(it) }
 }

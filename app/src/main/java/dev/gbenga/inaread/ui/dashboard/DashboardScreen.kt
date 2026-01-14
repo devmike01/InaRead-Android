@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.gbenga.inaread.tokens.DimenTokens
+import dev.gbenga.inaread.ui.addreading.AddReadingScreen
 import dev.gbenga.inaread.ui.home.HomeBottomNav
 import dev.gbenga.inaread.ui.home.HomeScreen
 import dev.gbenga.inaread.ui.home.InaBottomNavItem
@@ -92,9 +93,7 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel = hiltViewModel()){
                 }
 
                 composable<DashboardScreen.AddReading> {
-                    Box(modifier = Modifier
-                        .background(Color.Cyan)
-                        .fillMaxSize())
+                    AddReadingScreen()
                 }
 
                 composable<DashboardScreen.Settings> {

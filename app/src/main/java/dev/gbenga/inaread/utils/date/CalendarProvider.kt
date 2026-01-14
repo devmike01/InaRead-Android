@@ -2,11 +2,20 @@ package dev.gbenga.inaread.utils.date
 
 import dev.gbenga.inaread.domain.date.CalendarProvider
 import dev.gbenga.inaread.tokens.StringTokens
+import java.time.Month
+import java.time.YearMonth
+import java.time.ZoneId
+import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import javax.inject.Inject
 
-data class DateAndMonth(val day: String, val month: String, val timeInMillis: Long)
+
+data class DateAndMonth(val dayOfMonth: Int,
+                        val monthValue: Int,
+                        val month: String, val timeInMillis: Long)
 
 
 class CalendarProviderImpl @Inject constructor(
@@ -14,25 +23,30 @@ class CalendarProviderImpl @Inject constructor(
     ) : CalendarProvider {
 
     override fun getDateAndMonth(): List<DateAndMonth> {
-        val calendar: Calendar = Calendar.getInstance()
-        val dates = mutableListOf<DateAndMonth>()
-        for (day in 0..6){
-            calendar.add(Calendar.DAY_OF_MONTH, day)
-            val dateMonth = inaDateFormatter
-                .ddMMM(calendar.time)
-                .split("/")
-                .let {
-                    DateAndMonth(it[0], it[1], calendar.timeInMillis)
-                }
-            dates.add(dateMonth)
+        val zoneId = ZoneId.of("GMT+1")
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone(zoneId))
+        val yearMonth = YearMonth.now(zoneId)
+        val (startDay, endDay) = yearMonth
+            .let { Pair(it.atDay(1)
+                .dayOfMonth, it.atEndOfMonth().dayOfMonth) }
+        calendar.set(yearMonth.year, yearMonth.monthValue, startDay)
+
+        val dates = (startDay..endDay).map { dayOfMonth ->
+            val monthName = Month.of(1) // 1 = January
+                .getDisplayName(TextStyle.FULL,
+                    Locale.getDefault()).substring(0, 3)
+            DateAndMonth(dayOfMonth, yearMonth.monthValue,
+                monthName, calendar.timeInMillis)
         }
+
+
         return dates
     }
 
     override fun getTodayInMillis(): Long = System.currentTimeMillis()
 
     override fun getToday(): String = inaDateFormatter.dddMMMYyyy(Date())
-
+    
     override fun greetBasedOnTime(): String {
         val calendar = Calendar.getInstance()
         val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
@@ -49,6 +63,25 @@ class CalendarProviderImpl @Inject constructor(
                 }
             }
         }"
+    }
+
+    override fun getCurrentDayOfMonth(): Int = Calendar
+        .getInstance()
+        .get(Calendar.DAY_OF_MONTH)
+
+    override fun getFullDateFrom(dayOfMonth: Int): String {
+        val zoneId = ZoneId.of("GMT+1")
+        val yearMonth = YearMonth.now(zoneId)
+
+        val monthName = Month.of(yearMonth.monthValue) // 1 = January
+            .getDisplayName(TextStyle.FULL,
+                Locale.getDefault())
+        val currentYear = yearMonth.year
+        return "$dayOfMonth of $monthName, $currentYear"
+    }
+
+    override fun getIndexOf(dayOfMonth: Int): Int {
+        return getDateAndMonth().map { it.dayOfMonth }.indexOf(dayOfMonth)
     }
 
 }

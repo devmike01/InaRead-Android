@@ -4,6 +4,6 @@ import dev.gbenga.inaread.data.model.MeterResponse
 
 interface MeterSummaryRepository {
 
-    suspend fun getMeterSummary(): MeterResponse
+    suspend fun getMeterSummaryForDay(): MeterResponse
 
 }

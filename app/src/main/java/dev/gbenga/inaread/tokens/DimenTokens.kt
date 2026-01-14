@@ -26,10 +26,13 @@ object DimenTokens {
         val xSmall = 5.dp
         val small = xSmall * 2
         val large = small * 2
+        val xLarge = small * 2
     }
 
     object Size {
         val topbar = 100.dp
+        val emptyData = 100.dp
+        val icon = 50.dp
     }
 
     object CalendarItem{

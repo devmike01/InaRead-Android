@@ -14,7 +14,9 @@ class AddReadingViewModel @Inject constructor() : InaReadViewModel<AddReadingSta
             events.collect { events ->
                 when(events){
                     is AddReadingEvent.GetMeterImageResult -> {
-                        setState { it.copy( meterImagePath = events.imagePath) }
+                        setState { it.copy(
+                            meterImagePath = events.imagePath)
+                        }
                     }
                 }
             }

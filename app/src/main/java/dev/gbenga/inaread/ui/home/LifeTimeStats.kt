@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -113,7 +114,7 @@ fun LifeTimeReadingCard(lifeTimeReading: InaTextIcon,
 
             LineChart(data,
                 lineColor = MaterialTheme.colorScheme.tertiary,
-                fillColor = 0xFFFFF8A65.color(),
+                fillColor = Color(0x66FFF8A6),
                 modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(.5f))

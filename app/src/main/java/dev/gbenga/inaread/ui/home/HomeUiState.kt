@@ -6,10 +6,12 @@ import dev.gbenga.inaread.utils.InaReadUiState
 import dev.gbenga.inaread.utils.UiState
 
 data class HomeUiState(
-    val weekDates : CalendarTileWeekDays = emptyList(),
+    val daysOfMonth : CalendarTileWeekDays = emptyList(),
     val meterUsageSummary: UiState<Pair<MeterMonthlyStat, List<ResIdInaTextIcon>>> = UiState.Loading,
+    val selectedDateValue: String ="",
     val greeting: String = "",
     val todaysDate: String = "",
+    val selectedCalendarPos: Int = 0,
     val selectedPage: DashboardScreen = DashboardScreen.HomeScreen(),
 ): InaReadUiState
 

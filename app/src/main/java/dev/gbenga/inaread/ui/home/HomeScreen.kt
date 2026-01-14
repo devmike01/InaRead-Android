@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.gbenga.inaread.tokens.DimenTokens
@@ -41,8 +40,11 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
            item {
                TitledColumn(StringTokens.MeterSummary,
                    modifier = Modifier.animateItem()){
-                   CalendarTile(homeUiState.weekDates) { date ->
-                       viewModel.selectDay(date)
+                   CalendarTile(
+                       homeUiState.daysOfMonth,
+                       homeUiState.selectedCalendarPos,
+                       isAvailable = false) { dayOfMonth, index ->
+                       viewModel.selectDay(dayOfMonth,index)
                    }
                }
            }
@@ -54,7 +56,8 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                         errorRequest = { error ->
                             FailedUiStateComponent(error)
                         }){ homeSummary ->
-                        HomeSummaryCard(homeSummary.second)
+                        HomeSummaryCard(homeSummary.second,
+                            homeUiState.selectedDateValue)
                     }
 
                 }
