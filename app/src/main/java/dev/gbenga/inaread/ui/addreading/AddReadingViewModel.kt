@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gbenga.inaread.domain.providers.ImagePickerProvider
 import dev.gbenga.inaread.utils.InaReadViewModel
+import dev.gbenga.inaread.utils.Scada
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,6 +22,16 @@ class AddReadingViewModel @Inject constructor(private val imagePickerProvider: I
                             meterImagePath = selectedImagePath)
                         }
                     }
+
+                    is AddReadingEvent.ToggleMeterImageButton -> {
+                        setState { it.copy(
+                            enableReadImage = true)
+                        }
+                    }
+
+                    AddReadingEvent.RemoveImage -> {
+                        setState { it.copy(meterImagePath = null) }
+                    }
                 }
             }
         }
@@ -30,5 +41,14 @@ class AddReadingViewModel @Inject constructor(private val imagePickerProvider: I
         uri?.let {
             sendEvent(AddReadingEvent.GetMeterImageResult(uri))
         }
+
+        sendEvent(AddReadingEvent.ToggleMeterImageButton(uri != null))
     }
+
+    fun removeImage(){
+        Scada.info("REMOVE_IMAGE!!")
+        sendEvent(AddReadingEvent.RemoveImage)
+        sendEvent(AddReadingEvent.ToggleMeterImageButton(false))
+    }
+
 }

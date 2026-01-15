@@ -6,6 +6,7 @@ import dev.gbenga.inaread.utils.InaReadUiState
 data class AddReadingState(
     val meterImagePath: String? = null,
     val meterInfo: UIMeterReadingInfo = UIMeterReadingInfo(),
+    val enableReadImage: Boolean = false,
     ): InaReadUiState
 
 

@@ -3,6 +3,7 @@ package dev.gbenga.inaread.ui.addreading
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,8 +17,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -59,7 +64,9 @@ fun AddReadingScreen(viewModel: AddReadingViewModel = hiltViewModel()) {
             viewModel.addImage(uri)
         }
 
-    AddReadingScreenContent(uiState = uiState) {
+    AddReadingScreenContent(uiState = uiState, removeImageRequest = {
+        viewModel.removeImage()
+    }) {
         pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
@@ -67,7 +74,9 @@ fun AddReadingScreen(viewModel: AddReadingViewModel = hiltViewModel()) {
 
 @Composable
 fun AddReadingScreenContent(uiState: AddReadingState,
+                            removeImageRequest: () -> Unit,
                             showImagePickerRequest: () -> Unit){
+
     Box(modifier = Modifier.fillMaxSize()){
         HomeParentColumn(
             modifier = Modifier
@@ -78,7 +87,7 @@ fun AddReadingScreenContent(uiState: AddReadingState,
             subTitle = StringTokens.AddReadingImage.Subtitle
         ){
             ConstraintLayout(modifier = Modifier
-                .padding(top = DimenTokens.Padding.xLarge)
+                .padding(top = DimenTokens.Padding.large)
                 .wrapContentHeight(),) {
                 val (addImageBtn, readImgBtn) = createRefs()
 
@@ -89,18 +98,18 @@ fun AddReadingScreenContent(uiState: AddReadingState,
                         //bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    }, onClick = showImagePickerRequest)
+                    }, onClick = showImagePickerRequest,
+                    onRemoveImageClick = removeImageRequest)
 
                 Button(
+                    enabled = uiState.enableReadImage,
                     modifier = Modifier.constrainAs(readImgBtn){
                         top.linkTo(addImageBtn.bottom, margin = DimenTokens.Padding.large)
                         //bottom.linkTo(parent.bottom, margin = DimenTokens.Padding.xXLarge)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     },
-                    onClick = {
-
-                    }
+                    onClick = {},
                 ) {
                     Text(StringTokens.AddReadingImage.ReadMeterImage,
                         style = MaterialTheme.typography.bodyLarge)
@@ -114,41 +123,54 @@ fun AddReadingScreenContent(uiState: AddReadingState,
 @Composable
 fun UploadImageButton(imagePath: String?,
                       modifier: Modifier,
+                      onRemoveImageClick: () -> Unit,
                       onClick: () -> Unit){
 
-    imagePath?.let {
-        Scada.info("imagePath: $imagePath")
-        AsyncImage(
-            contentScale = ContentScale.Crop,
-            model = imagePath,
-            contentDescription = null,
-            modifier = modifier
-                .size(DimenTokens.Image.Large)
-                .clip(RoundedCornerShape(DimenTokens.Radius.large))
-        )
-    } ?: Button(onClick = onClick,
-        shape = RoundedCornerShape(DimenTokens.Radius.xLarge),
-        modifier = modifier.width(170.dp)
-            .height(180.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = 0xFF37474F.color()
-        ),
-        contentPadding = PaddingValues(DimenTokens.Padding.large),
-        elevation = ButtonDefaults.elevatedButtonElevation(
-            defaultElevation = 10.dp
-        )
-    ){
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(painter = painterResource(R.drawable.add_meter_reader_face_ic),
-                contentDescription = StringTokens.AddMeterReading,
-                modifier = Modifier.size(DimenTokens.Size.icon))
-            Text("Add Image",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.W700,
-                    color = Color.White))
+    AnimatedContent(imagePath,
+        modifier = modifier.size(
+            DimenTokens.Image.Large)) { animatedPath ->
+        animatedPath?.let {
+            Scada.info("animatedPath: $animatedPath")
+            Box(modifier = Modifier.size(
+                DimenTokens.Image.Large)) {
+                AsyncImage(
+                    contentScale = ContentScale.Crop,
+                    model = animatedPath,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(DimenTokens.Radius.large))
+                )
+                IconButton(onClick = onRemoveImageClick, modifier = Modifier.align(Alignment.TopEnd)
+                    .size(DimenTokens.Icon.Medium)) {
+                    Icon(Icons.Default.Cancel,
+                        contentDescription = StringTokens.AddReadingImage.CancelImageDescription)
+                }
+            }
+        } ?: Button(onClick = onClick,
+            shape = RoundedCornerShape(DimenTokens.Radius.xLarge),
+            modifier = Modifier.width(170.dp)
+                .height(180.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = 0xFF37474F.color()
+            ),
+            contentPadding = PaddingValues(DimenTokens.Padding.large),
+            elevation = ButtonDefaults.elevatedButtonElevation(
+                defaultElevation = 10.dp
+            )
+        ){
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(painter = painterResource(R.drawable.add_meter_reader_face_ic),
+                    contentDescription = StringTokens.AddMeterReading,
+                    modifier = Modifier.size(DimenTokens.Size.icon))
+                Text("Add Image",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.W700,
+                        color = Color.White))
+            }
         }
     }
 }
@@ -156,7 +178,7 @@ fun UploadImageButton(imagePath: String?,
 @Composable
 @Preview
 fun PreviewAddReadingScreenContent(){
-    AddReadingScreenContent(previewAddReadingState){
+    AddReadingScreenContent(previewAddReadingState, removeImageRequest = {}){
 
     }
 }
@@ -165,7 +187,7 @@ fun PreviewAddReadingScreenContent(){
 @Composable
 @Preview
 fun PreviewAddReadingScreenContentWithImage(){
-    AddReadingScreenContent(previewAddReadingState.copy(meterImagePath = "file://android_asset/preview_meter_reading.png")){
+    AddReadingScreenContent(previewAddReadingState.copy(meterImagePath = "file://android_asset/preview_meter_reading.png"), removeImageRequest = {}){
 
     }
 }

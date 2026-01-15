@@ -39,6 +39,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
            item {
                TitledColumn(StringTokens.MeterSummary,
+                   endText = "View All",
                    modifier = Modifier.animateItem()){
                    CalendarTile(
                        homeUiState.daysOfMonth,

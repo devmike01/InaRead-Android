@@ -114,7 +114,7 @@ fun LifeTimeReadingCard(lifeTimeReading: InaTextIcon,
 
             LineChart(data,
                 lineColor = MaterialTheme.colorScheme.tertiary,
-                fillColor = Color(0x66FFF8A6),
+                fillColor = Color(0x66FF5722),
                 modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(.5f))
