@@ -14,9 +14,11 @@ object StringTokens {
     const val AddMeterReading = "Add meter image"
 
     object AddReadingImage{
+        const val CancelImageDescription = "Cancel image upload"
         const val Title = "Add Meter Image for Analysis"
         const val Subtitle = "Upload a meter photo to extract and analyze the meter readings"
         const val ReadMeterImage = "Read Meter Image"
+        const val ViewAllTimeUsage = "View All"
     }
 
     object Greetings{
