@@ -22,8 +22,10 @@ object DimenTokens {
         val xXLarge = xLarge * 2
     }
 
-    object HomeSummaryCard{
-        val innerPadding = 20.dp
+    object Icon{
+        val Small = 25.dp
+        val Large = 35.dp
+        val Medium = 40.dp
     }
 
     object Radius{
