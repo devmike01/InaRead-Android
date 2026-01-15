@@ -1,7 +1,9 @@
-package dev.gbenga.inaread.utils.date
+package dev.gbenga.inaread.data
 
+import dev.gbenga.inaread.data.model.DateAndMonth
 import dev.gbenga.inaread.domain.date.CalendarProvider
 import dev.gbenga.inaread.tokens.StringTokens
+import dev.gbenga.inaread.utils.date.InaDateFormatter
 import java.time.Month
 import java.time.YearMonth
 import java.time.ZoneId
@@ -12,10 +14,6 @@ import java.util.Locale
 import java.util.TimeZone
 import javax.inject.Inject
 
-
-data class DateAndMonth(val dayOfMonth: Int,
-                        val monthValue: Int,
-                        val month: String, val timeInMillis: Long)
 
 
 class CalendarProviderImpl @Inject constructor(
@@ -82,6 +80,10 @@ class CalendarProviderImpl @Inject constructor(
 
     override fun getIndexOf(dayOfMonth: Int): Int {
         return getDateAndMonth().map { it.dayOfMonth }.indexOf(dayOfMonth)
+    }
+
+    override fun getDateTimeForImage(): String {
+        return inaDateFormatter.dddMMMYyyyMhs(Date(System.currentTimeMillis()))
     }
 
 }
