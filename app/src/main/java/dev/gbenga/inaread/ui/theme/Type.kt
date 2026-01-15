@@ -1,26 +1,28 @@
 package dev.gbenga.inaread.ui.theme
 
+import android.text.style.LineHeightSpan
 import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import dev.gbenga.inaread.tokens.DimenTokens
 
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        color = Color(0xFFFFFFFF),
+        fontWeight = FontWeight.W700,
+        color = White,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
     bodyMedium = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        color = Color(0xFFFFFFFF),
+        fontWeight = FontWeight.W700,
+        color = White,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
@@ -28,26 +30,28 @@ val Typography = Typography(
 
     headlineMedium = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        color = Color(0xFFFFFFFF),
+        fontWeight = FontWeight.W800,
+        color = White,
         fontSize = 28.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
-    /* Other default text styles to override
+
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.W700,
         fontSize = 22.sp,
         lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        letterSpacing = 0.sp,
+        color = White,
     ),
-    labelSmall = TextStyle(
+    headlineLarge = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+        fontWeight = FontWeight.W800,
+        fontSize = DimenTokens.FontSize.HeadlineLarge,
+        lineHeight = 1.sp,
+        letterSpacing = 0.0.sp,
+        color = White,
     )
-    */
+
 )

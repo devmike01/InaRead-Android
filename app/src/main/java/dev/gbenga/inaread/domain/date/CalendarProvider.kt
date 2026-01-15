@@ -1,6 +1,7 @@
 package dev.gbenga.inaread.domain.date
 
-import dev.gbenga.inaread.utils.date.DateAndMonth
+import dev.gbenga.inaread.data.model.DateAndMonth
+
 
 interface CalendarProvider {
 
@@ -17,5 +18,7 @@ interface CalendarProvider {
     fun getFullDateFrom(dayOfMonth: Int): String
 
     fun getIndexOf(dayOfMonth: Int): Int
+
+    fun getDateTimeForImage(): String
 
 }

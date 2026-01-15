@@ -8,6 +8,9 @@ object DimenTokens {
     object FontSize {
         val h1 = 30.sp
         val h2 = 20.sp
+        val HeadlineLarge = 30.sp
+        val HeadlineMedium = 27.sp
+        val HeadlineSmall = 24.sp
     }
 
     object Padding {
@@ -16,6 +19,7 @@ object DimenTokens {
         val normal = small * 2
         val large = normal * 2
         val xLarge = large * 2
+        val xXLarge = xLarge * 2
     }
 
     object HomeSummaryCard{
@@ -43,4 +47,8 @@ object DimenTokens {
         val outerPadding = 5.dp
     }
 
+    object Image {
+        val Large = 200.dp
+        val Small = 100.dp
+    }
 }

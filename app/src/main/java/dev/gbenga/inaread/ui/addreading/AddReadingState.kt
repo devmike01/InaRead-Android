@@ -5,4 +5,15 @@ import dev.gbenga.inaread.utils.InaReadUiState
 
 data class AddReadingState(
     val meterImagePath: String? = null,
-    val meterInfo: UIMeterReadingInfo = UIMeterReadingInfo(),): InaReadUiState
+    val meterInfo: UIMeterReadingInfo = UIMeterReadingInfo(),
+    ): InaReadUiState
+
+
+val previewAddReadingState = AddReadingState(
+    meterImagePath = null,
+    meterInfo = UIMeterReadingInfo(
+        "500.33kWh",
+        from = "2 January, 2026",
+        to = "13 January, 2026",
+    )
+)

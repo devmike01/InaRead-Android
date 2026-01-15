@@ -11,4 +11,5 @@ val Indigo200 = 0xFF7986CB.color()
 val Indigo100 = 0xffC5CAE9.color()
 val Indigo50 = 0XFFE8EAF6.color()
 val DeepOrange = 0xFFFF5722.color()
+val White = 0xFFE8EAF6.color()
 

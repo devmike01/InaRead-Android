@@ -9,6 +9,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 
 
+@Deprecated("Use the one directly in the UI")
 class ImagePickerProvider(private val context: Context,) {
 
     private val _pickedImage = Channel<Result<Uri>>()

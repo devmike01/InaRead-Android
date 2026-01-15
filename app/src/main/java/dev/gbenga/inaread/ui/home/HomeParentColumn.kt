@@ -14,15 +14,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.HorizontalCenter
+import dev.gbenga.inaread.ui.theme.White
 
 @Composable
 fun HomeParentColumn(title: String,
                      subTitle: String? =null,
+                     modifier: Modifier =Modifier,
                      content: @Composable () -> Unit) {
     HorizontalCenter(
-        modifier = Modifier
+        modifier = modifier
             .padding(DimenTokens.Padding.large)
-            .fillMaxSize()
     ) {
         val (titleFont, titleWeight) = MaterialTheme.typography.headlineLarge.let {
             Pair(it.fontSize, it.fontWeight)
@@ -30,16 +31,18 @@ fun HomeParentColumn(title: String,
         val titleSubTitle = buildAnnotatedString {
             withStyle(style = SpanStyle(
                 fontSize = titleFont,
-                fontWeight = titleWeight
+                fontWeight = titleWeight,
+                color = White,
             )){
-                append(title)
+                append("$title\n\n")
             }
             subTitle?.let {
                 append(subTitle)
             }
         }
         Text(titleSubTitle, style = MaterialTheme.typography
-            .titleLarge.copy(fontWeight = FontWeight.W400),
+            .bodyMedium.copy(fontWeight = FontWeight.W400,
+                color = White),
             textAlign = TextAlign.Center)
         content()
     }

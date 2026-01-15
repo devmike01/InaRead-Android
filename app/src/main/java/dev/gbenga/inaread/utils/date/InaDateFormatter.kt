@@ -24,5 +24,9 @@ class InaDateFormatter @Inject constructor(private val sdf: SimpleDateFormat) {
     }
 
 
+    fun dddMMMYyyyMhs(date: Date): String{
+        sdf.applyPattern("EEE-MMM-d-yyyy_HH:mm:ss")
+        return sdf.format(date)
+    }
     
 }
