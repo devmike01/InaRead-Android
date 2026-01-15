@@ -2,4 +2,4 @@ package dev.gbenga.inaread.utils
 
 import dev.gbenga.inaread.tokens.StringTokens
 
-class UserNotLoggedInException : Exception(StringTokens.UserNotAuthenticated)
+class UserNotFoundException : Exception(StringTokens.UserNotAuthenticated)

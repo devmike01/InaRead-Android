@@ -4,7 +4,7 @@ import dev.gbenga.inaread.data.model.MeterResponse
 import dev.gbenga.inaread.domain.datastore.UserDataStore
 import dev.gbenga.inaread.domain.meter.MeterSummaryRepository
 import dev.gbenga.inaread.domain.services.MeterSummaryApiService
-import dev.gbenga.inaread.utils.UserNotLoggedInException
+import dev.gbenga.inaread.utils.UserNotFoundException
 import kotlinx.coroutines.flow.firstOrNull
 
 class MeterSummaryRepositoryImpl (
@@ -16,7 +16,7 @@ class MeterSummaryRepositoryImpl (
         val profileId = userDataStore.getProfileId().firstOrNull()
         return profileId?.let {
             meterSummaryApiService.fetchMeterSummary(profileId)
-        } ?: throw UserNotLoggedInException()
+        } ?: throw UserNotFoundException()
     }
 
 
