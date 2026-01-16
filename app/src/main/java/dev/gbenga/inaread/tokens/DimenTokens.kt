@@ -24,8 +24,8 @@ object DimenTokens {
 
     object Icon{
         val Small = 25.dp
-        val Large = 35.dp
-        val Medium = 40.dp
+        val Large = 45.dp
+        val Medium = 35.dp
     }
 
     object Radius{
