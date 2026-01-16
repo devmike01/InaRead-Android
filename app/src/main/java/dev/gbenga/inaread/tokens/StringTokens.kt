@@ -26,4 +26,9 @@ object StringTokens {
         const val GoodAfternoon = "afternoon \uD83C\uDF1E!"
         const val GoodEvening = "evening \uD83C\uDF19!"
     }
+
+    object YearPicker {
+        const val ArrowBack = "Go back to previous year"
+        const val ArrowForward = "Go to next year"
+    }
 }
