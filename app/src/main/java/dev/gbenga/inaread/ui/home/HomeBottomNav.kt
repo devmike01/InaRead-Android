@@ -35,7 +35,6 @@ import dev.gbenga.inaread.ui.dashboard.DashboardScreen
 @Composable
 fun HomeBottomNav(modifier: Modifier = Modifier,
                   content: @Composable () -> Unit)  {
-    val color = MaterialTheme.colorScheme.secondary
 
     Row(
         modifier = modifier
@@ -86,7 +85,7 @@ fun InaBottomNavItem(inaTextIcon: InaBottomNavItemData,
                 modifier = Modifier
                     .size(26.dp)
                     .padding(end = DimenTokens.Padding.xSmall),
-                tint = Color.White.takeIf {  selected(route) } ?: 0xFF1A237E.color()
+                tint = Color.White.takeIf {  selected(route) } ?: Color(0x77FFFFFF)
             )
         }
 

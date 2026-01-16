@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import dev.gbenga.inaread.tokens.DimenTokens
+import dev.gbenga.inaread.ui.metric.AllTimeTitle
 
 @Composable
 fun TitledColumn(title: String,
@@ -25,8 +26,8 @@ fun TitledColumn(title: String,
         verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.small)) {
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(title, style = MaterialTheme.typography.titleMedium
-                .copy(color = Color(0xB9FFFFFF)))
+
+            AllTimeTitle(title)
             endText?.let {
                 TextButton(onClick = {}) {
                     Text(it,

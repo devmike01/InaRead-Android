@@ -86,7 +86,9 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel = hiltViewModel()){
             navController.navigate(route)
         }
 
-        Box(modifier = Modifier.padding(it),) {
+        Box(modifier = Modifier
+            .padding(it)
+            .fillMaxSize(),) {
 
             NavHost(navController, startDestination = DashboardScreen.HomeScreen()){
                 composable<DashboardScreen.HomeScreen> {

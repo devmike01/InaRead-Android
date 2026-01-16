@@ -1,9 +1,13 @@
 package dev.gbenga.inaread.utils
 
+import dev.gbenga.inaread.data.model.ApplianceRequest
+import dev.gbenga.inaread.data.model.ApplianceResponse
 import dev.gbenga.inaread.data.model.LastPowerUsage
 import dev.gbenga.inaread.data.model.MeterResponse
+import dev.gbenga.inaread.data.model.MonthChartResponse
 import dev.gbenga.inaread.data.model.MonthlyMeterUsage
 import dev.gbenga.inaread.domain.services.MeterSummaryApiService
+import dev.gbenga.inaread.ui.metric.MetricsApiService
 
 class FakeMeterSummaryApiService : MeterSummaryApiService {
 
@@ -11,6 +15,54 @@ class FakeMeterSummaryApiService : MeterSummaryApiService {
         return fakeMeterResponse
     }
 }
+
+class FakeMetricsApiService: MetricsApiService {
+
+    override suspend fun getAppliances(userId: String): List<ApplianceResponse> {
+        return applianceList
+    }
+
+    override suspend fun setAppliance(
+        userId: String,
+        applianceRequest: ApplianceRequest
+    ): ApplianceResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getMonthChart(userId: String): List<MonthChartResponse> {
+        return monthChartList
+    }
+
+}
+
+
+
+
+val applianceList = listOf(
+    ApplianceResponse(name = "Refrigerator", rating = "4.5", "21 January, 2021"),
+    ApplianceResponse(name = "Washing Machine", rating = "4.2", "1 August, 2026"),
+    ApplianceResponse(name = "Air Conditioner", rating = "4.7", "2 February, 2029"),
+    ApplianceResponse(name = "Microwave Oven", rating = "4.1", "5 March, 2024"),
+    ApplianceResponse(name = "Dishwasher", rating = "4.3", "12 January, 2026"),
+    ApplianceResponse(name = "Smart TV", rating = "4.6", "2 May, 2021"),
+    ApplianceResponse(name = "Vacuum Cleaner", rating = "4.0", "3 June, 2025")
+)
+
+
+val monthChartList = listOf(
+    MonthChartResponse(month = "Jan", value = 120.5f),
+    MonthChartResponse(month = "Feb", value = 98.2f),
+    MonthChartResponse(month = "Mar", value = 135.0f),
+    MonthChartResponse(month = "Apr", value = 150.8f),
+    MonthChartResponse(month = "May", value = 170.3f),
+    MonthChartResponse(month = "Jun", value = 160.0f),
+    MonthChartResponse(month = "Jul", value = 180.6f),
+    MonthChartResponse(month = "Aug", value = 175.4f),
+    MonthChartResponse(month = "Sep", value = 155.9f),
+    MonthChartResponse(month = "Oct", value = 140.2f),
+    MonthChartResponse(month = "Nov", value = 130.7f),
+    MonthChartResponse(month = "Dec", value = 165.1f)
+)
 
 val fakeMeterResponse = MeterResponse(
     monthlyMeterUsage = MonthlyMeterUsage(
