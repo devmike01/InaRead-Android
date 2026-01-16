@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +42,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import coil3.request.CachePolicy
+import coil3.request.ImageRequest
 import dev.gbenga.inaread.R
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.tokens.StringTokens
@@ -126,19 +130,23 @@ fun UploadImageButton(imagePath: String?,
                       onRemoveImageClick: () -> Unit,
                       onClick: () -> Unit){
 
+    val context = LocalContext.current
     AnimatedContent(imagePath,
-        modifier = modifier.size(
-            DimenTokens.Image.Large)) { animatedPath ->
+        modifier = modifier.wrapContentSize()) { animatedPath ->
         animatedPath?.let {
             Scada.info("animatedPath: $animatedPath")
             Box(modifier = Modifier.size(
                 DimenTokens.Image.Large)) {
                 AsyncImage(
                     contentScale = ContentScale.Crop,
-                    model = animatedPath,
+                    model = ImageRequest.Builder(context)
+                        .data(animatedPath)
+                        .diskCachePolicy(CachePolicy.DISABLED)
+                        .memoryCachePolicy(CachePolicy.DISABLED)
+                        .build(),
                     contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier = Modifier.size(
+                        DimenTokens.Image.Large)
                         .clip(RoundedCornerShape(DimenTokens.Radius.large))
                 )
                 IconButton(onClick = onRemoveImageClick, modifier = Modifier.align(Alignment.TopEnd)
@@ -149,8 +157,7 @@ fun UploadImageButton(imagePath: String?,
             }
         } ?: Button(onClick = onClick,
             shape = RoundedCornerShape(DimenTokens.Radius.xLarge),
-            modifier = Modifier.width(170.dp)
-                .height(180.dp),
+            modifier = Modifier.size(100.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = 0xFF37474F.color()
             ),
@@ -159,18 +166,11 @@ fun UploadImageButton(imagePath: String?,
                 defaultElevation = 10.dp
             )
         ){
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(painter = painterResource(R.drawable.add_meter_reader_face_ic),
-                    contentDescription = StringTokens.AddMeterReading,
-                    modifier = Modifier.size(DimenTokens.Size.icon))
-                Text("Add Image",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.W700,
-                        color = Color.White))
-            }
+            Image(painter = painterResource(R.drawable.add_meter_reader_face_ic),
+                contentDescription = StringTokens.AddMeterReading,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(DimenTokens.Icon.Large))
+
         }
     }
 }
