@@ -31,4 +31,25 @@ object StringTokens {
         const val ArrowBack = "Go back to previous year"
         const val ArrowForward = "Go to next year"
     }
+
+    object SignUp{
+        const val GoBack = "Go back"
+    }
+
+    object Auth{
+        const val UsernamePlaceholder = "Enter username"
+        const val PasswordPlaceholder = "Enter password"
+        const val ConfirmPasswordPlaceholder = "Confirm password"
+        const val EmailPlaceholder = "Enter email"
+        const val LoginTitle = "Log in with your Username"
+        const val Login = "Log in"
+        const val Email = "Email"
+        const val ForgotPassword = "Forgot password"
+        const val DontHaveAccount = "Don't have an account? "
+        const val SignUp = "Sign Up"
+        const val SignUpTitle = "Sign Up Now to Get Started"
+        const val SignUpDescription = "Track your electricity usage and spending to better optimise and reduce your cost"
+        const val LoginDescription = "Track your electricity usage and spending to better optimise and reduce your cost"
+        const val AlreadyHaveAccount = "Already have an account? "
+    }
 }
