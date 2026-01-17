@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -47,24 +48,34 @@ fun MetricScreen(viewModel: MetricViewModel = hiltViewModel()) {
         viewModel.populate()
     }
 
-    LazyColumn(modifier = Modifier.fillMaxSize()
-        .padding(horizontal = DimenTokens.Padding.normal),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.normal)) {
+    Column {
+        val yearState = rememberYearPickerState()
 
-        item {
-            AllTimeTitle("Your Usage for the year")
-            BarChart(uiState.monthChartValues,
-                modifier = Modifier.animateItem())
+        YearPicker(yearState,
+            modifier = Modifier.padding(
+                bottom = DimenTokens.Padding.normal)){
 
         }
 
-        item {
-            AllTimeTitle("Your Appliances")
-            uiState.appliances.forEach {
-                ApplianceItem(
-                    modifier = Modifier.animateItem(),
-                    appliance = it)
+        LazyColumn(modifier = Modifier.fillMaxSize()
+            .padding(horizontal = DimenTokens.Padding.normal),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.normal)) {
+
+            item {
+                AllTimeTitle("Your Usage for the year")
+                BarChart(uiState.monthChartValues,
+                    modifier = Modifier.animateItem())
+
+            }
+
+            item {
+                AllTimeTitle("Your Appliances")
+                uiState.appliances.forEach {
+                    ApplianceItem(
+                        modifier = Modifier.animateItem(),
+                        appliance = it)
+                }
             }
         }
     }
@@ -103,7 +114,7 @@ fun ApplianceItem(modifier: Modifier = Modifier, appliance: Appliance){
             ){
                 Icon(painter = painterResource(R.drawable.outline_electric_meter_24),
                     contentDescription = "Electric rating",
-                    modifier = Modifier.align(Alignment.TopCenter).size(DimenTokens.Icon.Large))
+                    modifier = Modifier.align(Alignment.TopCenter).size(DimenTokens.Icon.Medium))
                 Text(appliance.rating,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.W700),
                     modifier = Modifier.align(Alignment.BottomCenter))
