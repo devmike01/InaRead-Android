@@ -14,7 +14,7 @@ abstract class InaReadViewModel<S: InaReadUiState, E>(initialState: S) : ViewMod
     private val _events = Channel<E>(Channel.BUFFERED)
     private val _state = MutableStateFlow<S>(initialState)
 
-    val events = _events.receiveAsFlow()
+    protected val events = _events.receiveAsFlow()
     val state = _state.asStateFlow()
 
     protected fun sendEvent(event: E){

@@ -26,7 +26,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         title = homeUiState.todaysDate,
         subTitle = homeUiState.greeting,
         navigationClick = {}
-    )){
+    ), profileInitial = "G"){
         UnitLaunchEffect {
             viewModel.watchEvents()
             viewModel.populateDashboard()

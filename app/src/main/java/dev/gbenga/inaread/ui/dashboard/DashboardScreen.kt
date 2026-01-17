@@ -30,6 +30,7 @@ import dev.gbenga.inaread.ui.home.InaBottomNavItemData
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
 import dev.gbenga.inaread.ui.home.ValueLaunchEffect
 import dev.gbenga.inaread.ui.metric.MetricScreen
+import dev.gbenga.inaread.ui.settings.SettingsScreen
 import kotlinx.serialization.Serializable
 
 
@@ -100,9 +101,7 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel = hiltViewModel()){
                 }
 
                 composable<DashboardScreen.Settings> {
-                    Box(modifier = Modifier
-                        .background(Color.Green)
-                        .fillMaxSize())
+                    SettingsScreen()
                 }
 
                 composable<DashboardScreen.AllTimeUsage> {

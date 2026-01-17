@@ -84,7 +84,7 @@ fun MetricScreen(viewModel: MetricViewModel = hiltViewModel()) {
 @Composable
 fun AllTimeTitle(title: String){
     Text(title,
-        style = MaterialTheme.typography.titleLarge,
+        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.W700),
         modifier = Modifier.padding(bottom = DimenTokens.Padding.normal))
 }
 

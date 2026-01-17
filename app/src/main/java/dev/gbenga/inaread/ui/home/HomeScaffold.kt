@@ -1,33 +1,19 @@
 package dev.gbenga.inaread.ui.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,10 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.gbenga.inaread.tokens.DimenTokens
-import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.ui.customs.NullableText
 import dev.gbenga.inaread.ui.customs.VerticalCenter
-import dev.gbenga.inaread.ui.dashboard.DashboardScreen
 import dev.gbenga.inaread.ui.theme.Indigo800
 
 
@@ -51,6 +35,7 @@ data class HomeScaffoldConfig(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScaffold(inaScaffoldConfig: HomeScaffoldConfig,
+                 profileInitial: String,
                  content: @Composable () -> Unit) {
 
     Column(verticalArrangement = Arrangement.SpaceBetween) {
@@ -76,7 +61,7 @@ fun HomeScaffold(inaScaffoldConfig: HomeScaffoldConfig,
                 }
             },
             actions = {
-                InitialComponent("G")
+                InitialComponent(profileInitial)
             }
         )
         content()
@@ -85,8 +70,8 @@ fun HomeScaffold(inaScaffoldConfig: HomeScaffoldConfig,
 
 
 @Composable
-fun InitialComponent(initial: String){
-    VerticalCenter(modifier = Modifier.fillMaxHeight()) {
+fun InitialComponent(initial: String, modifier: Modifier =Modifier){
+    VerticalCenter(modifier = modifier.fillMaxHeight()) {
         Box(modifier = Modifier.size(60.dp)
             .padding(DimenTokens.Padding.small)
             .clip(CircleShape)
@@ -102,9 +87,10 @@ fun InitialComponent(initial: String){
 @Preview
 @Composable
 fun PreviewInaScaffold(){
-    HomeScaffold(HomeScaffoldConfig("Mon Jan, 2021", navigationClick = {
+    HomeScaffold(HomeScaffoldConfig("Mon Jan, 2021",
+        navigationClick = {
 
-    })){
+    }), profileInitial = "G"){
         Box(modifier = Modifier.padding().background(MaterialTheme.colorScheme.primary))
     }
 }

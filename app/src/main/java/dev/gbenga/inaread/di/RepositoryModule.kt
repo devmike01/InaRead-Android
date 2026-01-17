@@ -14,9 +14,12 @@ import dev.gbenga.inaread.domain.datastore.FakeUserDataStore
 import dev.gbenga.inaread.domain.services.MeterSummaryApiService
 import dev.gbenga.inaread.domain.datastore.UserDataStore
 import dev.gbenga.inaread.domain.metrics.MetricsRepository
+import dev.gbenga.inaread.domain.settings.ProfileApiService
+import dev.gbenga.inaread.domain.settings.SettingsRepository
 import dev.gbenga.inaread.ui.customs.dataStore
 import dev.gbenga.inaread.ui.metric.MetricsApiService
 import dev.gbenga.inaread.ui.metric.MetricsRepositoryImpl
+import dev.gbenga.inaread.ui.settings.SettingsRepositoryImpl
 import dev.gbenga.inaread.utils.FakeMeterSummaryApiService
 import dev.gbenga.inaread.utils.FakeMetricsApiService
 import kotlin.coroutines.CoroutineContext
@@ -30,16 +33,6 @@ object RepositoryModule {
                                       userDataStore: UserDataStore): MeterSummaryRepository
     = MeterSummaryRepositoryImpl(meterSummaryApiService, userDataStore)
 
-    // Todo: To be removed
-    @Provides
-    fun provideMeterSummaryApiService(): MeterSummaryApiService{
-        return FakeMeterSummaryApiService()
-    }
-
-    @Provides
-    fun provideMetricsApiService(): MetricsApiService{
-        return FakeMetricsApiService()
-    }
 
     @Provides
     fun provideMetricsRepository(
@@ -50,6 +43,13 @@ object RepositoryModule {
     @Provides
     fun provideFakeUserDataStore(): UserDataStore{
         return FakeUserDataStore()
+    }
+
+    @Provides
+    fun provideSettingsRepositoryImpl(profileApiService: ProfileApiService,
+                                      userDataStore: UserDataStore,
+                                      @IOCoroutineContext ioContext: CoroutineContext): SettingsRepository {
+        return SettingsRepositoryImpl(profileApiService, userDataStore, ioContext)
     }
 
 }

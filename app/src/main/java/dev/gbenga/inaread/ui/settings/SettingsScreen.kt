@@ -1,7 +1,189 @@
 package dev.gbenga.inaread.ui.settings
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.gbenga.inaread.tokens.DimenTokens
+import dev.gbenga.inaread.ui.customs.HorizontalCenter
+import dev.gbenga.inaread.ui.customs.InaCard
+import dev.gbenga.inaread.ui.home.HomeParentColumn
+import dev.gbenga.inaread.ui.home.InitialComponent
+import dev.gbenga.inaread.ui.home.UnitLaunchEffect
+import dev.gbenga.inaread.ui.home.VectorInaTextIcon
+import dev.gbenga.inaread.ui.metric.AllTimeTitle
+import dev.gbenga.inaread.ui.theme.Indigo50
+import dev.gbenga.inaread.ui.theme.White
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
+
+    val uiState by settingsViewModel.state.collectAsStateWithLifecycle()
+
+    Column(modifier = Modifier.padding(DimenTokens.Padding.small).fillMaxSize()) {
+
+        UnitLaunchEffect {
+            settingsViewModel.watchEvents()
+            settingsViewModel.populateSettings()
+        }
+
+        TitledColumn("Your Profile and Settings",
+            "Change from light to dark mode. Edit your profile and many more.",) {
+            LazyColumn(modifier = Modifier
+                .padding(vertical = DimenTokens.Padding.normal)
+                .fillMaxSize(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement
+                    .spacedBy(DimenTokens.Padding.normal)) {
+
+                item {
+                    AllTimeTitle("Profile")
+                    val (username, email, initial) = uiState.profile
+                    ProfileSummary(Modifier
+                        .wrapContentHeight()
+                        .fillMaxWidth().animateItem(), initial,
+                        username, email)
+                }
+                item {
+                    AllTimeTitle("Settings")
+                    SettingsMenu(Modifier.animateItem(), uiState.settingMenu)
+                }
+            }
+        }
+    }
+
+}
+
+
+@Composable
+fun TitledColumn(title: String,
+                     subTitle: String? =null,
+                     modifier: Modifier =Modifier,
+                     content: @Composable () -> Unit) {
+    HorizontalCenter(
+        modifier = modifier
+            .padding(DimenTokens.Padding.normal)
+    ) {
+        val (titleFont, titleWeight) = MaterialTheme.typography.headlineLarge.let {
+            Pair(it.fontSize, it.fontWeight)
+        }
+        val titleSubTitle = buildAnnotatedString {
+            withStyle(style = SpanStyle(
+                fontSize = titleFont,
+                fontWeight = titleWeight,
+                color = White,
+            )){
+                append("$title\n\n")
+            }
+            subTitle?.let {
+                append(subTitle)
+            }
+        }
+        Text(titleSubTitle, style = MaterialTheme.typography
+            .bodyMedium.copy(fontWeight = FontWeight.W400,
+                color = Indigo50
+            ),
+            textAlign = TextAlign.Center)
+        content()
+    }
+}
+@Composable
+fun SettingsMenu(modifier: Modifier,items: List<VectorInaTextIcon>){
+    InaCard(modifier = modifier.fillMaxWidth()
+        .wrapContentHeight()) {
+        items.forEachIndexed { index,  item ->
+            Column(
+                ) {
+                Row(modifier = Modifier.fillMaxSize().clickable{
+
+                },
+                    verticalAlignment = Alignment.CenterVertically) {
+                    item.icon?.let { icon ->
+                        Icon(imageVector = icon,
+                            contentDescription = item.label,
+                            modifier = Modifier.size(DimenTokens.Icon.Small),
+                            tint = Color(item.color)
+                        )
+                    }
+                    Text(item.label,
+                        style = MaterialTheme.typography.bodyMedium,modifier = Modifier
+                            .padding(horizontal = DimenTokens.Padding.normal,
+                                vertical = DimenTokens.Padding.normal)
+                        ,)
+                }
+                if(index < items.size -1){
+                    HorizontalDivider(thickness = .5.dp, color = White.copy(alpha = .5f),
+                      //  modifier = Modifier.padding(vertical = DimenTokens.Padding.normal),
+                    )
+
+                }
+            }
+
+        }
+    }
+}
+
+@Composable
+fun ProfileSummary(modifier: Modifier, initial: String, profileName: String, profileEmail: String){
+
+    InaCard(modifier = modifier) {
+        ConstraintLayout(modifier = Modifier
+            .padding(DimenTokens.Padding.normal)) {
+            val (profileAvatar, name, email) = createRefs()
+
+            InitialComponent(initial = initial,
+                modifier = Modifier.constrainAs(profileAvatar){
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                })
+            Text(profileName,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.constrainAs(name){
+                    start.linkTo(profileAvatar.end,
+                        margin = DimenTokens.Padding.small)
+                    top.linkTo(parent.top)
+                })
+            Text(profileEmail,style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.constrainAs(email){
+                    start.linkTo(profileAvatar.end,
+                        margin = DimenTokens.Padding.small)
+                    top.linkTo(name.bottom)
+                    bottom.linkTo(parent.bottom)
+                } )
+        }
+    }
+
+}
+
+@Preview
+@Composable
+fun PreviewSettingsScreen(){
+    SettingsScreen()
 }

@@ -13,7 +13,7 @@ import dev.gbenga.inaread.tokens.DimenTokens
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W700,
+        fontWeight = FontWeight.W500,
         color = White,
         fontSize = 16.sp,
         lineHeight = 24.sp,
@@ -21,7 +21,7 @@ val Typography = Typography(
     ),
     bodyMedium = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W700,
+        fontWeight = FontWeight.W500,
         color = White,
         fontSize = 16.sp,
         lineHeight = 24.sp,
@@ -39,7 +39,7 @@ val Typography = Typography(
 
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W700,
+        fontWeight = FontWeight.W600,
         fontSize = 22.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp,

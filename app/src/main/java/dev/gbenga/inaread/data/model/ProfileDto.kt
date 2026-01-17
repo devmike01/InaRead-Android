@@ -12,3 +12,9 @@ data class ProfileRequest(
     val email: String,
     val password: String,
 )
+
+data class Profile(
+    val username: String ="",
+    val email: String ="",
+    val initial: String =""
+)
