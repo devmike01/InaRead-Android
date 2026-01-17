@@ -42,7 +42,7 @@ fun BarChart(
         modifier = modifier
             .fillMaxWidth()
             .height(220.dp)
-            .padding(8.dp)
+            .padding(vertical = 8.dp)
     ) {
 
         val yAxisWidth = 36.dp.toPx()
