@@ -53,4 +53,9 @@ object DimenTokens {
         val Large = 200.dp
         val Small = 100.dp
     }
+
+    object Auth {
+        val TextFieldHeight = 80.dp
+        val ButtonHeight = 60.dp
+    }
 }
