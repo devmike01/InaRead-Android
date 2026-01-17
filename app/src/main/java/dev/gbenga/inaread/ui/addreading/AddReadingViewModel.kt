@@ -17,7 +17,9 @@ class AddReadingViewModel @Inject constructor(private val imagePickerProvider: I
             events.collect { events ->
                 when(events){
                     is AddReadingEvent.GetMeterImageResult -> {
-                        val selectedImagePath = imagePickerProvider.getAbsolutePathFor(events.imageUri)
+                        val selectedImagePath = imagePickerProvider
+                            .getAbsolutePathFor(events.imageUri)
+                        Scada.info("AddReadingEvent: $selectedImagePath")
                         setState { it.copy(
                             meterImagePath = selectedImagePath)
                         }
@@ -25,7 +27,7 @@ class AddReadingViewModel @Inject constructor(private val imagePickerProvider: I
 
                     is AddReadingEvent.ToggleMeterImageButton -> {
                         setState { it.copy(
-                            enableReadImage = true)
+                            enableReadImage = events.enabled)
                         }
                     }
 
@@ -46,7 +48,6 @@ class AddReadingViewModel @Inject constructor(private val imagePickerProvider: I
     }
 
     fun removeImage(){
-        Scada.info("REMOVE_IMAGE!!")
         sendEvent(AddReadingEvent.RemoveImage)
         sendEvent(AddReadingEvent.ToggleMeterImageButton(false))
     }
