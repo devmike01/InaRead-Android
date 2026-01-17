@@ -6,6 +6,8 @@ import dev.gbenga.inaread.domain.settings.GetProfileUseCase
 import dev.gbenga.inaread.domain.settings.GetSettingsMenuUseCase
 import dev.gbenga.inaread.ui.home.VectorInaTextIcon
 import dev.gbenga.inaread.utils.InaReadViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -13,6 +15,10 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(private val getProfileUseCase: GetProfileUseCase,
                                             private val getSettingsMenuUseCase: GetSettingsMenuUseCase) : InaReadViewModel<SettingsUiState,
         SettingsEvent>(SettingsUiState()) {
+
+            val profile = state.map { it.profile }.distinctUntilChanged()
+    val menuItems = state.map { it.settingMenu }.distinctUntilChanged()
+
 
     override fun watchEvents() {
         viewModelScope.launch {

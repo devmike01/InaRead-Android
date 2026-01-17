@@ -1,9 +1,11 @@
 package dev.gbenga.inaread.ui.home
 
 import androidx.annotation.DrawableRes
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.vector.ImageVector
 
 
+@Immutable
 data class ResIdInaTextIcon(
     override val value: String,
     override val label: String,
@@ -11,6 +13,7 @@ data class ResIdInaTextIcon(
     @DrawableRes val icon: Int? =null,
 ) : InaTextIcon
 
+@Immutable
 data class VectorInaTextIcon(
     val icon: ImageVector? =null,
     override val value: String,

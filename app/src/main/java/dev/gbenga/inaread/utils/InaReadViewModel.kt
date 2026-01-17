@@ -31,5 +31,11 @@ abstract class InaReadViewModel<S: InaReadUiState, E>(initialState: S) : ViewMod
         _state.update (reducer)
     }
 
+    protected fun setState(doBefore: (S) -> S, reducer: (S) -> S){
+        _state.update { state ->
+            reducer(doBefore(state))
+        }
+    }
+
     abstract fun watchEvents()
 }

@@ -24,10 +24,10 @@ private val DarkColorScheme = darkColorScheme(
 
 private val LightColorScheme = lightColorScheme(
     primary = DeepOrange,
-    secondary = Indigo300,
+    secondary = Indigo700,
     tertiary = DeepOrange,
     surface = Indigo300,
-    background = Indigo400,
+    background = Indigo600,
     primaryContainer = Indigo400,
     surfaceVariant = Indigo300,
 

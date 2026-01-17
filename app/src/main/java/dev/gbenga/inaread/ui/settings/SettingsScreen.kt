@@ -6,17 +6,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,10 +32,10 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.gbenga.inaread.data.model.Profile
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.HorizontalCenter
 import dev.gbenga.inaread.ui.customs.InaCard
-import dev.gbenga.inaread.ui.home.HomeParentColumn
 import dev.gbenga.inaread.ui.home.InitialComponent
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
 import dev.gbenga.inaread.ui.home.VectorInaTextIcon
@@ -45,6 +47,11 @@ import dev.gbenga.inaread.ui.theme.White
 fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
 
     val uiState by settingsViewModel.state.collectAsStateWithLifecycle()
+
+     val onItemClick = remember {
+        { value: String -> /* do something here */ }
+    }
+
 
     Column(modifier = Modifier.padding(DimenTokens.Padding.small).fillMaxSize()) {
 
@@ -63,21 +70,42 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
                     .spacedBy(DimenTokens.Padding.normal)) {
 
                 item {
-                    AllTimeTitle("Profile")
-                    val (username, email, initial) = uiState.profile
-                    ProfileSummary(Modifier
-                        .wrapContentHeight()
-                        .fillMaxWidth().animateItem(), initial,
-                        username, email)
+                    ProfileSummaryContent(settingsViewModel)
                 }
                 item {
-                    AllTimeTitle("Settings")
-                    SettingsMenu(Modifier.animateItem(), uiState.settingMenu)
+                    SettingsContent(settingsViewModel, onItemClick)
                 }
             }
         }
     }
 
+}
+
+
+@Composable
+fun LazyItemScope.SettingsContent(settingsViewModel: SettingsViewModel,
+                                  onItemClick: (String) -> Unit){
+    val settingsMenu by settingsViewModel.menuItems.collectAsStateWithLifecycle(
+        initialValue = emptyList()
+    )
+
+    AllTimeTitle("Settings")
+    SettingsMenu(Modifier.animateItem(),
+        settingsMenu,
+        onItemClick)
+}
+
+@Composable
+fun LazyItemScope.ProfileSummaryContent(settingsViewModel: SettingsViewModel){
+    val profile by settingsViewModel.profile.collectAsStateWithLifecycle(
+        initialValue = Profile.EMPTY
+    )
+    AllTimeTitle("Profile")
+    ProfileSummary(Modifier
+        .wrapContentHeight()
+        .fillMaxWidth().animateItem(), profile.initial,
+        profile.username,
+        profile.email)
 }
 
 
@@ -114,14 +142,14 @@ fun TitledColumn(title: String,
     }
 }
 @Composable
-fun SettingsMenu(modifier: Modifier,items: List<VectorInaTextIcon>){
+fun SettingsMenu(modifier: Modifier,items: List<VectorInaTextIcon>,
+                 onItemClick: (String) -> Unit){
     InaCard(modifier = modifier.fillMaxWidth()
         .wrapContentHeight()) {
         items.forEachIndexed { index,  item ->
-            Column(
-                ) {
+            Column {
                 Row(modifier = Modifier.fillMaxSize().clickable{
-
+                    onItemClick.invoke(item.value)
                 },
                     verticalAlignment = Alignment.CenterVertically) {
                     item.icon?.let { icon ->
