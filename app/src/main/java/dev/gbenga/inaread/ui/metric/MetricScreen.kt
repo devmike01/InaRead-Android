@@ -44,7 +44,6 @@ fun MetricScreen(viewModel: MetricViewModel = hiltViewModel()) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
     UnitLaunchEffect {
-        viewModel.watchEvents()
         viewModel.populate()
     }
 

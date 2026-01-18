@@ -21,6 +21,14 @@ class NavigationDelegateImpl(private val navController: NavController) : Navigat
             NavigationEvent.NavigateBack -> {
                 navController.navigateUp()
             }
+
+            is NavigationEvent.NavigateTaskTop -> {
+                navController.navigate(navigationEvent.screen){
+                    popUpTo(navigationEvent.screen){
+                        inclusive =true
+                    }
+                }
+            }
         }
     }
 

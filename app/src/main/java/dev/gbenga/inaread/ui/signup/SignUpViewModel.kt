@@ -15,33 +15,16 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor() : InaReadViewModel<SignUpUiState, SignUpEvent> (SignUpUiState()){
 
-    private val _navigator = Channel<NavigationEvent>(CONFLATED)
-    val navigator get() = _navigator.receiveAsFlow()
 
-
-    override fun watchEvents() {
-        viewModelScope.launch {
-            events.collect { uiEvents ->
-                when(uiEvents){
-                    is SignUpEvent.GotoLogin -> {
-                        _navigator.trySend(NavigationEvent.Navigate(InaScreen.Login))
-                    }
-                    is SignUpEvent.SignUp -> {
-                        setState(doBefore = {
-                            it.copy(signUp = UiStateWithIdle.Loading)
-                        }) { it.copy(signUp = UiStateWithIdle.Idle) }
-                    }
-                }
-            }
-        }
-    }
 
     fun signUp(){
-        sendEvent(SignUpEvent.SignUp)
+        setState(doBefore = {
+            it.copy(signUp = UiStateWithIdle.Loading)
+        }) { it.copy(signUp = UiStateWithIdle.Idle) }
     }
 
     fun gotoLogin(){
-        sendEvent(SignUpEvent.GotoLogin)
+        navigate(NavigationEvent.NavigateBack)
     }
 
 }

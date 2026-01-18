@@ -28,7 +28,6 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         navigationClick = {}
     ), profileInitial = "G"){
         UnitLaunchEffect {
-            viewModel.watchEvents()
             viewModel.populateDashboard()
         }
 
@@ -39,13 +38,12 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
            item {
                TitledColumn(StringTokens.MeterSummary,
-                   endText = "View All",
-                   modifier = Modifier.animateItem()){
+                   endText = "View All",){
                    CalendarTile(
                        homeUiState.daysOfMonth,
                        homeUiState.selectedCalendarPos,
                        isAvailable = false) { dayOfMonth, index ->
-                       viewModel.selectDay(dayOfMonth,index)
+                       viewModel.selectNewDay(dayOfMonth,index)
                    }
                }
            }

@@ -23,10 +23,9 @@ import androidx.navigation.NavController
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.ui.customs.AuthParentColumn
+import dev.gbenga.inaread.ui.customs.InaSingleTextField
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
-import dev.gbenga.inaread.ui.login.InaSingleTextField
 import dev.gbenga.inaread.ui.login.TextWithLink
-import dev.gbenga.inaread.ui.login.rememberLoginFieldState
 import dev.gbenga.inaread.utils.rememberNavigationDelegate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,15 +51,14 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel = hiltViewModel(),
         val navigatorDelegate = rememberNavigationDelegate(navController)
 
         UnitLaunchEffect {
-            signUpViewModel.watchEvents()
-            signUpViewModel.navigator.collect {
-                navigatorDelegate.handleEvents(it)
+            signUpViewModel.navigator.collect { navigationEvent ->
+                navigatorDelegate.handleEvents(navigationEvent)
             }
         }
 
         AuthParentColumn(StringTokens.Auth.SignUpTitle,
             subTitle = StringTokens.Auth.LoginDescription,
-            modifier = Modifier){
+            modifier = Modifier.padding(it)){
             val fieldState = rememberSignUpFormState()
 
             InaSingleTextField(

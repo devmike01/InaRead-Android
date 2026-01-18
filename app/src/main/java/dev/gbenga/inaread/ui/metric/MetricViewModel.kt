@@ -14,28 +14,17 @@ import javax.inject.Inject
 class MetricViewModel @Inject constructor(private val getAppliancesUseCase: GetAppliancesUseCase,
                       private val getMonthlyChartUseCase: GetMonthlyChartUseCase) : InaReadViewModel<MetricUiState, MetricEvent>(MetricUiState()) {
 
-    override fun watchEvents() {
-        viewModelScope.launch {
-            events.collect { uiEvent ->
-                when(uiEvent){
-                    is MetricEvent.LoadAppliances -> {
-                        val monthlyChart = getMonthlyChartUseCase.invoke()
-                            .map { it.toMonthValue() }
-                        setState { it.copy(
-                            monthChartValues = monthlyChart
-                        ) }
-                    }
-                    is MetricEvent.PopulateScreen -> {
-                        val appliances = getAppliancesUseCase.invoke().map { a -> a.toAppliance() }
-                        setState { it.copy(appliances = appliances) }
-                    }
-                }
-            }
-        }
-    }
 
     fun populate(){
-        sendEvent(MetricEvent.PopulateScreen)
-        sendEvent(MetricEvent.LoadAppliances)
+
+        viewModelScope.launch {
+            val appliances = getAppliancesUseCase.invoke().map { a -> a.toAppliance() }
+            val monthlyChart = getMonthlyChartUseCase.invoke()
+                .map { it.toMonthValue() }
+            setState { it.copy(
+                monthChartValues = monthlyChart,
+                appliances = appliances
+            ) }
+        }
     }
 }

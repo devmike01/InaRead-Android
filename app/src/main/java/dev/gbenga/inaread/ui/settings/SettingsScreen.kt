@@ -56,7 +56,6 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
     Column(modifier = Modifier.padding(DimenTokens.Padding.small).fillMaxSize()) {
 
         UnitLaunchEffect {
-            settingsViewModel.watchEvents()
             settingsViewModel.populateSettings()
         }
 

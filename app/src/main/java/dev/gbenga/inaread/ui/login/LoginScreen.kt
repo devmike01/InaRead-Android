@@ -29,7 +29,9 @@ import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.ui.customs.AuthParentColumn
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
 import dev.gbenga.inaread.ui.theme.Indigo300
+import dev.gbenga.inaread.ui.theme.Indigo600
 import dev.gbenga.inaread.utils.rememberNavigationDelegate
+import dev.gbenga.inaread.ui.customs.InaSingleTextField
 
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(),
@@ -43,7 +45,6 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(),
         val fieldState = rememberLoginFieldState()
 
         UnitLaunchEffect {
-            loginViewModel.watchEvents()
             loginViewModel.navigator.collect {
                 navDelegate.handleEvents(it)
             }
@@ -83,7 +84,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(),
         }
 
         Button(onClick = {
-            loginViewModel.gotoSignUp()
+            loginViewModel.logIn("", "")
         },
             modifier = Modifier
                 .padding(vertical = DimenTokens.Padding.normal)
@@ -94,7 +95,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(),
         }
 
         TextWithLink(modifier = Modifier.align(Alignment.BottomCenter),
-            text = StringTokens.Auth.SignUp,
+            text = StringTokens.Auth.DontHaveAccount,
             linkText = StringTokens.Auth.SignUp){
             loginViewModel.gotoSignUp()
         }
@@ -111,7 +112,7 @@ fun TextWithLink(
     onLinkClick: () -> Unit){
 
     val annotatedDontHaveAcct = buildAnnotatedString {
-        append(StringTokens.Auth.DontHaveAccount)
+        append(text)
         withLink(link = LinkAnnotation.Clickable(
             tag = linkText,
             TextLinkStyles(SpanStyle(
@@ -121,36 +122,11 @@ fun TextWithLink(
             onLinkClick()
             //loginViewModel.gotoSignUp()
         }){
-            append(text)
+            append(linkText)
         }
     }
     Text(annotatedDontHaveAcct,
         modifier = modifier,
         style = MaterialTheme.typography
             .bodyMedium)
-}
-
-@Composable
-fun InaSingleTextField(
-    modifier: Modifier =Modifier,
-    value: String,placeholder: String,
-                       onValueChange: (String) -> Unit,){
-    TextField(value,
-        modifier = modifier
-            .height(DimenTokens.Auth.TextFieldHeight)
-            .padding(vertical = DimenTokens.Padding.small)
-            .fillMaxWidth(),
-        onValueChange = onValueChange,
-        singleLine = true,
-        placeholder = {
-            Text(placeholder)
-        },
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            unfocusedContainerColor = Indigo300,
-            focusedContainerColor = MaterialTheme.colorScheme.secondary
-        ),
-        shape = RoundedCornerShape(DimenTokens.Radius.large)
-    )
 }

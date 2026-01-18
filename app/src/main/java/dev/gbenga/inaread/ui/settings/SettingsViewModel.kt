@@ -20,37 +20,18 @@ class SettingsViewModel @Inject constructor(private val getProfileUseCase: GetPr
     val menuItems = state.map { it.settingMenu }.distinctUntilChanged()
 
 
-    override fun watchEvents() {
-        viewModelScope.launch {
-            events.collect { uiEvent ->
-                when(uiEvent){
-                    is SettingsEvent.LoadProfile -> {
-                        val profile = getProfileUseCase.invoke()
-                        setState { it.copy(profile = profile) }
-                    }
-                    is SettingsEvent.LogOut -> {
-
-                    }
-                    is SettingsEvent.LoadMenu -> {
-                        setState { it.copy(
-                            settingMenu = getSettingsMenuUseCase.invoke().map { menu ->
-                                VectorInaTextIcon(
-                                    null, menu.value ?: "",
-                                    menu.name, 0xFFFFFFFF
-                                )
-                            }
-                        ) }
-                    }
-                }
-            }
-        }
-    }
-
-
 
     fun populateSettings(){
-        sendEvent(SettingsEvent.LoadProfile)
-        sendEvent(SettingsEvent.LoadMenu)
+        viewModelScope.launch {
+            val profile = getProfileUseCase.invoke()
+            setState { it.copy(profile = profile,
+                settingMenu = getSettingsMenuUseCase.invoke().map { menu ->
+                    VectorInaTextIcon(
+                        null, menu.value ?: "",
+                        menu.name, 0xFFFFFFFF
+                    )
+                }) }
+        }
     }
 
     fun logOut(){

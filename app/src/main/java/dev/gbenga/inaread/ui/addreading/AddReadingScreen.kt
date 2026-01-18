@@ -59,9 +59,6 @@ fun AddReadingScreen(viewModel: AddReadingViewModel = hiltViewModel()) {
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    UnitLaunchEffect {
-        viewModel.watchEvents()
-    }
 
     val pickMultipleMedia =
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->

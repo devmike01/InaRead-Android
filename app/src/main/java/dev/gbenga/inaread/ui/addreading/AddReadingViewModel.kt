@@ -12,44 +12,32 @@ import javax.inject.Inject
 @HiltViewModel
 class AddReadingViewModel @Inject constructor(private val imagePickerProvider: ImagePickerProvider) : InaReadViewModel<AddReadingState, AddReadingEvent>(AddReadingState()) {
 
-    override fun watchEvents() {
+
+    fun addImage(imageUri: Uri?){
         viewModelScope.launch {
-            events.collect { events ->
-                when(events){
-                    is AddReadingEvent.GetMeterImageResult -> {
-                        val selectedImagePath = imagePickerProvider
-                            .getAbsolutePathFor(events.imageUri)
-                        Scada.info("AddReadingEvent: $selectedImagePath")
-                        setState { it.copy(
-                            meterImagePath = selectedImagePath)
-                        }
-                    }
+            imageUri?.let { imageUri->
 
-                    is AddReadingEvent.ToggleMeterImageButton -> {
-                        setState { it.copy(
-                            enableReadImage = events.enabled)
-                        }
-                    }
-
-                    AddReadingEvent.RemoveImage -> {
-                        setState { it.copy(meterImagePath = null) }
-                    }
+                val selectedImagePath = imagePickerProvider
+                    .getAbsolutePathFor(imageUri)
+                Scada.info("AddReadingEvent: $selectedImagePath")
+                setState { it.copy(
+                    meterImagePath = selectedImagePath)
                 }
             }
+            toggleImage(imageUri != null)
         }
+
     }
 
-    fun addImage(uri: Uri?){
-        uri?.let {
-            sendEvent(AddReadingEvent.GetMeterImageResult(uri))
+    private fun toggleImage(enabled: Boolean){
+        setState { it.copy(
+            enableReadImage = enabled)
         }
-
-        sendEvent(AddReadingEvent.ToggleMeterImageButton(uri != null))
     }
 
     fun removeImage(){
-        sendEvent(AddReadingEvent.RemoveImage)
-        sendEvent(AddReadingEvent.ToggleMeterImageButton(false))
+        setState { it.copy(meterImagePath = null) }
+        toggleImage(false)
     }
 
 }

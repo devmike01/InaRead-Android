@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.color
-import dev.gbenga.inaread.ui.dashboard.DashboardScreen
+import dev.gbenga.inaread.utils.nav.DashboardScreen
 
 
 @Composable

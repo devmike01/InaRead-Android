@@ -1,9 +1,9 @@
 package dev.gbenga.inaread.ui.home
 
 import dev.gbenga.inaread.data.model.MeterMonthlyStat
-import dev.gbenga.inaread.ui.dashboard.DashboardScreen
 import dev.gbenga.inaread.utils.InaReadUiState
 import dev.gbenga.inaread.utils.UiState
+import dev.gbenga.inaread.utils.nav.DashboardScreen
 
 data class HomeUiState(
     val daysOfMonth : CalendarTileWeekDays = emptyList(),

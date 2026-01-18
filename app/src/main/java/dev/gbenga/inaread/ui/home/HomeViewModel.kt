@@ -45,78 +45,15 @@ class HomeViewModel @Inject constructor(
         val selectedDate = savedStateHandle.get<Int>(SELECTED_DATE)
         val selectedPos = savedStateHandle.get<Int>(SELECTED_CALENDAR_POS)
 
-        sendEvent(HomeEvent.LoadTodaysDate)
-        sendEvent(HomeEvent.LoadGreeting)
-        sendEvent(HomeEvent.LoadMeterSummary(calendarProvider
-            .getCurrentDayOfMonth()))
-        sendEvent(HomeEvent.LoadWeekDays)
+        getTopbarContent()
+        getSummary(calendarProvider
+            .getCurrentDayOfMonth())
 
         val scrollToPos = calendarProvider.getIndexOf(calendarProvider.getCurrentDayOfMonth())
-        sendEvent(HomeEvent.SelectDay(selectedDate
-            ?: calendarProvider.getCurrentDayOfMonth(), selectedPos ?: scrollToPos))
+        selectNewDay(selectedDate
+            ?: calendarProvider.getCurrentDayOfMonth(), selectedPos ?: scrollToPos)
     }
 
-
-    override fun watchEvents(){
-        viewModelScope.launch {
-            events.collect { event ->
-                when(event){
-                    is HomeEvent.SelectDay ->{
-                        setState { it.copy(daysOfMonth = it.daysOfMonth.map {  weekDay ->
-                            Scada.info("dayOfMonth: ${weekDay.dayOfMonth}")
-                            weekDay.copy(selected = weekDay.dayOfMonth == event.dayOfMonth,
-                                dayIsAvailable = it.daysOfMonth.any{ dOM -> dOM.dayOfMonth == event.dayOfMonth},
-                                )
-                        }, selectedCalendarPos = event.selectedPos) }
-                    }
-
-                    is HomeEvent.AddReading -> {
-
-                    }
-                    is HomeEvent.GotoHome -> {
-
-                    }
-                    is HomeEvent.GotoSetting -> {
-
-                    }
-                    is HomeEvent.LoadWeekDays ->  setState {
-                        it.copy(daysOfMonth = weekDays.invoke())
-                    }
-                    is HomeEvent.LoadMeterSummary ->   {
-                        meterUseCase.invoke()
-                            .map { usage ->  usage.map {
-                                val usagesByDay = it.usages.associateBy { usage -> usage.fromDayOfMonth }
-                                Pair(it.monthlyMeterUsage.toMeterMonthlyStat(),
-                                    usagesByDay[event.fromDayOfMonth]?.toResIdIconItems() ?: emptyList())
-                            } }
-                            .onStart {
-                                setState { it.copy(meterUsageSummary = UiState.Loading) }
-                            }
-                            .catch {
-                                Scada.error("---------\nMonth_dayOfMonth: $it")
-                            }
-
-                            .collect { usageSummary ->
-                                Scada.info("---------\nMonth_dayOfMonth: ${usageSummary.getOrNull()?.second}")
-
-                                setState { it.copy(
-                                meterUsageSummary = usageSummary.toUiState(),
-                                    selectedDateValue = calendarProvider.getFullDateFrom(event.fromDayOfMonth)
-                                ) }
-                            }
-                    }
-
-                    HomeEvent.LoadGreeting -> {
-                        setState { it.copy(greeting = calendarProvider.greetBasedOnTime()) }
-                    }
-                    HomeEvent.LoadTodaysDate -> {
-                        setState { it.copy(todaysDate = calendarProvider.getToday()) }
-                    }
-
-                }
-            }
-        }
-    }
 
     private fun MonthlyMeterUsage.toMeterMonthlyStat(): MeterMonthlyStat {
         return MeterMonthlyStat(
@@ -177,6 +114,56 @@ class HomeViewModel @Inject constructor(
 
         sendEvent(HomeEvent.LoadMeterSummary(dayOfMonth))
         sendEvent(HomeEvent.SelectDay(dayOfMonth, index))
+    }
+
+    fun selectNewDay(dayOfMonth: Int, selectedPos: Int){
+        if (dayOfMonth != savedStateHandle[SELECTED_DATE]){
+            savedStateHandle[SELECTED_DATE] = dayOfMonth
+            savedStateHandle[SELECTED_CALENDAR_POS] = selectedPos
+        }
+
+        getSummary(dayOfMonth)
+
+        setState { it.copy(daysOfMonth = it.daysOfMonth.map {  weekDay ->
+            Scada.info("dayOfMonth: ${weekDay.dayOfMonth}")
+            weekDay.copy(selected = weekDay.dayOfMonth == dayOfMonth,
+                dayIsAvailable = it.daysOfMonth.any{ dOM -> dOM.dayOfMonth == dayOfMonth},
+            )
+        }, selectedCalendarPos = selectedPos) }
+    }
+
+    fun getTopbarContent(){
+        setState { it.copy(greeting = calendarProvider.greetBasedOnTime(),
+            todaysDate = calendarProvider.getToday(),
+            daysOfMonth = weekDays.invoke()
+            ) }
+    }
+
+    fun getSummary(fromDayOfMonth: Int){
+        viewModelScope.launch {
+
+            meterUseCase.invoke()
+                .map { usage ->  usage.map {
+                    val usagesByDay = it.usages.associateBy { usage -> usage.fromDayOfMonth }
+                    Pair(it.monthlyMeterUsage.toMeterMonthlyStat(),
+                        usagesByDay[fromDayOfMonth]?.toResIdIconItems() ?: emptyList())
+                } }
+                .onStart {
+                    setState { it.copy(meterUsageSummary = UiState.Loading) }
+                }
+                .catch {
+                    Scada.error("---------\nMonth_dayOfMonth: $it")
+                }
+
+                .collect { usageSummary ->
+                    Scada.info("---------\nMonth_dayOfMonth: ${usageSummary.getOrNull()?.second}")
+
+                    setState { it.copy(
+                        meterUsageSummary = usageSummary.toUiState(),
+                        selectedDateValue = calendarProvider.getFullDateFrom(fromDayOfMonth)
+                    ) }
+                }
+        }
     }
 
 }

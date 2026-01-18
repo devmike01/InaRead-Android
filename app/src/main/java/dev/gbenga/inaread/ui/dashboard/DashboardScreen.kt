@@ -31,61 +31,33 @@ import dev.gbenga.inaread.ui.home.UnitLaunchEffect
 import dev.gbenga.inaread.ui.home.ValueLaunchEffect
 import dev.gbenga.inaread.ui.metric.MetricScreen
 import dev.gbenga.inaread.ui.settings.SettingsScreen
+import dev.gbenga.inaread.utils.nav.DashboardScreen
+import dev.gbenga.inaread.utils.nav.InaScreen
+import dev.gbenga.inaread.utils.rememberNavigationDelegate
 import kotlinx.serialization.Serializable
 
 
-@Serializable
-sealed interface DashboardScreen {
-
-    val key: String
-
-    companion object{
-        const val HOME_KEY = "DashboardScreen.HOME"
-        const val SETTINGS_KEY = "DashboardScreen.SETTINGS_KEY"
-        const val ADD_READING_KEY = "DashboardScreen.ADD_READING"
-        const val ALL_TIME_USAGE = "DashboardScreen.ALL_TIME_USAGE"
-    }
-
-    @Serializable
-    data class HomeScreen(override val key: String = HOME_KEY) : DashboardScreen
-
-    @Serializable
-    data class Settings(override val key: String= SETTINGS_KEY) : DashboardScreen
-
-    @Serializable
-    data class AllTimeUsage(override val key: String= ALL_TIME_USAGE) : DashboardScreen
-
-    @Serializable
-    data class AddReading(override val key: String= ADD_READING_KEY) : DashboardScreen
-}
-
-fun String?.toDashboardRoute(): DashboardScreen{
-    return when(this){
-        DashboardScreen.ADD_READING_KEY -> DashboardScreen.AddReading(this)
-        DashboardScreen.HOME_KEY -> DashboardScreen.HomeScreen(this)
-        DashboardScreen.SETTINGS_KEY ->  DashboardScreen.HomeScreen(this)
-        DashboardScreen.ALL_TIME_USAGE -> DashboardScreen.AllTimeUsage(this)
-        else -> throw IllegalArgumentException("Argument is not supported")
-    }
-}
 
 @Composable
-fun DashboardScreenNavGraph(viewModel: DashboardViewModel = hiltViewModel()){
+fun DashboardScreenNavGraph(viewModel: DashboardViewModel = hiltViewModel(),){
     val navController = rememberNavController()
 
     val dashboardUiState by viewModel.state.collectAsStateWithLifecycle()
+    val navigatorDelegate = rememberNavigationDelegate(navController)
 
     Scaffold {
 
         UnitLaunchEffect {
-            viewModel.watchEvents()
             viewModel.navigateUsingSavedState()
             viewModel.populateUI()
+
+
+            viewModel.navigator.collect { nav ->
+                navigatorDelegate.handleEvents(nav)
+            }
         }
 
-        ValueLaunchEffect(dashboardUiState.route) { route ->
-            navController.navigate(route)
-        }
+
 
         Box(modifier = Modifier
             .padding(it)
@@ -118,10 +90,10 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel = hiltViewModel()){
 
                 dashboardUiState.dashboardButtons.forEach { button ->
                     InaBottomNavItem(
-                        selected = { route -> dashboardUiState.route == route },
+                        selected = { route -> dashboardUiState.selectedRoute == route },
                         route = button.route,
                         inaTextIcon = button.inaTextIcon
-                    ){ route -> viewModel.gotoRoute(route) }
+                    ){ route -> viewModel.gotoNewPage(route) }
                 }
 
             }

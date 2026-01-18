@@ -7,5 +7,7 @@ sealed interface NavigationEvent{
 
     data class Navigate(val screen: InaScreen): NavigationEvent
 
+    data class NavigateTaskTop(val screen: InaScreen): NavigationEvent
+
     object NavigateBack: NavigationEvent
 }
