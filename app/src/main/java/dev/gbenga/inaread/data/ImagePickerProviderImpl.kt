@@ -9,7 +9,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dev.gbenga.inaread.domain.date.CalendarProvider
+import dev.gbenga.inaread.domain.providers.CalendarProvider
 import dev.gbenga.inaread.domain.providers.ImagePickerProvider
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withContext

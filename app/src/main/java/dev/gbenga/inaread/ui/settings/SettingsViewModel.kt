@@ -2,8 +2,8 @@ package dev.gbenga.inaread.ui.settings
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.gbenga.inaread.domain.settings.GetProfileUseCase
-import dev.gbenga.inaread.domain.settings.GetSettingsMenuUseCase
+import dev.gbenga.inaread.domain.usecase.GetProfileUseCase
+import dev.gbenga.inaread.domain.usecase.GetSettingsMenuUseCase
 import dev.gbenga.inaread.ui.home.VectorInaTextIcon
 import dev.gbenga.inaread.utils.InaReadViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged

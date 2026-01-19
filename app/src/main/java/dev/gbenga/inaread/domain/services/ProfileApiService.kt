@@ -1,4 +1,4 @@
-package dev.gbenga.inaread.domain.settings
+package dev.gbenga.inaread.domain.services
 
 import dev.gbenga.inaread.data.model.ProfileResponse
 

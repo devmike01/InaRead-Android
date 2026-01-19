@@ -1,4 +1,4 @@
-package dev.gbenga.inaread.domain.coroutines
+package dev.gbenga.inaread.domain.providers
 
 interface CoroutineProviders {
 

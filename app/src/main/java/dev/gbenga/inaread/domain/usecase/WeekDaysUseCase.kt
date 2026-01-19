@@ -1,7 +1,6 @@
-package dev.gbenga.inaread.domain.home
+package dev.gbenga.inaread.domain.usecase
 
-import android.util.Log
-import dev.gbenga.inaread.domain.date.CalendarProvider
+import dev.gbenga.inaread.domain.providers.CalendarProvider
 import dev.gbenga.inaread.ui.home.CalendarTileData
 import dev.gbenga.inaread.ui.home.CalendarTileWeekDays
 import javax.inject.Inject

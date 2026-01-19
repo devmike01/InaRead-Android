@@ -1,7 +1,6 @@
-package dev.gbenga.inaread.domain.date
+package dev.gbenga.inaread.domain.providers
 
 import dev.gbenga.inaread.data.model.DateAndMonth
-
 
 interface CalendarProvider {
 

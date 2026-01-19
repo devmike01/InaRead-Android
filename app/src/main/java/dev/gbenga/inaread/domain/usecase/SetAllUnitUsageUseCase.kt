@@ -1,8 +1,8 @@
-package dev.gbenga.inaread.domain.unitusage
+package dev.gbenga.inaread.domain.usecase
 
 import dev.gbenga.inaread.data.model.MonthlyUsage
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
-import dev.gbenga.inaread.domain.allunits.AllUnitUsageRepository
+import dev.gbenga.inaread.domain.repository.AllUnitUsageRepository
 import javax.inject.Inject
 
 class SetAllUnitUsageUseCase  @Inject constructor(val allUnitUsageRepository: AllUnitUsageRepository) {

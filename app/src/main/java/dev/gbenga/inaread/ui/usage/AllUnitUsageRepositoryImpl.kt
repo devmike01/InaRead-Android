@@ -2,8 +2,8 @@ package dev.gbenga.inaread.ui.usage
 
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
 import dev.gbenga.inaread.data.model.MonthlyUsageResponse
-import dev.gbenga.inaread.domain.allunits.AllUnitUsageApiService
-import dev.gbenga.inaread.domain.allunits.AllUnitUsageRepository
+import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
+import dev.gbenga.inaread.domain.repository.AllUnitUsageRepository
 import dev.gbenga.inaread.domain.datastore.UserDataStore
 import dev.gbenga.inaread.utils.UserNotFoundException
 import kotlinx.coroutines.flow.firstOrNull

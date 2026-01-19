@@ -22,9 +22,11 @@ ksp = "2.1.10-1.0.30"
 mockk = "1.14.7"
 mockkAgent = "1.14.7"
 mockkAndroid = "1.14.7"
-retrofit = "3.0.0"
+retrofit = "2.11.0"
 roomRuntime = "2.8.4"
 datastoreCore = "1.2.0"
+okhttp3Logging = "5.3.0"
+
 
 [libraries]
 androidx-constraint-layout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintLayout"}
@@ -34,8 +36,9 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 compose-icons-extention = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "composeIconExtention"}
-
+retrofit = { group = "com.squareup.retrofit2", name="retrofit", version.ref = "retrofit"}
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+okhttp3-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref ="okhttp3Logging"}
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-viewmodel = { group = "androidx.hilt", name = "hilt-lifecycle-viewmodel", version.ref = "hiltNavigation" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigation"}
@@ -62,7 +65,6 @@ kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-seria
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastoreCore" }
 
 [plugins]

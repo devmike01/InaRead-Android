@@ -3,15 +3,12 @@ package dev.gbenga.inaread.ui.usage
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
-import dev.gbenga.inaread.domain.unitusage.GetAllUnitUsageUseCase
-import dev.gbenga.inaread.domain.unitusage.SetAllUnitUsageUseCase
-import dev.gbenga.inaread.ui.customs.toUiState
-import dev.gbenga.inaread.ui.customs.uiStateRunCatching
+import dev.gbenga.inaread.domain.usecase.GetAllUnitUsageUseCase
+import dev.gbenga.inaread.domain.usecase.SetAllUnitUsageUseCase
 import dev.gbenga.inaread.ui.customs.uiStateWithIdleRunCatching
 import dev.gbenga.inaread.utils.InaReadViewModelV2
 import dev.gbenga.inaread.utils.NavigationEvent
 import dev.gbenga.inaread.utils.Scada
-import dev.gbenga.inaread.utils.UiState
 import dev.gbenga.inaread.utils.UiStateWithIdle
 import kotlinx.coroutines.launch
 import javax.inject.Inject

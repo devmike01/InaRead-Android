@@ -1,8 +1,7 @@
-package dev.gbenga.inaread.domain.allunits
+package dev.gbenga.inaread.domain.repository
 
-import dev.gbenga.inaread.data.model.MonthlyUsageResponse
-import dev.gbenga.inaread.data.model.MonthValue
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
+import dev.gbenga.inaread.data.model.MonthlyUsageResponse
 
 interface AllUnitUsageRepository {
 

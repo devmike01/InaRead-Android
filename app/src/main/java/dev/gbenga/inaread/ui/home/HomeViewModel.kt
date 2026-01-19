@@ -1,6 +1,5 @@
 package dev.gbenga.inaread.ui.home
 
-import androidx.compose.ui.util.fastAny
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,9 +7,9 @@ import dev.gbenga.inaread.R
 import dev.gbenga.inaread.data.model.LastPowerUsage
 import dev.gbenga.inaread.data.model.MeterMonthlyStat
 import dev.gbenga.inaread.data.model.MonthlyMeterUsage
-import dev.gbenga.inaread.domain.date.CalendarProvider
-import dev.gbenga.inaread.domain.home.WeekDaysUseCase
-import dev.gbenga.inaread.domain.meter.MeterSummaryUseCase
+import dev.gbenga.inaread.domain.providers.CalendarProvider
+import dev.gbenga.inaread.domain.usecase.WeekDaysUseCase
+import dev.gbenga.inaread.domain.usecase.MeterSummaryUseCase
 import dev.gbenga.inaread.ui.customs.toUiState
 import dev.gbenga.inaread.utils.InaReadViewModel
 import dev.gbenga.inaread.utils.NavigationEvent
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel

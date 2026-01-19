@@ -1,4 +1,4 @@
-package dev.gbenga.inaread.domain.metrics
+package dev.gbenga.inaread.domain.repository
 
 import dev.gbenga.inaread.data.model.ApplianceRequest
 import dev.gbenga.inaread.data.model.ApplianceResponse

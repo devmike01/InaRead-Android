@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.gbenga.inaread.domain.date.CalendarProvider
+import dev.gbenga.inaread.domain.providers.CalendarProvider
 import dev.gbenga.inaread.data.CalendarProviderImpl
 import dev.gbenga.inaread.data.ImagePickerProviderImpl
 import dev.gbenga.inaread.di.annotations.IOCoroutineContext

@@ -1,7 +1,7 @@
 package dev.gbenga.inaread.data
 
 import dev.gbenga.inaread.data.model.DateAndMonth
-import dev.gbenga.inaread.domain.date.CalendarProvider
+import dev.gbenga.inaread.domain.providers.CalendarProvider
 import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.utils.date.InaDateFormatter
 import java.time.Month

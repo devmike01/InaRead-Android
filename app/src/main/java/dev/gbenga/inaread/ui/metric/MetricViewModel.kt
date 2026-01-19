@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gbenga.inaread.data.model.toAppliance
 import dev.gbenga.inaread.data.model.toMonthValue
-import dev.gbenga.inaread.domain.metrics.GetAppliancesUseCase
-import dev.gbenga.inaread.domain.metrics.GetMonthlyChartUseCase
+import dev.gbenga.inaread.domain.usecase.GetAppliancesUseCase
+import dev.gbenga.inaread.domain.usecase.GetMonthlyChartUseCase
 import dev.gbenga.inaread.utils.InaReadViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

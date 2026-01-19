@@ -1,46 +1,72 @@
 package dev.gbenga.inaread.di
 
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import dev.gbenga.inaread.BuildConfig
+import dev.gbenga.inaread.data.auth.LoginResponse
+import dev.gbenga.inaread.data.model.ApiResult
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
 import dev.gbenga.inaread.data.model.MonthlyUsageResponse
 import dev.gbenga.inaread.data.model.ProfileResponse
-import dev.gbenga.inaread.domain.allunits.AllUnitUsageApiService
+import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
+import dev.gbenga.inaread.domain.services.AuthApiService
 import dev.gbenga.inaread.domain.services.MeterSummaryApiService
-import dev.gbenga.inaread.domain.settings.ProfileApiService
-import dev.gbenga.inaread.domain.settings.SettingsRepository
+import dev.gbenga.inaread.domain.services.ProfileApiService
 import dev.gbenga.inaread.ui.metric.MetricsApiService
-import dev.gbenga.inaread.ui.settings.SettingsRepositoryImpl
 import dev.gbenga.inaread.utils.FakeMeterSummaryApiService
 import dev.gbenga.inaread.utils.FakeMetricsApiService
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiServiceModule {
 
+    @Provides
+    fun provideGson() = Gson()
+
+    @Provides
+    fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient{
+        val logging: HttpLoggingInterceptor = HttpLoggingInterceptor()
+        logging.setLevel(level = HttpLoggingInterceptor.Level.HEADERS)
+        return OkHttpClient.Builder()
+            .connectTimeout(60_000, TimeUnit.SECONDS)
+            .readTimeout(60_000, TimeUnit.SECONDS)
+            .addInterceptor(logging)
+            .build()
+    }
+
 
     // Todo: To be removed
     @Provides
-    fun provideMeterSummaryApiService(): MeterSummaryApiService{
-        return FakeMeterSummaryApiService()
+    fun provideMeterSummaryApiService(retrofit: Retrofit): MeterSummaryApiService{
+        return retrofit.create(MeterSummaryApiService::class.java)
     }
 
     @Provides
-    fun provideMetricsApiService(): MetricsApiService{
-        return FakeMetricsApiService()
+    fun provideMetricsApiService(retrofit: Retrofit): MetricsApiService{
+        return retrofit.create(MetricsApiService::class.java)
     }
 
     @Provides
-    fun provideSettingsRepository(): ProfileApiService{
-        return object : ProfileApiService{
-            override suspend fun getProfile(): ProfileResponse {
-                return ProfileResponse("Devmike01", "devmike01@gbenga.com", userId = "ffmg")
-            }
-
-        }
+    fun provideSettingsRepository(retrofit: Retrofit): ProfileApiService{
+        return retrofit.create(ProfileApiService::class.java)
     }
 
     @Provides
@@ -58,6 +84,11 @@ object ApiServiceModule {
             }
 
         }
+    }
+
+    @Provides
+    fun provideAuthApiService(retrofit: Retrofit): AuthApiService {
+        return retrofit.create(AuthApiService::class.java)
     }
 }
 

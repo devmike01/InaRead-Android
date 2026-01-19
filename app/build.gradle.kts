@@ -34,11 +34,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-           // buildConfigField()
+            buildConfigField("String", "BASE_URL", "\"http://127.0.0.1:3000\"")
         }
 
         debug {
             isMinifyEnabled = false
+            buildConfigField("String", "BASE_URL", "\"http://127.0.0.1:3000\"")
         }
 
     }
@@ -76,6 +77,8 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.gson)
+    implementation(libs.okhttp3.logging)
 
     // Mockk
     testImplementation(libs.mockk)
@@ -95,6 +98,15 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     // Typed DataStore for custom data objects (for example, using Proto or JSON).
     implementation(libs.androidx.datastore)
+    // okhttp
+    implementation("com.squareup.okhttp3:okhttp:5.3.2")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+// Also need the main retrofit library and the Gson library
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+
 
     implementation(libs.kotlinx.serialization)
     implementation(libs.androidx.camera2)

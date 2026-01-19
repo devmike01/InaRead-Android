@@ -50,7 +50,7 @@ fun AllUnitUsageScreen(viewModel: AllUnitUsageViewModel = hiltViewModel(),
             navigationClick = {
                 viewModel.goBack()
             }
-        )) {
+        )) { paddingValues ->
             val uiState by viewModel.state.collectAsStateWithLifecycle()
         val navigatorDelegate = rememberNavigationDelegate(navigator)
 
@@ -62,12 +62,13 @@ fun AllUnitUsageScreen(viewModel: AllUnitUsageViewModel = hiltViewModel(),
         }
 
 
-        UiStateWithLoadingBox(uiState.monthlyUsageItems, errorRequest = {
+        UiStateWithLoadingBox(uiState.monthlyUsageItems,
+            errorRequest = {
             Text(it, style = MaterialTheme.typography.bodySmall
                 .copy(color = MaterialTheme.colorScheme.tertiary))
-        }) {  monthlyUsages ->
+        },) {  monthlyUsages ->
             Scada.info("monthlyUsages -> $monthlyUsages")
-            LazyColumn(modifier = Modifier, verticalArrangement = Arrangement
+            LazyColumn(modifier = Modifier.padding(paddingValues), verticalArrangement = Arrangement
                 .spacedBy(DimenTokens.Padding.XSmall) ) {
                 items(monthlyUsages.size){
                     UsageCardItem(item = monthlyUsages[it])
@@ -90,7 +91,7 @@ fun UsageCardItem(modifier: Modifier = Modifier, item: MonthlyUsage){
                 month = item.month,
                 dayOfMonth = item.dayOfMonth)
             VerticalDivider(modifier = Modifier
-                .padding(DimenTokens.Padding.Large)
+                .padding(DimenTokens.Padding.Small)
                 .fillMaxHeight(), thickness = .5.dp,
                 color = 0xFF9FA8DA.color())
             DetailItem(

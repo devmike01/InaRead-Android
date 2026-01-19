@@ -1,4 +1,4 @@
-package dev.gbenga.inaread.domain.meter
+package dev.gbenga.inaread.domain.repository
 
 import dev.gbenga.inaread.data.model.MeterResponse
 
