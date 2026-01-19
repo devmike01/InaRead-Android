@@ -11,15 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -52,14 +49,14 @@ fun MetricScreen(viewModel: MetricViewModel = hiltViewModel()) {
 
         YearPicker(yearState,
             modifier = Modifier.padding(
-                bottom = DimenTokens.Padding.normal)){
+                bottom = DimenTokens.Padding.Normal)){
 
         }
 
         LazyColumn(modifier = Modifier.fillMaxSize()
-            .padding(horizontal = DimenTokens.Padding.normal),
+            .padding(horizontal = DimenTokens.Padding.Normal),
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.normal)) {
+            verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.Normal)) {
 
             item {
                 AllTimeTitle("Your Usage for the year")
@@ -84,14 +81,14 @@ fun MetricScreen(viewModel: MetricViewModel = hiltViewModel()) {
 fun AllTimeTitle(title: String){
     Text(title,
         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.W700),
-        modifier = Modifier.padding(bottom = DimenTokens.Padding.normal))
+        modifier = Modifier.padding(bottom = DimenTokens.Padding.Normal))
 }
 
 
 @Composable
 fun ApplianceItem(modifier: Modifier = Modifier, appliance: Appliance){
     Card(modifier = modifier
-        .padding(vertical = DimenTokens.Padding.small)
+        .padding(vertical = DimenTokens.Padding.Small)
         .height(100.dp)
         .fillMaxWidth(),
     ) {
@@ -99,12 +96,12 @@ fun ApplianceItem(modifier: Modifier = Modifier, appliance: Appliance){
         Row(modifier = Modifier
             .fillMaxWidth()
             .background(Indigo400)
-            .padding(DimenTokens.Padding.normal),
+            .padding(DimenTokens.Padding.Normal),
             horizontalArrangement = Arrangement.SpaceBetween) {
 
             Column {
                 Text(appliance.name, style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(bottom = DimenTokens.Padding.xSmall))
+                    modifier = Modifier.padding(bottom = DimenTokens.Padding.XSmall))
                 Text("Added on: ${appliance.createdOn}",
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.W800))
             }

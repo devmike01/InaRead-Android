@@ -29,9 +29,13 @@ data class InaScaffoldConfig(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InaScaffold(inaScaffoldConfig: InaScaffoldConfig, content: @Composable (PaddingValues) -> Unit) {
+fun InaScaffold(
+    modifier: Modifier = Modifier,
+    inaScaffoldConfig: InaScaffoldConfig = InaScaffoldConfig(),
+    content: @Composable (PaddingValues) -> Unit) {
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {
@@ -40,9 +44,9 @@ fun InaScaffold(inaScaffoldConfig: InaScaffoldConfig, content: @Composable (Padd
                 navigationIcon = {
                     IconButton(onClick = inaScaffoldConfig.navigationClick,
                         modifier = Modifier
-                            .padding(DimenTokens.Padding.small)
+                            .padding(DimenTokens.Padding.Small)
                             .border(width = 1.dp, MaterialTheme
-                                .colorScheme.primary.copy(alpha = .5f),
+                                .colorScheme.secondary.copy(alpha = .5f),
                                 RoundedCornerShape(DimenTokens.Radius.small))) {
                         Icon(imageVector = Icons.Default.ChevronLeft,
                             contentDescription = "Go Back")
@@ -62,7 +66,7 @@ fun InaScaffold(inaScaffoldConfig: InaScaffoldConfig, content: @Composable (Padd
 @Preview
 @Composable
 fun PreviewInaScaffold(){
-    InaScaffold(InaScaffoldConfig("Back", navigationClick = {
+    InaScaffold(inaScaffoldConfig =InaScaffoldConfig("Back", navigationClick = {
 
     })){
         Box(modifier = Modifier.padding(it).background(MaterialTheme.colorScheme.primary))

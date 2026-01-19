@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import dev.gbenga.inaread.tokens.DimenTokens
-import dev.gbenga.inaread.ui.customs.HorizontalCenter
 import dev.gbenga.inaread.ui.customs.InaCard
 import dev.gbenga.inaread.ui.customs.XYAxisCenter
 import java.util.Locale
@@ -30,12 +29,9 @@ fun HomeSummaryCard(cardItems: MeterUsageSummary, monthName: String) {
     InaCard() {
         Row(horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
-                .padding(DimenTokens.Padding.small)
+                .padding(DimenTokens.Padding.Small)
                 .fillMaxWidth()) {
 
-//            cardItems.forEach { item ->
-//                HomeSummaryCardItem(item)
-//            }
 
             MayBeEmptyContent(
                 data = cardItems,
@@ -60,8 +56,8 @@ fun HomeSummaryCard(cardItems: MeterUsageSummary, monthName: String) {
 fun HomeSummaryCardItem(data: InaTextIcon){
     Column(modifier = Modifier
         .wrapContentSize()
-        .padding(DimenTokens.Padding.small),
-        verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.xSmall),
+        .padding(DimenTokens.Padding.Small),
+        verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.XSmall),
         horizontalAlignment = Alignment.Start) {
         InaIcon(data = data)
 

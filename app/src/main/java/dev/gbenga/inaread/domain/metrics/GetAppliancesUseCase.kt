@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 class GetAppliancesUseCase @Inject constructor(val metricsRepository: MetricsRepository) {
 
-    suspend fun invoke(): List<ApplianceResponse>{
+    suspend operator fun invoke(): List<ApplianceResponse>{
         return metricsRepository.getAppliances()
     }
 }

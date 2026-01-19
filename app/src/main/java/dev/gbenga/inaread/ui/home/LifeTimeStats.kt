@@ -27,7 +27,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import dev.gbenga.inaread.data.model.MeterMonthlyStat
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.InaCard
-import dev.gbenga.inaread.ui.customs.color
 
 @Composable
 fun LifeTimeStats(meterMonthlyStat: MeterMonthlyStat, modifier: Modifier = Modifier) {
@@ -44,13 +43,13 @@ fun LifeTimeStats(meterMonthlyStat: MeterMonthlyStat, modifier: Modifier = Modif
             Modifier.constrainAs(monthly){
             top.linkTo(parent.top)
             end.linkTo(parent.end,)
-            start.linkTo(lifetime.end, margin = DimenTokens.Padding.normal)
+            start.linkTo(lifetime.end, margin = DimenTokens.Padding.Normal)
         })
 
         NoChartCard(meterMonthlyStat.costStat, Modifier
-            .padding(vertical = DimenTokens.Padding.small).constrainAs(cost){
+            .padding(vertical = DimenTokens.Padding.Small).constrainAs(cost){
             end.linkTo(parent.end,)
-            start.linkTo(lifetime.end, margin = DimenTokens.Padding.normal)
+            start.linkTo(lifetime.end, margin = DimenTokens.Padding.Normal)
             top.linkTo(monthly.bottom)
         })
     }
@@ -64,7 +63,7 @@ private fun NoChartCard(itemData: InaTextIcon,
         ConstraintLayout(modifier = Modifier
             .fillMaxWidth(.44f)
             .height(100.dp)
-            .padding(start = DimenTokens.Padding.normal)) {
+            .padding(start = DimenTokens.Padding.Normal)) {
             val (stats, chartIcon) = createRefs()
             Column(modifier = Modifier.constrainAs(stats){
                 start.linkTo(parent.start)
@@ -79,7 +78,7 @@ private fun NoChartCard(itemData: InaTextIcon,
                         .copy(fontWeight = FontWeight.W600),)
             }
             InaIcon(itemData, modifier = Modifier.constrainAs(chartIcon){
-                end.linkTo(parent.end, margin = DimenTokens.Padding.xSmall)
+                end.linkTo(parent.end, margin = DimenTokens.Padding.XSmall)
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
             }.size(90.dp))
@@ -95,8 +94,8 @@ fun LifeTimeReadingCard(lifeTimeReading: InaTextIcon,
     InaCard(modifier = modifier) {
         Column(modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween) {
-            Column (modifier = Modifier.padding(DimenTokens.Padding.normal),
-                verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.normal)){
+            Column (modifier = Modifier.padding(DimenTokens.Padding.Normal),
+                verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.Normal)){
                 InaIcon(data = lifeTimeReading)
                 val annotatedString = buildAnnotatedString {
                     withStyle(style = SpanStyle(

@@ -5,7 +5,7 @@ import dev.gbenga.inaread.data.model.ApplianceResponse
 
 class SetApplianceUseCase (private val metricsRepository: MetricsRepository) {
 
-    suspend fun invoke(applianceRequest: ApplianceRequest): ApplianceResponse{
+    suspend operator fun invoke(applianceRequest: ApplianceRequest): ApplianceResponse{
         return metricsRepository.setAppliance(applianceRequest)
     }
 }

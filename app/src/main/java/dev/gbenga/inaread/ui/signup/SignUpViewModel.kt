@@ -27,4 +27,5 @@ class SignUpViewModel @Inject constructor() : InaReadViewModel<SignUpUiState, Si
         navigate(NavigationEvent.NavigateBack)
     }
 
+
 }

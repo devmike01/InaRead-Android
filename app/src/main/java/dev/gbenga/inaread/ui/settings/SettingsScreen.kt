@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -53,7 +52,7 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
     }
 
 
-    Column(modifier = Modifier.padding(DimenTokens.Padding.small).fillMaxSize()) {
+    Column(modifier = Modifier.padding(DimenTokens.Padding.Small).fillMaxSize()) {
 
         UnitLaunchEffect {
             settingsViewModel.populateSettings()
@@ -62,11 +61,11 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
         TitledColumn("Your Profile and Settings",
             "Change from light to dark mode. Edit your profile and many more.",) {
             LazyColumn(modifier = Modifier
-                .padding(vertical = DimenTokens.Padding.normal)
+                .padding(vertical = DimenTokens.Padding.Normal)
                 .fillMaxSize(),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement
-                    .spacedBy(DimenTokens.Padding.normal)) {
+                    .spacedBy(DimenTokens.Padding.Normal)) {
 
                 item {
                     ProfileSummaryContent(settingsViewModel)
@@ -115,7 +114,7 @@ fun TitledColumn(title: String,
                      content: @Composable () -> Unit) {
     HorizontalCenter(
         modifier = modifier
-            .padding(DimenTokens.Padding.normal)
+            .padding(DimenTokens.Padding.Normal)
     ) {
         val (titleFont, titleWeight) = MaterialTheme.typography.headlineLarge.let {
             Pair(it.fontSize, it.fontWeight)
@@ -160,8 +159,8 @@ fun SettingsMenu(modifier: Modifier,items: List<VectorInaTextIcon>,
                     }
                     Text(item.label,
                         style = MaterialTheme.typography.bodyMedium,modifier = Modifier
-                            .padding(horizontal = DimenTokens.Padding.normal,
-                                vertical = DimenTokens.Padding.normal)
+                            .padding(horizontal = DimenTokens.Padding.Normal,
+                                vertical = DimenTokens.Padding.Normal)
                         ,)
                 }
                 if(index < items.size -1){
@@ -181,7 +180,7 @@ fun ProfileSummary(modifier: Modifier, initial: String, profileName: String, pro
 
     InaCard(modifier = modifier) {
         ConstraintLayout(modifier = Modifier
-            .padding(DimenTokens.Padding.normal)) {
+            .padding(DimenTokens.Padding.Normal)) {
             val (profileAvatar, name, email) = createRefs()
 
             InitialComponent(initial = initial,
@@ -194,13 +193,13 @@ fun ProfileSummary(modifier: Modifier, initial: String, profileName: String, pro
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.constrainAs(name){
                     start.linkTo(profileAvatar.end,
-                        margin = DimenTokens.Padding.small)
+                        margin = DimenTokens.Padding.Small)
                     top.linkTo(parent.top)
                 })
             Text(profileEmail,style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.constrainAs(email){
                     start.linkTo(profileAvatar.end,
-                        margin = DimenTokens.Padding.small)
+                        margin = DimenTokens.Padding.Small)
                     top.linkTo(name.bottom)
                     bottom.linkTo(parent.bottom)
                 } )

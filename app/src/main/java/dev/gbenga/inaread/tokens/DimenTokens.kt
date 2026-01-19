@@ -11,15 +11,17 @@ object DimenTokens {
         val HeadlineLarge = 30.sp
         val HeadlineMedium = 27.sp
         val HeadlineSmall = 24.sp
+        val BodySmall = 12.sp
+        val BodyMedium = 16.sp
     }
 
     object Padding {
-        val xSmall = 5.dp
-        val small = xSmall * 2
-        val normal = small * 2
-        val large = normal * 2
-        val xLarge = large * 2
-        val xXLarge = xLarge * 2
+        val XSmall = 5.dp
+        val Small = XSmall * 2
+        val Normal = Small * 2
+        val Large = Normal * 2
+        val XLarge = Large * 2
+        val xXLarge = XLarge * 2
     }
 
     object Icon{
@@ -57,5 +59,9 @@ object DimenTokens {
     object Auth {
         val TextFieldHeight = 80.dp
         val ButtonHeight = 60.dp
+    }
+
+    object UnitUsage {
+        val CardHeight = 115.dp
     }
 }

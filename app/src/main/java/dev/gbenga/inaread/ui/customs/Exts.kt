@@ -15,6 +15,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.utils.UiState
+import dev.gbenga.inaread.utils.UiStateWithIdle
 
 
 @Composable
@@ -41,6 +42,23 @@ fun <T> Result<T>.toUiState(): UiState<T>{
         onFailure = {
             UiState.Error(it.message ?: StringTokens.UknownErrorOccured)
         })
+}
+
+
+suspend  fun <T> uiStateRunCatching(block: suspend () -> T): UiState<T>{
+    return try {
+        UiState.Success(block())
+    }catch (exception: Exception){
+        UiState.Error(exception.message ?: StringTokens.UknownErrorOccured)
+    }
+}
+
+suspend  fun <T> uiStateWithIdleRunCatching(block: suspend () -> T): UiStateWithIdle<T>{
+    return try {
+        UiStateWithIdle.Success(block())
+    }catch (exception: Exception){
+        UiStateWithIdle.Error(exception.message ?: StringTokens.UknownErrorOccured)
+    }
 }
 
 

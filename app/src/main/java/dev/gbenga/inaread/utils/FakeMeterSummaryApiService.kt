@@ -50,18 +50,18 @@ val applianceList = listOf(
 
 
 val monthChartList = listOf(
-    MonthChartResponse(month = "Jan", value = 120.5f),
-    MonthChartResponse(month = "Feb", value = 98.2f),
-    MonthChartResponse(month = "Mar", value = 135.0f),
-    MonthChartResponse(month = "Apr", value = 150.8f),
-    MonthChartResponse(month = "May", value = 170.3f),
-    MonthChartResponse(month = "Jun", value = 160.0f),
-    MonthChartResponse(month = "Jul", value = 180.6f),
-    MonthChartResponse(month = "Aug", value = 175.4f),
-    MonthChartResponse(month = "Sep", value = 155.9f),
-    MonthChartResponse(month = "Oct", value = 140.2f),
-    MonthChartResponse(month = "Nov", value = 130.7f),
-    MonthChartResponse(month = "Dec", value = 165.1f)
+    MonthChartResponse(month = "Jan", value = 120.5f, "2 May, 2024"),
+    MonthChartResponse(month = "Feb", value = 98.2f, "2 May, 2024"),
+    MonthChartResponse(month = "Mar", value = 135.0f, "2 May, 2024"),
+    MonthChartResponse(month = "Apr", value = 150.8f, "2 May, 2024"),
+    MonthChartResponse(month = "May", value = 170.3f, "2 May, 2024"),
+    MonthChartResponse(month = "Jun", value = 160.0f, "2 May, 2024"),
+    MonthChartResponse(month = "Jul", value = 180.6f, "2 May, 2024"),
+    MonthChartResponse(month = "Aug", value = 175.4f, "2 May, 2024"),
+    MonthChartResponse(month = "Sep", value = 155.9f, "2 May, 2024"),
+    MonthChartResponse(month = "Oct", value = 140.2f, "2 May, 2024"),
+    MonthChartResponse(month = "Nov", value = 130.7f, "2 May, 2024"),
+    MonthChartResponse(month = "Dec", value = 165.1f, "2 May, 2024")
 )
 
 val fakeMeterResponse = MeterResponse(

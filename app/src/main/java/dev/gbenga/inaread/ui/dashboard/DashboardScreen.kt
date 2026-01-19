@@ -1,23 +1,17 @@
 package dev.gbenga.inaread.ui.dashboard
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,20 +20,16 @@ import dev.gbenga.inaread.ui.addreading.AddReadingScreen
 import dev.gbenga.inaread.ui.home.HomeBottomNav
 import dev.gbenga.inaread.ui.home.HomeScreen
 import dev.gbenga.inaread.ui.home.InaBottomNavItem
-import dev.gbenga.inaread.ui.home.InaBottomNavItemData
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
-import dev.gbenga.inaread.ui.home.ValueLaunchEffect
 import dev.gbenga.inaread.ui.metric.MetricScreen
 import dev.gbenga.inaread.ui.settings.SettingsScreen
 import dev.gbenga.inaread.utils.nav.DashboardScreen
-import dev.gbenga.inaread.utils.nav.InaScreen
 import dev.gbenga.inaread.utils.rememberNavigationDelegate
-import kotlinx.serialization.Serializable
-
 
 
 @Composable
-fun DashboardScreenNavGraph(viewModel: DashboardViewModel = hiltViewModel(),){
+fun DashboardScreenNavGraph(viewModel: DashboardViewModel = hiltViewModel(),
+                            parentNavController: NavController){
     val navController = rememberNavController()
 
     val dashboardUiState by viewModel.state.collectAsStateWithLifecycle()
@@ -65,7 +55,7 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel = hiltViewModel(),){
 
             NavHost(navController, startDestination = DashboardScreen.HomeScreen()){
                 composable<DashboardScreen.HomeScreen> {
-                    HomeScreen()
+                    HomeScreen(parentNavController = parentNavController)
                 }
 
                 composable<DashboardScreen.AddReading> {
@@ -85,7 +75,7 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel = hiltViewModel(),){
                 modifier = Modifier
                     .fillMaxWidth(.85f)
                     .align(Alignment.BottomCenter)
-                    .padding(vertical = DimenTokens.Padding.normal),
+                    .padding(vertical = DimenTokens.Padding.Normal),
             ){
 
                 dashboardUiState.dashboardButtons.forEach { button ->

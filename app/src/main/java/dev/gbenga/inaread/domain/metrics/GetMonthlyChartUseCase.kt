@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 class GetMonthlyChartUseCase @Inject constructor(private val metricsRepository: MetricsRepository) {
 
-    suspend fun invoke(): List<MonthChartResponse>{
+    suspend operator fun invoke(): List<MonthChartResponse>{
         return metricsRepository.getMonthChart()
     }
 

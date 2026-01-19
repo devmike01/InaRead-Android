@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class MeterSummaryUseCase @Inject constructor(private val meterSummaryRepository: MeterSummaryRepository) {
 
-    suspend fun invoke(): Flow<Result<MeterResponse>>{
+    suspend operator fun invoke(): Flow<Result<MeterResponse>>{
         return flowOf (
 
             runCatching {

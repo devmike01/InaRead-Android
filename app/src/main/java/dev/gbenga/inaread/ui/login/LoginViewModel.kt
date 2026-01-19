@@ -3,13 +3,14 @@ package dev.gbenga.inaread.ui.login
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gbenga.inaread.utils.InaReadViewModel
+import dev.gbenga.inaread.utils.InaReadViewModelV2
 import dev.gbenga.inaread.utils.NavigationEvent
 import dev.gbenga.inaread.utils.nav.InaScreen
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : InaReadViewModel<LoginUiState, LoginEvent>(LoginUiState.Empty) {
+class LoginViewModel @Inject constructor() : InaReadViewModelV2<LoginUiState>(LoginUiState.Empty) {
 
 
     fun logIn(username: String, password: String){

@@ -10,6 +10,7 @@ import dev.gbenga.inaread.ui.dashboard.DashboardScreenNavGraph
 import dev.gbenga.inaread.ui.login.LoginScreen
 import dev.gbenga.inaread.ui.signup.SignUpScreen
 import dev.gbenga.inaread.ui.theme.InaReadTheme
+import dev.gbenga.inaread.ui.usage.AllUnitUsageScreen
 import kotlinx.serialization.Serializable
 
 
@@ -27,7 +28,8 @@ sealed interface InaScreen {
     @Serializable
     object ForgotPassword: InaScreen
 
-
+    @Serializable
+    object AllUnitUsage : InaScreen
 }
 
 
@@ -100,7 +102,7 @@ fun InaNavGraph() {
 
     ){
         composable<InaScreen.Dashboard>{
-            DashboardScreenNavGraph()
+            DashboardScreenNavGraph(parentNavController = navController)
         }
 
         composable<InaScreen.ForgotPassword> {
@@ -113,6 +115,10 @@ fun InaNavGraph() {
 
         composable<InaScreen.SignUp> {
             SignUpScreen(navController = navController)
+        }
+
+        composable<InaScreen.AllUnitUsage> {
+            AllUnitUsageScreen(navigator = navController)
         }
     }
 

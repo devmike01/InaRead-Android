@@ -2,11 +2,9 @@ package dev.gbenga.inaread.ui.home
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -19,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
@@ -45,8 +42,8 @@ fun HomeBottomNav(modifier: Modifier = Modifier,
                 clip = false
             }
             .padding(
-                horizontal = DimenTokens.Padding.small,
-                vertical = DimenTokens.Padding.small
+                horizontal = DimenTokens.Padding.Small,
+                vertical = DimenTokens.Padding.Small
             )
             .wrapContentHeight(),
         verticalAlignment = Alignment.CenterVertically,
@@ -66,8 +63,8 @@ fun InaBottomNavItem(inaTextIcon: InaBottomNavItemData,
     } ?: Color.Transparent
     Button(
         modifier = Modifier,
-        contentPadding = PaddingValues(horizontal = DimenTokens.Padding.small,
-            vertical = DimenTokens.Padding.small),
+        contentPadding = PaddingValues(horizontal = DimenTokens.Padding.Small,
+            vertical = DimenTokens.Padding.Small),
         onClick = { onClick(route) },
         shape = RoundedCornerShape(DimenTokens.Radius.large),
         colors = ButtonDefaults.buttonColors(
@@ -84,7 +81,7 @@ fun InaBottomNavItem(inaTextIcon: InaBottomNavItemData,
                 contentDescription = inaTextIcon.label,
                 modifier = Modifier
                     .size(26.dp)
-                    .padding(end = DimenTokens.Padding.xSmall),
+                    .padding(end = DimenTokens.Padding.XSmall),
                 tint = Color.White.takeIf {  selected(route) } ?: Color(0x77FFFFFF)
             )
         }

@@ -34,7 +34,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.tokens.StringTokens
-import dev.gbenga.inaread.ui.theme.DeepOrange
 import dev.gbenga.inaread.utils.Scada
 import java.util.Calendar
 
@@ -107,7 +106,7 @@ fun YearPicker(yearState: YearPickerState,
 
 
     Column(modifier = Modifier.wrapContentHeight()
-        .padding(bottom = DimenTokens.Padding.normal)) {
+        .padding(bottom = DimenTokens.Padding.Normal)) {
         Row(horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
@@ -154,7 +153,7 @@ fun YearPicker(yearState: YearPickerState,
                             border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.tertiary),
                             shape = RoundedCornerShape(DimenTokens.Radius.large),
                             modifier = Modifier
-                                .padding(DimenTokens.Padding.xSmall)
+                                .padding(DimenTokens.Padding.XSmall)
                                 .wrapContentHeight()
                                 .padding(3.dp)
                         ) {

@@ -18,8 +18,8 @@ class MetricViewModel @Inject constructor(private val getAppliancesUseCase: GetA
     fun populate(){
 
         viewModelScope.launch {
-            val appliances = getAppliancesUseCase.invoke().map { a -> a.toAppliance() }
-            val monthlyChart = getMonthlyChartUseCase.invoke()
+            val appliances = getAppliancesUseCase().map { a -> a.toAppliance() }
+            val monthlyChart = getMonthlyChartUseCase()
                 .map { it.toMonthValue() }
             setState { it.copy(
                 monthChartValues = monthlyChart,

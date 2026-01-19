@@ -5,16 +5,12 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,11 +27,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -47,12 +41,9 @@ import coil3.request.ImageRequest
 import dev.gbenga.inaread.R
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.tokens.StringTokens
-import dev.gbenga.inaread.ui.customs.HorizontalCenter
 import dev.gbenga.inaread.ui.customs.color
 import dev.gbenga.inaread.ui.home.HomeParentColumn
-import dev.gbenga.inaread.ui.home.UnitLaunchEffect
 import dev.gbenga.inaread.utils.Scada
-import dev.gbenga.inaread.utils.UiState
 
 @Composable
 fun AddReadingScreen(viewModel: AddReadingViewModel = hiltViewModel()) {
@@ -88,7 +79,7 @@ fun AddReadingScreenContent(uiState: AddReadingState,
             subTitle = StringTokens.AddReadingImage.Subtitle
         ){
             ConstraintLayout(modifier = Modifier
-                .padding(top = DimenTokens.Padding.large)
+                .padding(top = DimenTokens.Padding.Large)
                 .wrapContentHeight(),) {
                 val (addImageBtn, readImgBtn) = createRefs()
 
@@ -105,7 +96,7 @@ fun AddReadingScreenContent(uiState: AddReadingState,
                 Button(
                     enabled = uiState.enableReadImage,
                     modifier = Modifier.constrainAs(readImgBtn){
-                        top.linkTo(addImageBtn.bottom, margin = DimenTokens.Padding.large)
+                        top.linkTo(addImageBtn.bottom, margin = DimenTokens.Padding.Large)
                         //bottom.linkTo(parent.bottom, margin = DimenTokens.Padding.xXLarge)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
@@ -158,7 +149,7 @@ fun UploadImageButton(imagePath: String?,
             colors = ButtonDefaults.buttonColors(
                 containerColor = 0xFF37474F.color()
             ),
-            contentPadding = PaddingValues(DimenTokens.Padding.large),
+            contentPadding = PaddingValues(DimenTokens.Padding.Large),
             elevation = ButtonDefaults.elevatedButtonElevation(
                 defaultElevation = 10.dp
             )

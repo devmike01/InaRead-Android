@@ -13,8 +13,10 @@ import dev.gbenga.inaread.domain.home.WeekDaysUseCase
 import dev.gbenga.inaread.domain.meter.MeterSummaryUseCase
 import dev.gbenga.inaread.ui.customs.toUiState
 import dev.gbenga.inaread.utils.InaReadViewModel
+import dev.gbenga.inaread.utils.NavigationEvent
 import dev.gbenga.inaread.utils.Scada
 import dev.gbenga.inaread.utils.UiState
+import dev.gbenga.inaread.utils.nav.InaScreen
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -54,6 +56,9 @@ class HomeViewModel @Inject constructor(
             ?: calendarProvider.getCurrentDayOfMonth(), selectedPos ?: scrollToPos)
     }
 
+    fun gotoAllUnitUsage(){
+        navigate(NavigationEvent.Navigate(InaScreen.AllUnitUsage))
+    }
 
     private fun MonthlyMeterUsage.toMeterMonthlyStat(): MeterMonthlyStat {
         return MeterMonthlyStat(
@@ -135,14 +140,14 @@ class HomeViewModel @Inject constructor(
     fun getTopbarContent(){
         setState { it.copy(greeting = calendarProvider.greetBasedOnTime(),
             todaysDate = calendarProvider.getToday(),
-            daysOfMonth = weekDays.invoke()
+            daysOfMonth = weekDays()
             ) }
     }
 
     fun getSummary(fromDayOfMonth: Int){
         viewModelScope.launch {
 
-            meterUseCase.invoke()
+            meterUseCase()
                 .map { usage ->  usage.map {
                     val usagesByDay = it.usages.associateBy { usage -> usage.fromDayOfMonth }
                     Pair(it.monthlyMeterUsage.toMeterMonthlyStat(),

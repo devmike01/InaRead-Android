@@ -9,7 +9,11 @@ import dagger.hilt.components.SingletonComponent
 import dev.gbenga.inaread.domain.meter.MeterSummaryRepository
 import dev.gbenga.inaread.data.MeterSummaryRepositoryImpl
 import dev.gbenga.inaread.data.datastore.UserDataStoreImpl
+import dev.gbenga.inaread.data.model.MonthlyUsageRequest
+import dev.gbenga.inaread.data.model.MonthlyUsageResponse
 import dev.gbenga.inaread.di.annotations.IOCoroutineContext
+import dev.gbenga.inaread.domain.allunits.AllUnitUsageApiService
+import dev.gbenga.inaread.domain.allunits.AllUnitUsageRepository
 import dev.gbenga.inaread.domain.datastore.FakeUserDataStore
 import dev.gbenga.inaread.domain.services.MeterSummaryApiService
 import dev.gbenga.inaread.domain.datastore.UserDataStore
@@ -20,6 +24,7 @@ import dev.gbenga.inaread.ui.customs.dataStore
 import dev.gbenga.inaread.ui.metric.MetricsApiService
 import dev.gbenga.inaread.ui.metric.MetricsRepositoryImpl
 import dev.gbenga.inaread.ui.settings.SettingsRepositoryImpl
+import dev.gbenga.inaread.ui.usage.AllUnitUsageRepositoryImpl
 import dev.gbenga.inaread.utils.FakeMeterSummaryApiService
 import dev.gbenga.inaread.utils.FakeMetricsApiService
 import kotlin.coroutines.CoroutineContext
@@ -52,4 +57,15 @@ object RepositoryModule {
         return SettingsRepositoryImpl(profileApiService, userDataStore, ioContext)
     }
 
+
+    @Provides
+    fun provideAllUnitUsageRepository(unitUsageApiService: AllUnitUsageApiService,
+                                      userDataStore: UserDataStore,
+                                      @IOCoroutineContext io: CoroutineContext): AllUnitUsageRepository{
+        return AllUnitUsageRepositoryImpl(
+
+        unitUsageApiService, userDataStore, io)
+    }
+
 }
+

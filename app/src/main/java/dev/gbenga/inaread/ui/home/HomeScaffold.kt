@@ -73,7 +73,7 @@ fun HomeScaffold(inaScaffoldConfig: HomeScaffoldConfig,
 fun InitialComponent(initial: String, modifier: Modifier =Modifier){
     VerticalCenter(modifier = modifier.fillMaxHeight()) {
         Box(modifier = Modifier.size(60.dp)
-            .padding(DimenTokens.Padding.small)
+            .padding(DimenTokens.Padding.Small)
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.tertiary)
         ) {

@@ -6,6 +6,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.gbenga.inaread.utils.UiState
+import dev.gbenga.inaread.utils.UiStateWithIdle
 
 @Composable
 fun <T> UiStateWithLoadingBox(uiState: UiState<T>,
@@ -25,7 +26,29 @@ fun <T> UiStateWithLoadingBox(uiState: UiState<T>,
             errorRequest(uiState.message)
         }
 
-        else -> {}
     }
 }
 
+
+
+@Composable
+fun <T> UiStateWithLoadingBox(uiState: UiStateWithIdle<T>,
+                              errorRequest: @Composable (String) -> Unit,
+                              content: @Composable (T) -> Unit,) {
+    when(uiState){
+        is UiStateWithIdle.Loading ->{
+            HorizontalCenter(modifier = Modifier.wrapContentHeight()
+                .fillMaxWidth()) {
+                CircularProgressIndicator()
+            }
+        }
+        is UiStateWithIdle.Success -> {
+            content(uiState.data)
+        }
+        is UiStateWithIdle.Error -> {
+            errorRequest(uiState.message)
+        }
+
+        else -> {}
+    }
+}

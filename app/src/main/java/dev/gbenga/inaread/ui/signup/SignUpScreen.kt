@@ -38,7 +38,9 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel = hiltViewModel(),
             TopAppBar(title = {
                 Text("Back")
             }, navigationIcon = {
-                IconButton(onClick = {}) {
+                IconButton(onClick = {
+                    signUpViewModel.gotoLogin()
+                }) {
                     Icon(Icons.AutoMirrored.Default.ArrowBack,
                         contentDescription = StringTokens.SignUp.GoBack)
                 }
@@ -87,7 +89,7 @@ fun SignUpScreen(signUpViewModel: SignUpViewModel = hiltViewModel(),
 
             Button(onClick = {},
                 modifier = Modifier
-                    .padding(vertical = DimenTokens.Padding.normal)
+                    .padding(vertical = DimenTokens.Padding.Normal)
                     .height(DimenTokens.Auth.ButtonHeight)
                     .fillMaxWidth()) {
                 Text(StringTokens.Auth.SignUp,

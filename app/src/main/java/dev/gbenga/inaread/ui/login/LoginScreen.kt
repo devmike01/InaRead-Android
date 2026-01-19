@@ -4,18 +4,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
@@ -28,8 +24,6 @@ import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.ui.customs.AuthParentColumn
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
-import dev.gbenga.inaread.ui.theme.Indigo300
-import dev.gbenga.inaread.ui.theme.Indigo600
 import dev.gbenga.inaread.utils.rememberNavigationDelegate
 import dev.gbenga.inaread.ui.customs.InaSingleTextField
 
@@ -87,7 +81,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(),
             loginViewModel.logIn("", "")
         },
             modifier = Modifier
-                .padding(vertical = DimenTokens.Padding.normal)
+                .padding(vertical = DimenTokens.Padding.Normal)
                 .height(DimenTokens.Auth.ButtonHeight)
                 .fillMaxWidth()) {
             Text(StringTokens.Auth.Login,

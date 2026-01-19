@@ -1,13 +1,10 @@
 package dev.gbenga.inaread.ui.home
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -25,7 +22,7 @@ fun HomeParentColumn(title: String,
                      content: @Composable () -> Unit) {
     HorizontalCenter(
         modifier = modifier
-            .padding(DimenTokens.Padding.large)
+            .padding(DimenTokens.Padding.Large)
     ) {
         val (titleFont, titleWeight) = MaterialTheme.typography.headlineLarge.let {
             Pair(it.fontSize, it.fontWeight)

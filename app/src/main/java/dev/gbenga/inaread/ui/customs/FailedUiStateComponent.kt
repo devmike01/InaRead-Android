@@ -12,7 +12,7 @@ import dev.gbenga.inaread.ui.home.VectorInaTextIcon
 @Composable
 fun FailedUiStateComponent(message: String) {
     XYAxisCenter(modifier = Modifier
-        .padding(DimenTokens.Padding.normal).fillMaxWidth()) {
+        .padding(DimenTokens.Padding.Normal).fillMaxWidth()) {
         VectorInaTextIcon(
             icon = Icons.Outlined.ErrorOutline,
             label = "Error",

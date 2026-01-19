@@ -1,11 +1,5 @@
 package dev.gbenga.inaread.ui.customs
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -15,16 +9,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -60,7 +48,7 @@ fun AuthParentColumn(title: String,
 
                     drawRect(color = background, size = size)
                 }.fillMaxSize()
-                .padding(DimenTokens.Padding.normal)
+                .padding(DimenTokens.Padding.Normal)
                 .align(Alignment.Center)
         ) {
             content()
@@ -77,7 +65,7 @@ fun AuthTitledColumn(
                      content: @Composable () -> Unit) {
     Column (
         modifier = modifier
-            .padding(vertical = DimenTokens.Padding.large)
+            .padding(vertical = DimenTokens.Padding.Large)
             .wrapContentHeight(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -101,7 +89,7 @@ fun AuthTitledColumn(
             .bodyMedium.copy(fontWeight = FontWeight.W400,
                 color = Indigo50),
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = DimenTokens.Padding.normal))
+            modifier = Modifier.padding(bottom = DimenTokens.Padding.Normal))
         content()
     }
 }
