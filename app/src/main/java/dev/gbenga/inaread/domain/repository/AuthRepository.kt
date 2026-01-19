@@ -3,14 +3,14 @@ package dev.gbenga.inaread.domain.repository
 import dev.gbenga.inaread.data.auth.LoginRequest
 import dev.gbenga.inaread.data.auth.LoginResponse
 import dev.gbenga.inaread.data.auth.SignUpRequest
-import dev.gbenga.inaread.data.auth.SignUpResponse
+import dev.gbenga.inaread.data.model.ApiResult
 
 interface AuthRepository {
 
-    fun login(request: LoginRequest): LoginResponse
+    suspend fun authenticate(request: LoginRequest): ApiResult<LoginResponse>
 
-    fun getProfile(): LoginResponse
+    suspend fun getProfile(): ApiResult<LoginResponse>
 
-    fun signUp(request: SignUpRequest) : SignUpResponse
+    suspend fun signUp(request: SignUpRequest) : ApiResult<String>
 
 }
