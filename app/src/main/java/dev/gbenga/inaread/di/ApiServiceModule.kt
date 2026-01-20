@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.gbenga.inaread.BuildConfig
+import dev.gbenga.inaread.adapters.NetworkResponseInterceptor
 import dev.gbenga.inaread.data.auth.LoginResponse
 import dev.gbenga.inaread.data.model.ApiResult
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
@@ -42,13 +43,15 @@ object ApiServiceModule {
     }
 
     @Provides
-    fun provideOkHttpClient(): OkHttpClient{
-        val logging: HttpLoggingInterceptor = HttpLoggingInterceptor()
+    fun provideOkHttpClient(gson: Gson): OkHttpClient{
+        val logging = HttpLoggingInterceptor()
         logging.setLevel(level = HttpLoggingInterceptor.Level.HEADERS)
         return OkHttpClient.Builder()
             .connectTimeout(60_000, TimeUnit.SECONDS)
             .readTimeout(60_000, TimeUnit.SECONDS)
             .addInterceptor(logging)
+            .addInterceptor(NetworkResponseInterceptor(gson))
+
             .build()
     }
 
