@@ -10,6 +10,7 @@ data class ApplianceResponse(
 data class ApplianceRequest(
     val name: String,
     val rating: String,
+    val userId: String,
 )
 
 data class Appliance( val name: String,
