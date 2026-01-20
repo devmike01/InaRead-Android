@@ -22,7 +22,7 @@ class MetricsRepositoryImpl(
     }
 
     override suspend fun setAppliance(applianceRequest: ApplianceRequest) = useUserIdInIO { userId ->
-        metricsApiService.setAppliance(userId, applianceRequest)
+        metricsApiService.setAppliance(applianceRequest)
     }
 
     override suspend fun getMonthChart(): List<MonthChartResponse> = useUserIdInIO { userId ->
