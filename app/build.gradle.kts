@@ -89,8 +89,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     // Coil
-    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
     // Datastore
     // Preferences DataStore (SharedPreferences like APIs)
@@ -99,13 +99,16 @@ dependencies {
     // Typed DataStore for custom data objects (for example, using Proto or JSON).
     implementation(libs.androidx.datastore)
     // okhttp
-    implementation("com.squareup.okhttp3:okhttp:5.3.2")
+    implementation(libs.okhttp)
 
     // Retrofit
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation(libs.converter.gson.v2110)
 // Also need the main retrofit library and the Gson library
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.retrofit.v300)
+    implementation(libs.gson.v2101)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
 
 
     implementation(libs.kotlinx.serialization)
