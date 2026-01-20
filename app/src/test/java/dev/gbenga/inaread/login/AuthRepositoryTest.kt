@@ -20,6 +20,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import javax.inject.Inject
+import kotlin.math.sign
 
 
 class AuthRepositoryTest {
@@ -36,6 +37,7 @@ class AuthRepositoryTest {
         private const val EMAIL = "dev01@gm.com"
         private const val AUTH_ERROR_MSG = "Invalid password and username"
         private const val SIGN_UP_SUCCESS_MSG = "Sign up was successful"
+        private const val INVALID_EMAIL_ERROR = "Email is not valid"
     }
 
 
@@ -77,7 +79,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `test sign up success`() = runTest {
-        val signUpRequest = SignUpRequest(USERNAME, PASSWORD, EMAIL)
+
         coEvery { authApiService.signUp(signUpRequest) } returns ApiResult(
             data = SIGN_UP_SUCCESS_MSG
         )
@@ -89,4 +91,20 @@ class AuthRepositoryTest {
         coVerify(exactly = 1) { authApiService.signUp(signUpRequest) }
     }
 
+    @Test
+    fun `test sign up error`() = runTest {
+        coEvery { authApiService.signUp(signUpRequest) } returns ApiResult(
+            error = INVALID_EMAIL_ERROR
+        )
+        val signUpResult = authRepository.signUp(signUpRequest)
+        assertTrue(signUpResult.isError)
+        assertFalse(signUpResult.isSuccess)
+        assertEquals(SIGN_UP_SUCCESS_MSG, signUpResult.data )
+    }
+
+    fun `get user profile`(){
+
+    }
+
+    private val signUpRequest = SignUpRequest(USERNAME, PASSWORD, EMAIL)
 }
