@@ -16,6 +16,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.utils.UiState
 import dev.gbenga.inaread.utils.UiStateWithIdle
+import java.util.concurrent.CancellationException
 
 
 @Composable
@@ -57,6 +58,9 @@ suspend  fun <T> uiStateWithIdleRunCatching(block: suspend () -> T): UiStateWith
     return try {
         UiStateWithIdle.Success(block())
     }catch (exception: Exception){
+        if (exception is CancellationException){
+            throw exception
+        }
         UiStateWithIdle.Error(exception.message ?: StringTokens.UknownErrorOccured)
     }
 }

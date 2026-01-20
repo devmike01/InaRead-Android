@@ -32,6 +32,7 @@ import dev.gbenga.inaread.R
 import dev.gbenga.inaread.data.model.Appliance
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.BarChart
+import dev.gbenga.inaread.ui.customs.UiStateWithLoadingBox
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
 import dev.gbenga.inaread.ui.theme.Indigo400
 
@@ -60,17 +61,26 @@ fun MetricScreen(viewModel: MetricViewModel = hiltViewModel()) {
 
             item {
                 AllTimeTitle("Your Usage for the year")
-                BarChart(uiState.monthChartValues,
-                    modifier = Modifier.animateItem())
+                UiStateWithLoadingBox(uiState.monthChartValues,
+                    errorRequest = {
+
+                    }) {
+                    BarChart(it,
+                        modifier = Modifier.animateItem())
+                }
 
             }
 
             item {
                 AllTimeTitle("Your Appliances")
-                uiState.appliances.forEach {
-                    ApplianceItem(
-                        modifier = Modifier.animateItem(),
-                        appliance = it)
+                UiStateWithLoadingBox(uiState.appliances, errorRequest = {
+                    // TODO: Handle error
+                }) { appliances ->
+                    appliances.forEach {
+                        ApplianceItem(
+                            modifier = Modifier.animateItem(),
+                            appliance = it)
+                    }
                 }
             }
         }

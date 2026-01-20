@@ -23,7 +23,6 @@ class FakeMetricsApiService: MetricsApiService {
     }
 
     override suspend fun setAppliance(
-        userId: String,
         applianceRequest: ApplianceRequest
     ): ApplianceResponse {
         TODO("Not yet implemented")

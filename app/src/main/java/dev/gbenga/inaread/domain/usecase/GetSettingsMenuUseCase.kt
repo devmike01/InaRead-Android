@@ -6,5 +6,5 @@ import javax.inject.Inject
 
 class GetSettingsMenuUseCase  @Inject constructor(private val settingsRepository: SettingsRepository){
 
-    fun invoke(): List<SettingsMenu> = settingsRepository.getSettingsMenu()
+    operator fun invoke(): List<SettingsMenu> = settingsRepository.getSettingsMenu()
 }

@@ -2,10 +2,12 @@ package dev.gbenga.inaread.ui.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -35,12 +37,14 @@ import dev.gbenga.inaread.data.model.Profile
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.HorizontalCenter
 import dev.gbenga.inaread.ui.customs.InaCard
+import dev.gbenga.inaread.ui.customs.UiStateWithLoadingBox
 import dev.gbenga.inaread.ui.home.InitialComponent
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
 import dev.gbenga.inaread.ui.home.VectorInaTextIcon
 import dev.gbenga.inaread.ui.metric.AllTimeTitle
 import dev.gbenga.inaread.ui.theme.Indigo50
 import dev.gbenga.inaread.ui.theme.White
+import dev.gbenga.inaread.utils.Scada
 
 @Composable
 fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
@@ -95,15 +99,29 @@ fun LazyItemScope.SettingsContent(settingsViewModel: SettingsViewModel,
 
 @Composable
 fun LazyItemScope.ProfileSummaryContent(settingsViewModel: SettingsViewModel){
-    val profile by settingsViewModel.profile.collectAsStateWithLifecycle(
-        initialValue = Profile.EMPTY
-    )
+    val settingsUiState by settingsViewModel.state.collectAsStateWithLifecycle()
+
     AllTimeTitle("Profile")
-    ProfileSummary(Modifier
-        .wrapContentHeight()
-        .fillMaxWidth().animateItem(), profile.initial,
-        profile.username,
-        profile.email)
+
+    UiStateWithLoadingBox(settingsUiState.profile,
+        errorRequest = {
+        Scada.info("error---->: $it")
+            InaCard(modifier = Modifier
+                .wrapContentHeight()
+                .height(DimenTokens.Size.topbar)) {
+                Box(modifier = Modifier.fillMaxSize()){
+                    Text(it, modifier = Modifier.align(Alignment.Center))
+                }
+            }
+    }) { profile ->
+        ProfileSummary(Modifier
+            .wrapContentHeight()
+            .fillMaxWidth().animateItem(), profile.initial,
+            profile.username,
+            profile.email)
+    }
+
+
 }
 
 

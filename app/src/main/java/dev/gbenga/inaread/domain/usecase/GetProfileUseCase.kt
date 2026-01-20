@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class GetProfileUseCase @Inject constructor(private val settingsRepository: SettingsRepository) {
 
-    suspend fun invoke(): Profile = settingsRepository.getUserProfile().let { profile ->
+    suspend operator fun invoke(): Profile = settingsRepository.getUserProfile().let { profile ->
         Profile(
             username = profile.username,
             email=profile.email,
