@@ -34,12 +34,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"http://127.0.0.1:3000\"")
+            buildConfigField("String", "BASE_URL", "\"http://localhost:8080/api/v1\"")
         }
 
         debug {
             isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"http://127.0.0.1:3000\"")
+            buildConfigField("String", "BASE_URL", "\"http://localhost:8080/api/v1\"")
         }
 
     }
