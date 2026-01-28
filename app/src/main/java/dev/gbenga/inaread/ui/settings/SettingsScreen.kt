@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.gbenga.inaread.data.model.Profile
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.HorizontalCenter
 import dev.gbenga.inaread.ui.customs.InaCard
@@ -65,8 +64,8 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
         }
 
         TitledColumn(
-            "Your Profile and Settings",
-            "Change from light to dark mode. Edit your profile and many more.",
+            title ="Your Profile and Settings",
+            subTitle = "Change from light to dark mode. Edit your profile and many more.",
         ) {
             LazyColumn(
                 modifier = Modifier
