@@ -10,6 +10,7 @@ import dev.gbenga.inaread.data.model.ApiResult
 import dev.gbenga.inaread.data.network.AuthenticationService
 import dev.gbenga.inaread.domain.repository.AuthRepository
 import dev.gbenga.inaread.domain.services.AuthApiService
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
 class AuthRepositoryImpl(private val authApiService: AuthenticationService,
@@ -34,20 +35,22 @@ class AuthRepositoryImpl(private val authApiService: AuthenticationService,
     }
 
     override suspend fun getProfile(userId: String): ApiResult<LoginResponse> {
-        val profile = userDao.getProfile(userId).map {
-            LoginResponse(
-                it.customerId,
-                it.meterNo,
-                it.countryId,
-                it.meterCategoryId,
-                it.createdAt,
-                it.enabled,
-                it.username,
-                it.email,
-                null,
-            )
+        return withContext(io){
+            val profile = userDao.getProfile(userId).map {
+                LoginResponse(
+                    it.customerId,
+                    it.meterNo,
+                    it.countryId,
+                    it.meterCategoryId,
+                    it.createdAt,
+                    it.enabled,
+                    it.username,
+                    it.email,
+                    null,
+                )
+            }
+            ApiResult(data = profile.firstOrNull())
         }
-        return ApiResult(data = profile.firstOrNull())
     }
 
     override suspend fun signUp(request: SignUpRequest): ApiResult<SignUpResponse> {
