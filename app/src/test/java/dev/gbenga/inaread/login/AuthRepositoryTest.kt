@@ -6,14 +6,15 @@ import dev.gbenga.inaread.data.auth.LoginResponse
 import dev.gbenga.inaread.data.auth.SignUpRequest
 import dev.gbenga.inaread.data.auth.SignUpResponse
 import dev.gbenga.inaread.data.db.UserDao
+import dev.gbenga.inaread.data.db.entities.UserEntity
 import dev.gbenga.inaread.data.model.ApiResult
 import dev.gbenga.inaread.data.network.AuthenticationService
 import dev.gbenga.inaread.data.repository.AuthRepositoryImpl
 import dev.gbenga.inaread.domain.repository.AuthRepository
-import dev.gbenga.inaread.domain.services.AuthApiService
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import junit.framework.Assert.assertNotNull
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.runTest
@@ -22,8 +23,6 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import javax.inject.Inject
-import kotlin.math.sign
 
 
 class AuthRepositoryTest {
@@ -116,6 +115,32 @@ class AuthRepositoryTest {
         assertTrue(signUpResult.isError)
         assertFalse(signUpResult.isSuccess)
         assertEquals(INVALID_EMAIL_ERROR, signUpResult.error )
+    }
+
+    @Test
+    fun `test local profile can be queried successfully`() = runTest{
+        val userId = "ff22ddxx"
+        coEvery { userDao.getProfile(userId) } returns listOf(
+            UserEntity(
+                userId,
+                "dev01",
+                "dev@gm.com",
+                "1234543232",
+                "NG",
+                23,
+                "15-Aug-2026",
+                true,
+                locked = false
+            )
+        )
+        val profile = authRepository.getProfile(userId)
+        assertTrue(profile.isSuccess)
+        assertFalse(profile.isError)
+        assertNotNull(profile.data)
+        assertEquals("dev01", profile.data!!.username)
+        assertEquals("dev@gm.com", profile.data.email)
+        assertEquals("1234543232", profile.data.meterNo)
+        assertEquals("NG", profile.data.countryId)
     }
 
 
