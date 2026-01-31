@@ -10,12 +10,12 @@ import dev.gbenga.inaread.data.db.entities.UserEntity
 interface UserDao {
 
     @Query("SELECT * FROM user WHERE customerId = :customerId")
-    suspend fun getProfile(customerId: String): List<UserEntity>
+    fun getProfile(customerId: String): List<UserEntity>
 
     @Delete
-    suspend fun deleteProfile(): Long
+    fun deleteProfile(userEntity: UserEntity): Int
 
     @Insert
-    suspend fun save(userEntity: UserEntity)
+    fun save(userEntity: UserEntity)
 
 }
