@@ -41,7 +41,7 @@ fun <T> Result<T>.toUiState(): UiState<T>{
         UiState.Success(it)
     },
         onFailure = {
-            UiState.Error(it.message ?: StringTokens.UknownErrorOccured)
+            UiState.Error(it.message ?: StringTokens.UnknownErrorOccured)
         })
 }
 
@@ -50,7 +50,7 @@ suspend  fun <T> uiStateRunCatching(block: suspend () -> T): UiState<T>{
     return try {
         UiState.Success(block())
     }catch (exception: Exception){
-        UiState.Error(exception.message ?: StringTokens.UknownErrorOccured)
+        UiState.Error(exception.message ?: StringTokens.UnknownErrorOccured)
     }
 }
 
@@ -61,7 +61,7 @@ suspend  fun <T> uiStateWithIdleRunCatching(block: suspend () -> T): UiStateWith
         if (exception is CancellationException){
             throw exception
         }
-        UiStateWithIdle.Error(exception.message ?: StringTokens.UknownErrorOccured)
+        UiStateWithIdle.Error(exception.message ?: StringTokens.UnknownErrorOccured)
     }
 }
 

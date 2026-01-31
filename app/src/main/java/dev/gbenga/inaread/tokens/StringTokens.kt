@@ -9,7 +9,7 @@ object StringTokens {
     const val SelectADate = "Select a Date"
     const val MeterSummary = "Summary of Usage"
     const val MonthlyUsageSummary = "Summary of Monthly Usage"
-    const val UknownErrorOccured = "An unknown message has occurred"
+    const val UnknownErrorOccured = "An unknown message has occurred"
     const val UserNotAuthenticated = "User not found"
     const val AddMeterReading = "Add meter image"
 
@@ -51,5 +51,7 @@ object StringTokens {
         const val SignUpDescription = "Track your electricity usage and spending to better optimise and reduce your cost"
         const val LoginDescription = "Track your electricity usage and spending to better optimise and reduce your cost"
         const val AlreadyHaveAccount = "Already have an account? "
+        const val NoSuchData = "Data is not available"
+        const val NoProfileWithUserId = "No user with provided ID"
     }
 }

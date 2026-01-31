@@ -6,14 +6,14 @@ import dev.gbenga.inaread.domain.datastore.UserDataStore
 import dev.gbenga.inaread.domain.services.ProfileApiService
 import dev.gbenga.inaread.domain.repository.SettingsRepository
 import dev.gbenga.inaread.utils.UserNotFoundException
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.CoroutineContext
 
 class SettingsRepositoryImpl(
     val profileApiService: ProfileApiService,
     val userDataStore: UserDataStore,
-    val ioContext: CoroutineContext
+    val ioContext: CoroutineDispatcher
 ) : SettingsRepository {
 
     override suspend fun getUserProfile(): ProfileResponse = useUserIdInIO {

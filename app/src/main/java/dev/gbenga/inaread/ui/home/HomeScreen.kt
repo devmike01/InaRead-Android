@@ -97,10 +97,3 @@ fun UnitLaunchEffect(block: suspend CoroutineScope.() -> Unit){
         block()
     }
 }
-
-@Composable
-fun <T> ValueLaunchEffect(key: T, block: suspend CoroutineScope.(T) -> Unit){
-    LaunchedEffect(key) {
-        block(key)
-    }
-}

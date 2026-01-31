@@ -46,7 +46,7 @@ fun <T> UiStateWithLoadingBox(uiState: UiStateWithIdle<T>,
             content(uiState.data)
         }
         is UiStateWithIdle.Error -> {
-            errorRequest(uiState.message)
+            errorRequest(uiState.requiredMessage)
         }
 
         else -> {}

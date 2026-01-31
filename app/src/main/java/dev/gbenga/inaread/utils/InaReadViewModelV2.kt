@@ -15,8 +15,8 @@ abstract class InaReadViewModelV2 <S: InaReadUiState>(initialState: S) : ViewMod
     val state = _state.asStateFlow()
 
 
-    private val _uIState = MutableStateFlow<UiStateWithIdle<S>>(UiStateWithIdle.Idle)
-    val uiState = _uIState.asStateFlow()
+//    private val _uIState = MutableStateFlow<UiStateWithIdle<S>>(UiStateWithIdle.Idle)
+//    val uiState = _uIState.asStateFlow()
 
 
     private val _navigator = Channel<NavigationEvent>(Channel.BUFFERED)

@@ -8,11 +8,11 @@ import dev.gbenga.inaread.domain.datastore.UserDataStore
 import dev.gbenga.inaread.utils.UserNotFoundException
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineDispatcher
 
 class AllUnitUsageRepositoryImpl(private val valUnitUsageApiService: AllUnitUsageApiService,
     private val userDataStore: UserDataStore,
-    private val io: CoroutineContext) : AllUnitUsageRepository {
+    private val io: CoroutineDispatcher) : AllUnitUsageRepository {
 
     override suspend fun getAllMonthlyUsage(): List<MonthlyUsageResponse> {
         return withContext(io){

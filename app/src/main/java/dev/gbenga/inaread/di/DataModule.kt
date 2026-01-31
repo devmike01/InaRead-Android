@@ -16,9 +16,9 @@ import dev.gbenga.inaread.data.db.UserDao
 import dev.gbenga.inaread.di.annotations.IOCoroutineContext
 import dev.gbenga.inaread.domain.providers.ImagePickerProvider
 import dev.gbenga.inaread.utils.date.InaDateFormatter
+import kotlinx.coroutines.CoroutineDispatcher
 import java.text.SimpleDateFormat
 import java.util.Locale
-import kotlin.coroutines.CoroutineContext
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -26,10 +26,11 @@ object DataModule {
 
 
     @Provides
-    fun provideInaReadDatabase(context: Context): InaReadDatabase{
+    fun provideInaReadDatabase(@ApplicationContext context: Context): InaReadDatabase{
         return Room.databaseBuilder(context,
             InaReadDatabase::class.java,
-            "inaread-db").build()
+            "inaread-db")
+            .build()
     }
 
     @Provides
@@ -47,6 +48,6 @@ object DataModule {
 
     @Provides
     fun provideImagePickerProvider(@ApplicationContext context: Context,
-                                   @IOCoroutineContext ioDispatcher : CoroutineContext,): ImagePickerProvider
+                                   @IOCoroutineContext ioDispatcher : CoroutineDispatcher,): ImagePickerProvider
     = ImagePickerProviderImpl(context, ioDispatcher)
 }

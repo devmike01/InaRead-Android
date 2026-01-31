@@ -12,8 +12,8 @@ import dev.gbenga.inaread.data.model.ApiResult
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
 import dev.gbenga.inaread.data.model.MonthlyUsageResponse
 import dev.gbenga.inaread.data.model.ProfileResponse
+import dev.gbenga.inaread.data.network.AuthenticationService
 import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
-import dev.gbenga.inaread.domain.services.AuthApiService
 import dev.gbenga.inaread.domain.services.MeterSummaryApiService
 import dev.gbenga.inaread.domain.services.ProfileApiService
 import dev.gbenga.inaread.ui.metric.MetricsApiService
@@ -73,6 +73,11 @@ object ApiServiceModule {
     }
 
     @Provides
+    fun provideAuthenticationService(retrofit: Retrofit): AuthenticationService {
+        return retrofit.create(AuthenticationService::class.java)
+    }
+
+    @Provides
     fun provideUnitUsageApiService(): AllUnitUsageApiService {
         return object : AllUnitUsageApiService {
             override suspend fun getAllMonthlyUsage(userId: String): List<MonthlyUsageResponse> {
@@ -89,10 +94,7 @@ object ApiServiceModule {
         }
     }
 
-    @Provides
-    fun provideAuthApiService(retrofit: Retrofit): AuthApiService {
-        return retrofit.create(AuthApiService::class.java)
-    }
+
 }
 
 

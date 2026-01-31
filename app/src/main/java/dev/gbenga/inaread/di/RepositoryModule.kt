@@ -1,33 +1,29 @@
 package dev.gbenga.inaread.di
 
-import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.gbenga.inaread.domain.repository.MeterSummaryRepository
 import dev.gbenga.inaread.data.MeterSummaryRepositoryImpl
-import dev.gbenga.inaread.data.datastore.UserDataStoreImpl
-import dev.gbenga.inaread.data.model.MonthlyUsageRequest
-import dev.gbenga.inaread.data.model.MonthlyUsageResponse
-import dev.gbenga.inaread.di.annotations.IOCoroutineContext
-import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
-import dev.gbenga.inaread.domain.repository.AllUnitUsageRepository
-import dev.gbenga.inaread.domain.datastore.FakeUserDataStore
-import dev.gbenga.inaread.domain.services.MeterSummaryApiService
-import dev.gbenga.inaread.domain.datastore.UserDataStore
-import dev.gbenga.inaread.domain.repository.MetricsRepository
-import dev.gbenga.inaread.domain.services.ProfileApiService
-import dev.gbenga.inaread.domain.repository.SettingsRepository
-import dev.gbenga.inaread.ui.customs.dataStore
-import dev.gbenga.inaread.ui.metric.MetricsApiService
+import dev.gbenga.inaread.data.db.UserDao
+import dev.gbenga.inaread.data.network.AuthenticationService
+import dev.gbenga.inaread.data.repository.AuthRepositoryImpl
 import dev.gbenga.inaread.data.repository.MetricsRepositoryImpl
 import dev.gbenga.inaread.data.repository.SettingsRepositoryImpl
+import dev.gbenga.inaread.di.annotations.IOCoroutineContext
+import dev.gbenga.inaread.domain.datastore.FakeUserDataStore
+import dev.gbenga.inaread.domain.datastore.UserDataStore
+import dev.gbenga.inaread.domain.repository.AllUnitUsageRepository
+import dev.gbenga.inaread.domain.repository.AuthRepository
+import dev.gbenga.inaread.domain.repository.MeterSummaryRepository
+import dev.gbenga.inaread.domain.repository.MetricsRepository
+import dev.gbenga.inaread.domain.repository.SettingsRepository
+import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
+import dev.gbenga.inaread.domain.services.MeterSummaryApiService
+import dev.gbenga.inaread.domain.services.ProfileApiService
+import dev.gbenga.inaread.ui.metric.MetricsApiService
 import dev.gbenga.inaread.ui.usage.AllUnitUsageRepositoryImpl
-import dev.gbenga.inaread.utils.FakeMeterSummaryApiService
-import dev.gbenga.inaread.utils.FakeMetricsApiService
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineDispatcher
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -41,7 +37,7 @@ object RepositoryModule {
 
     @Provides
     fun provideMetricsRepository(
-        @IOCoroutineContext ioContext: CoroutineContext, userDataStore: UserDataStore,
+        @IOCoroutineContext ioContext: CoroutineDispatcher, userDataStore: UserDataStore,
         metricsApiService: MetricsApiService):
             MetricsRepository = MetricsRepositoryImpl(ioContext, userDataStore, metricsApiService)
 
@@ -53,7 +49,7 @@ object RepositoryModule {
     @Provides
     fun provideSettingsRepositoryImpl(profileApiService: ProfileApiService,
                                       userDataStore: UserDataStore,
-                                      @IOCoroutineContext ioContext: CoroutineContext): SettingsRepository {
+                                      @IOCoroutineContext ioContext: CoroutineDispatcher): SettingsRepository {
         return SettingsRepositoryImpl(profileApiService, userDataStore, ioContext)
     }
 
@@ -61,11 +57,16 @@ object RepositoryModule {
     @Provides
     fun provideAllUnitUsageRepository(unitUsageApiService: AllUnitUsageApiService,
                                       userDataStore: UserDataStore,
-                                      @IOCoroutineContext io: CoroutineContext): AllUnitUsageRepository{
+                                      @IOCoroutineContext io: CoroutineDispatcher): AllUnitUsageRepository{
         return AllUnitUsageRepositoryImpl(
 
         unitUsageApiService, userDataStore, io)
     }
 
+
+    @Provides
+    fun provideAuthRepository(authApiService: AuthenticationService, userDao: UserDao,
+                              @IOCoroutineContext io: CoroutineDispatcher)
+    : AuthRepository = AuthRepositoryImpl(authApiService, userDao, io)
 }
 
