@@ -12,17 +12,17 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dev.gbenga.inaread.domain.providers.CalendarProvider
 import dev.gbenga.inaread.domain.providers.ImagePickerProvider
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 class ImagePickerProviderImpl @Inject constructor(
     private val context: Context,
-    private val ioDispatcher : CoroutineContext,
+    private val ioDispatcher : CoroutineDispatcher,
 ): ImagePickerProvider {
 
     companion object{
