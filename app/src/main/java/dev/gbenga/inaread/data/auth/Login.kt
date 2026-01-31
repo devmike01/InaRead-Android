@@ -1,7 +1,15 @@
 package dev.gbenga.inaread.data.auth
 
-data class UiLogin(val value: String) {
-}
+data class UiLogin(
+    val customerId: String,
+    val meterNo: String,
+    val countryId: String,
+    val meterCategoryId: Int,
+    val createdAt: String,
+    val enabled: Boolean,
+    val username: String,
+    val email: String,
+)
 
 data class LoginResponse(
     val customerId: String,
@@ -23,10 +31,17 @@ data class AccessToken(val access: String,
 data class LoginRequest(val username: String,
     val password: String)
 
+
 data class SignUpRequest(
     val username: String,
     val password: String,
-    val email: String)
+    val meterType: String,
+    val countryId: String,
+    val meterNo: String,
+    val email: String,
+    val meterCategoryId: Int
+)
+
 
 
 data class SignUpResponse(val message: String)
