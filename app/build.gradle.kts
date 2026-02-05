@@ -110,6 +110,9 @@ dependencies {
     // Room
     implementation(libs.androidx.room.runtime)
 
+    // Android crypto
+    implementation(libs.androidx.crypto.security)
+
 
     implementation(libs.kotlinx.serialization)
     implementation(libs.androidx.camera2)
