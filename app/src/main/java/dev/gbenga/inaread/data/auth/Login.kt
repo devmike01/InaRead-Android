@@ -9,7 +9,20 @@ data class UiLogin(
     val enabled: Boolean,
     val username: String,
     val email: String,
-)
+){
+    companion object{
+        val EMPTY = UiLogin(
+            "",
+            "",
+            "",
+            -1,
+            "",
+            false,
+            "",
+            ""
+        )
+    }
+}
 
 data class LoginResponse(
     val customerId: String,
