@@ -13,6 +13,7 @@ import dev.gbenga.inaread.ui.home.HomeEvent
 import dev.gbenga.inaread.ui.home.HomeViewModel
 import dev.gbenga.inaread.ui.home.InaBottomNavItemData
 import dev.gbenga.inaread.utils.InaReadViewModel
+import dev.gbenga.inaread.utils.InaReadViewModelV2
 import dev.gbenga.inaread.utils.NavigationEvent
 import dev.gbenga.inaread.utils.nav.DashboardScreen
 import dev.gbenga.inaread.utils.nav.toDashboardRoute
@@ -23,8 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-): InaReadViewModel<DashboardUiState, DashboardEvent>(DashboardUiState()) {
-
+): InaReadViewModelV2<DashboardUiState>(DashboardUiState()) {
 
 
     fun populateUI(){

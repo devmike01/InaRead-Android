@@ -45,12 +45,12 @@ object ApiServiceModule {
     @Provides
     fun provideOkHttpClient(gson: Gson): OkHttpClient{
         val logging = HttpLoggingInterceptor()
-        logging.setLevel(level = HttpLoggingInterceptor.Level.HEADERS)
+        logging.setLevel(level = HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient.Builder()
             .connectTimeout(60_000, TimeUnit.SECONDS)
             .readTimeout(60_000, TimeUnit.SECONDS)
             .addInterceptor(logging)
-            .addInterceptor(NetworkResponseInterceptor(gson))
+           // .addInterceptor(NetworkResponseInterceptor(gson))
 
             .build()
     }

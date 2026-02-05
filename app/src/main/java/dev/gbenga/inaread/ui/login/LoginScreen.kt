@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withLink
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -45,10 +47,21 @@ import dev.gbenga.inaread.utils.UiStateWithIdle
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(),
-                navController: NavController) {
+fun LoginScreen(
+    loginViewModel: LoginViewModel = hiltViewModel(),
+    navController: NavController
+) {
 
     val snackbarHost = remember { SnackbarHostState() }
+    val uiState by loginViewModel.state.collectAsStateWithLifecycle()
+
+    UnitLaunchEffect {
+        loginViewModel.snackBarEvent.collect { msg ->
+            if (msg.isNotEmpty()){
+                snackbarHost.showSnackbar(msg)
+            }
+        }
+    }
 
     Scaffold(
         snackbarHost = {
@@ -65,22 +78,20 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(),
             modifier = Modifier.padding(it),
             title = StringTokens.Auth.LoginTitle,
             subTitle = StringTokens.Auth.LoginDescription,){
-            val uiState by loginViewModel.state.collectAsStateWithLifecycle()
             val navDelegate = rememberNavigationDelegate(navController)
+
             val fieldState = rememberLoginFieldState()
             val showLoading = uiState.login is UiStateWithIdle.Loading
+            val inState = remember { derivedStateOf { uiState.login } }
 
-
-            LaunchedEffect(uiState.login) {
-                when(val loginUiState = uiState.login){
-                    is UiStateWithIdle.Success<*> -> {
-                        loginViewModel.navigateToDashboard()
-                    }
-                    is UiStateWithIdle.Error -> {
-                        snackbarHost.showSnackbar(loginUiState.requiredMessage)
-                    }
-                    else -> {
-                    }
+            when(val login = inState.value){
+                is UiStateWithIdle.Success<*> -> {
+                    loginViewModel.navigateToDashboard()
+                }
+                is UiStateWithIdle.Error -> {
+                    loginViewModel.showSnackBar(login.requiredMessage)
+                }
+                else -> {
                 }
             }
 
@@ -99,7 +110,9 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(),
             }
 
             InaSingleTextField(value =fieldState.password,
-                placeholder = StringTokens.Auth.PasswordPlaceholder){
+                placeholder = StringTokens.Auth.PasswordPlaceholder,
+                passwordVisible = false,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)){
                 fieldState.onPasswordChanged(it)
             }
 
@@ -107,7 +120,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = hiltViewModel(),
                 loginViewModel.gotoForgotPassword()
             }
             Button(onClick = {
-                loginViewModel.logIn("", "")
+                loginViewModel.logIn(fieldState.username, fieldState.password)
             },
                 modifier = Modifier
                     .padding(vertical = DimenTokens.Padding.Normal)

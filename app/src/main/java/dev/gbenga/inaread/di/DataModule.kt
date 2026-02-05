@@ -1,8 +1,14 @@
 package dev.gbenga.inaread.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
+import android.util.Log
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,14 +17,20 @@ import dagger.hilt.components.SingletonComponent
 import dev.gbenga.inaread.domain.providers.CalendarProvider
 import dev.gbenga.inaread.data.CalendarProviderImpl
 import dev.gbenga.inaread.data.ImagePickerProviderImpl
+import dev.gbenga.inaread.data.datastore.AccessTokenStore
 import dev.gbenga.inaread.data.db.InaReadDatabase
 import dev.gbenga.inaread.data.db.UserDao
+import dev.gbenga.inaread.data.security.InaEncryptedPrefs
+import dev.gbenga.inaread.data.security.InaEncryptedPrefsImpl
+import dev.gbenga.inaread.di.annotations.EncryptedSharedPrefs
 import dev.gbenga.inaread.di.annotations.IOCoroutineContext
 import dev.gbenga.inaread.domain.providers.ImagePickerProvider
 import dev.gbenga.inaread.utils.date.InaDateFormatter
 import kotlinx.coroutines.CoroutineDispatcher
+import java.io.FileInputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.Properties
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -50,4 +62,62 @@ object DataModule {
     fun provideImagePickerProvider(@ApplicationContext context: Context,
                                    @IOCoroutineContext ioDispatcher : CoroutineDispatcher,): ImagePickerProvider
     = ImagePickerProviderImpl(context, ioDispatcher)
+
+    @Provides
+    fun provideProperties(): Properties{
+        val property = Properties()
+        return FileInputStream("keys.properties").let{ fis ->
+            property.load(fis)
+            property
+        }
+    }
+
+    @Provides
+    fun provideMasterKey(context: Context, properties: Properties): MasterKey? {
+
+         try {
+            val spec = KeyGenParameterSpec.Builder(
+                properties.getProperty("master.key"),
+                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+            )
+                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                .setKeySize(256)
+                .build()
+
+            return MasterKey.Builder(context)
+                .setKeyGenParameterSpec(spec)
+                .build()
+        } catch (e: Exception) {
+            Log.e(javaClass.getSimpleName(), "Error on getting master key", e)
+        }
+        return null
+    }
+
+    /**
+     * Try to create a secure shared preferences but fall back to
+     * ordinary shared preferences if masterkey is null
+     */
+    @Provides
+    @EncryptedSharedPrefs
+    fun provideEncryptedSharedPreferences(context: Context, masterKey: MasterKey?): SharedPreferences{
+        return masterKey?.let { key ->
+            EncryptedSharedPreferences.create(context,"access_token",
+                key,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences
+                    .PrefValueEncryptionScheme.AES256_GCM)
+        } ?: context.getSharedPreferences("access_token", Context.MODE_PRIVATE)
+
+    }
+
+    @Provides
+    fun provideAccessTokenStore(prefs: EncryptedSharedPreferences): AccessTokenStore {
+        return AccessTokenStore(prefs)
+    }
+
+    @Provides
+    fun provideInaEncryptedPrefs(@EncryptedSharedPrefs preferences: SharedPreferences): InaEncryptedPrefs {
+        return InaEncryptedPrefsImpl(preferences)
+    }
 }

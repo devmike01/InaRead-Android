@@ -5,7 +5,8 @@ import dev.gbenga.inaread.utils.InaReadUiState
 import dev.gbenga.inaread.utils.UiStateWithIdle
 import dev.gbenga.inaread.utils.nav.InaScreen
 
-data class LoginUiState(val login: UiStateWithIdle<UiLogin> = UiStateWithIdle.Idle,
+data class LoginUiState(
+    val login: UiStateWithIdle<UiLogin> = UiStateWithIdle.Idle,
     ): InaReadUiState {
 
     companion object{

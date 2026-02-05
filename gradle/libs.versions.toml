@@ -33,6 +33,7 @@ roomRuntime = "2.8.4"
 datastoreCore = "1.2.0"
 okhttp3Logging = "5.3.0"
 kotlinCoroutineTest = "1.10.2"
+androidCryptoSecurity="1.1.0-alpha06"
 
 
 [libraries]
@@ -79,6 +80,7 @@ mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastoreCore" }
 retrofit-v300 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
+androidx-crypto-security = { group = "androidx.security", name ="security-crypto", version.ref = "androidCryptoSecurity"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
