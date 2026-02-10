@@ -12,6 +12,7 @@ import dev.gbenga.inaread.domain.usecase.WeekDaysUseCase
 import dev.gbenga.inaread.domain.usecase.MeterSummaryUseCase
 import dev.gbenga.inaread.ui.customs.toUiState
 import dev.gbenga.inaread.utils.InaReadViewModel
+import dev.gbenga.inaread.utils.InaReadViewModelV2
 import dev.gbenga.inaread.utils.NavigationEvent
 import dev.gbenga.inaread.utils.Scada
 import dev.gbenga.inaread.utils.UiState
@@ -29,7 +30,7 @@ class HomeViewModel @Inject constructor(
     private val meterUseCase: MeterSummaryUseCase,
     private val calendarProvider: CalendarProvider,
     private val savedStateHandle: SavedStateHandle,
-) : InaReadViewModel<HomeUiState, HomeEvent>(
+) : InaReadViewModelV2<HomeUiState>(
     HomeUiState()
 ) {
 
@@ -115,8 +116,8 @@ class HomeViewModel @Inject constructor(
             savedStateHandle[SELECTED_CALENDAR_POS] = index
         }
 
-        sendEvent(HomeEvent.LoadMeterSummary(dayOfMonth))
-        sendEvent(HomeEvent.SelectDay(dayOfMonth, index))
+//        sendEvent(HomeEvent.LoadMeterSummary(dayOfMonth))
+//        sendEvent(HomeEvent.SelectDay(dayOfMonth, index))
     }
 
     fun selectNewDay(dayOfMonth: Int, selectedPos: Int){
