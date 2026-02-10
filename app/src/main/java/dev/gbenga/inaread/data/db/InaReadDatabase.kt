@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import dev.gbenga.inaread.data.db.entities.UserEntity
 
-@Database(entities = [UserEntity::class], version = 1, exportSchema = false)
+@Database(entities = [UserEntity::class], version = 2, exportSchema = false)
 abstract class InaReadDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
