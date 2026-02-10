@@ -6,7 +6,6 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Log
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import dagger.Module
@@ -14,16 +13,16 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.gbenga.inaread.domain.providers.CalendarProvider
 import dev.gbenga.inaread.data.CalendarProviderImpl
 import dev.gbenga.inaread.data.ImagePickerProviderImpl
 import dev.gbenga.inaread.data.datastore.AccessTokenStore
 import dev.gbenga.inaread.data.db.InaReadDatabase
 import dev.gbenga.inaread.data.db.UserDao
-import dev.gbenga.inaread.data.security.InaEncryptedPrefs
 import dev.gbenga.inaread.data.security.InaEncryptedPrefsImpl
 import dev.gbenga.inaread.di.annotations.EncryptedSharedPrefs
 import dev.gbenga.inaread.di.annotations.IOCoroutineContext
+import dev.gbenga.inaread.domain.datastore.InaEncryptedPrefs
+import dev.gbenga.inaread.domain.providers.CalendarProvider
 import dev.gbenga.inaread.domain.providers.ImagePickerProvider
 import dev.gbenga.inaread.utils.date.InaDateFormatter
 import kotlinx.coroutines.CoroutineDispatcher
@@ -42,6 +41,7 @@ object DataModule {
         return Room.databaseBuilder(context,
             InaReadDatabase::class.java,
             "inaread-db")
+            .fallbackToDestructiveMigration(true) // TODO:
             .build()
     }
 
@@ -64,16 +64,15 @@ object DataModule {
     = ImagePickerProviderImpl(context, ioDispatcher)
 
     @Provides
-    fun provideProperties(): Properties{
-        val property = Properties()
-        return FileInputStream("keys.properties").let{ fis ->
-            property.load(fis)
-            property
-        }
+    fun provideProperties(@ApplicationContext context: Context): Properties{
+        val properties = Properties()
+        val ins = context.assets.open("keys.properties")
+        properties.load(ins)
+        return properties
     }
 
     @Provides
-    fun provideMasterKey(context: Context, properties: Properties): MasterKey? {
+    fun provideMasterKey(@ApplicationContext context: Context, properties: Properties): MasterKey? {
 
          try {
             val spec = KeyGenParameterSpec.Builder(
@@ -100,7 +99,7 @@ object DataModule {
      */
     @Provides
     @EncryptedSharedPrefs
-    fun provideEncryptedSharedPreferences(context: Context, masterKey: MasterKey?): SharedPreferences{
+    fun provideEncryptedSharedPreferences(@ApplicationContext context: Context, masterKey: MasterKey?): SharedPreferences{
         return masterKey?.let { key ->
             EncryptedSharedPreferences.create(context,"access_token",
                 key,
@@ -112,7 +111,7 @@ object DataModule {
     }
 
     @Provides
-    fun provideAccessTokenStore(prefs: EncryptedSharedPreferences): AccessTokenStore {
+    fun provideAccessTokenStore(@EncryptedSharedPrefs prefs: SharedPreferences): AccessTokenStore {
         return AccessTokenStore(prefs)
     }
 

@@ -2,7 +2,7 @@ package dev.gbenga.inaread.data.security
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import dev.gbenga.inaread.domain.InaEncryptedPrefs
+import dev.gbenga.inaread.domain.datastore.InaEncryptedPrefs
 
 
 class InaEncryptedPrefsImpl(private val preferences: SharedPreferences) : InaEncryptedPrefs {
@@ -13,6 +13,10 @@ class InaEncryptedPrefsImpl(private val preferences: SharedPreferences) : InaEnc
         preferences.edit {
             putString(key, value)
         }
+    }
+
+    override fun getString(key: String): String? {
+        return preferences.getString(key, null)
     }
 
     override fun clear() {

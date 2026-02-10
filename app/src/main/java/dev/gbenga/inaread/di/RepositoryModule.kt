@@ -5,12 +5,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.gbenga.inaread.data.MeterSummaryRepositoryImpl
+import dev.gbenga.inaread.data.datastore.AccessTokenStore
 import dev.gbenga.inaread.data.db.UserDao
 import dev.gbenga.inaread.data.network.AuthenticationService
 import dev.gbenga.inaread.data.repository.AuthRepositoryImpl
 import dev.gbenga.inaread.data.repository.MetricsRepositoryImpl
 import dev.gbenga.inaread.data.repository.SettingsRepositoryImpl
 import dev.gbenga.inaread.di.annotations.IOCoroutineContext
+import dev.gbenga.inaread.domain.datastore.InaEncryptedPrefs
 import dev.gbenga.inaread.domain.datastore.FakeUserDataStore
 import dev.gbenga.inaread.domain.datastore.UserDataStore
 import dev.gbenga.inaread.domain.repository.AllUnitUsageRepository
@@ -66,7 +68,11 @@ object RepositoryModule {
 
     @Provides
     fun provideAuthRepository(authApiService: AuthenticationService, userDao: UserDao,
+                              inaEncryptedPrefs: AccessTokenStore,
                               @IOCoroutineContext io: CoroutineDispatcher)
-    : AuthRepository = AuthRepositoryImpl(authApiService, userDao, io)
+    : AuthRepository = AuthRepositoryImpl(
+        authApiService, userDao,
+        accessTokenStore = inaEncryptedPrefs,
+        io)
 }
 

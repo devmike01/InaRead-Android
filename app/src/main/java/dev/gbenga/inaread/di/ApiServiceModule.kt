@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.di
 
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -8,11 +9,14 @@ import dagger.hilt.components.SingletonComponent
 import dev.gbenga.inaread.BuildConfig
 import dev.gbenga.inaread.adapters.NetworkResponseInterceptor
 import dev.gbenga.inaread.data.auth.LoginResponse
+import dev.gbenga.inaread.data.datastore.AccessTokenStore
 import dev.gbenga.inaread.data.model.ApiResult
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
 import dev.gbenga.inaread.data.model.MonthlyUsageResponse
 import dev.gbenga.inaread.data.model.ProfileResponse
 import dev.gbenga.inaread.data.network.AuthenticationService
+import dev.gbenga.inaread.di.annotations.EncryptedSharedPrefs
+import dev.gbenga.inaread.domain.SecureAccessTokenStore
 import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
 import dev.gbenga.inaread.domain.services.MeterSummaryApiService
 import dev.gbenga.inaread.domain.services.ProfileApiService
@@ -43,16 +47,20 @@ object ApiServiceModule {
     }
 
     @Provides
-    fun provideOkHttpClient(gson: Gson): OkHttpClient{
+    fun provideOkHttpClient(accessTokenStore: SecureAccessTokenStore): OkHttpClient{
         val logging = HttpLoggingInterceptor()
         logging.setLevel(level = HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient.Builder()
             .connectTimeout(60_000, TimeUnit.SECONDS)
             .readTimeout(60_000, TimeUnit.SECONDS)
             .addInterceptor(logging)
-           // .addInterceptor(NetworkResponseInterceptor(gson))
-
+            .addInterceptor(NetworkResponseInterceptor(accessTokenStore))
             .build()
+    }
+
+    @Provides
+    fun provideAccessTokenStore(@EncryptedSharedPrefs prefs: SharedPreferences): SecureAccessTokenStore{
+        return AccessTokenStore(prefs);
     }
 
 

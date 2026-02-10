@@ -50,14 +50,14 @@ fun UserEntity.toLoginOutput(): LoginOutput{
 
 fun LoginResponse.toUserEntity(): UserEntity{
     return UserEntity(
-        customerId,
-        username,
-        email,
-        meterNo,
-        countryId,
-        meterCategoryId,
-        createdAt,
-        enabled,
+        customerId =customerId,
+        username =username,
+        email =email,
+        meterNo=meterNo,
+        countryId=countryId,
+        meterCategoryId=meterCategoryId,
+        createdAt=createdAt,
+        enabled=enabled,
         locked = false
     )
 }

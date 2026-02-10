@@ -22,3 +22,4 @@ inline fun <T, R> RepoResult<T>.map(
         is RepoResult.Success<T> -> RepoResult.Success(onMap(this.data))
     }
 }
+

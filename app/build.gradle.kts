@@ -34,12 +34,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://inaread-v0-0-1.onrender.com/api/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://a95a-197-253-4-26.ngrok-free.app/api/v1/\"")
         }
 
         debug {
             isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"https://inaread-v0-0-1.onrender.com/api/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://a95a-197-253-4-26.ngrok-free.app/api/v1/\"")
         }
 
     }
