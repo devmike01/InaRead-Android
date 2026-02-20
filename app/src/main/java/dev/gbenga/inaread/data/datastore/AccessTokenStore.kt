@@ -9,6 +9,7 @@ class AccessTokenStore(private val cryptoSharedPrefs: SharedPreferences) : Secur
 
     companion object{
         private const val ACCESS_TOKEN = "AccessTokenStore.ACCESS_TOKEN";
+        private const val REFRESH_TOKEN = "AccessTokenStore.REFRESH_TOKEN"
     }
 
     override fun setAccessToken(jwt: String) {
@@ -19,5 +20,15 @@ class AccessTokenStore(private val cryptoSharedPrefs: SharedPreferences) : Secur
 
     override fun getAccessToken(): String? {
         return cryptoSharedPrefs.getString(ACCESS_TOKEN, null)
+    }
+
+    override fun getRefreshToken(): String? {
+        return cryptoSharedPrefs.getString(REFRESH_TOKEN, null)
+    }
+
+    override fun setRefreshToken(token: String) {
+        cryptoSharedPrefs.edit {
+            putString(REFRESH_TOKEN, token)
+        }
     }
 }
