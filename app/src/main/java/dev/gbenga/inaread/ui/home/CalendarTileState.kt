@@ -17,6 +17,7 @@ class CalendarTileState  {
 
     private val _state = mutableStateOf(CalendarTileData(
         "",
+        "",
         2, 1,
         false,
         0L,false,
@@ -50,6 +51,7 @@ val CalendarTileStateSaver = mapSaver(
             select(
                 CalendarTileData(
                     it.take(CalendarParamNames.MONTH),
+                    it.take(CalendarParamNames.YMD_DATE),
                     it.take(CalendarParamNames.MONTH_VALUE),
                     it.take(CalendarParamNames.DAY),
                     it.take(CalendarParamNames.DAY_IN_MILLIS),

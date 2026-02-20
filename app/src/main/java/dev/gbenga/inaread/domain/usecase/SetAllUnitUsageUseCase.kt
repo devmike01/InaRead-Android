@@ -2,23 +2,12 @@ package dev.gbenga.inaread.domain.usecase
 
 import dev.gbenga.inaread.data.model.MonthlyUsage
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
-import dev.gbenga.inaread.domain.repository.AllUnitUsageRepository
+import dev.gbenga.inaread.domain.repository.AppliancesRepository
 import javax.inject.Inject
 
-class SetAllUnitUsageUseCase  @Inject constructor(val allUnitUsageRepository: AllUnitUsageRepository) {
+class SetAllUnitUsageUseCase  @Inject constructor(val allUnitUsageRepository: AppliancesRepository) {
 
-    suspend operator fun invoke(monthlyUsageResponse: MonthlyUsageRequest): MonthlyUsage{
-        return allUnitUsageRepository.uploadMonthlyUsage(monthlyUsageResponse).let { (date,
-            kilowatt, period, cost) ->
-            val dayMonth = date.split("-") //Tue-12-Nov
-            MonthlyUsage(
-                kilowatt = kilowatt,
-                period = period,
-                cost = cost,
-                day = dayMonth[0],
-                dayOfMonth = dayMonth[1],
-                month = dayMonth[2]
-            )
-        }
-    }
+//    suspend operator fun invoke(monthlyUsageResponse: MonthlyUsageRequest): MonthlyUsage{
+//        return MonthlyUsage()
+//    }
 }

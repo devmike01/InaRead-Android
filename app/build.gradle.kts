@@ -39,7 +39,7 @@ android {
 
         debug {
             isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"https://a95a-197-253-4-26.ngrok-free.app/api/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://e6a3-197-253-4-26.ngrok-free.app/api/v1/\"")
         }
 
     }

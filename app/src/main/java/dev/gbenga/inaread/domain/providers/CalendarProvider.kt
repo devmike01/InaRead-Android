@@ -20,4 +20,6 @@ interface CalendarProvider {
 
     fun getDateTimeForImage(): String
 
+    fun getTodayYMD(): String // 2026-01-02
+
 }

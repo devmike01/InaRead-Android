@@ -76,7 +76,7 @@ object DataModule {
 
          try {
             val spec = KeyGenParameterSpec.Builder(
-                properties.getProperty("master.key"),
+                "_androidx_security_master_key_",
                 KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
             )
                 .setBlockModes(KeyProperties.BLOCK_MODE_GCM)

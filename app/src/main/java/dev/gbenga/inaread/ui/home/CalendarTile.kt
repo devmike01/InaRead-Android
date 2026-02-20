@@ -30,7 +30,7 @@ import dev.gbenga.inaread.utils.Scada
 fun CalendarTile(weekDays: CalendarTileWeekDays,
                  scrollToPosition: Int,
                  isAvailable: Boolean,
-                 onItemClick: (Int, Int) -> Unit) {
+                 onItemClick: (String, Int) -> Unit) {
 
     val calendarScrollState = rememberLazyListState()
 
@@ -48,7 +48,7 @@ fun CalendarTile(weekDays: CalendarTileWeekDays,
         items(weekDays.size){ index ->
             val weekDay = weekDays[index]
              CalendarTileItem(weekDay, onItemClick = {
-                onItemClick(weekDay.dayOfMonth, index)
+                onItemClick(weekDay.ymdDateStr, index)
             }, isAvailable = isAvailable)
         }
     }
@@ -90,6 +90,7 @@ fun PreviewCalendarTileItem(){
     CalendarTileItem(
         CalendarTileData(
             month = "Jan",
+            ymdDateStr = "",
             dayOfMonth = 12,
             dateInMillis = 12122L,
             selected = false,
@@ -106,6 +107,7 @@ fun PreviewCalendarTile(){
     CalendarTile( (1..10).mapIndexed { id, i ->
         CalendarTileData(
             month = "Mon$i",
+            ymdDateStr = "",
             dayOfMonth = i,
             dateInMillis = 12122L,
             selected = i == 2,

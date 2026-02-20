@@ -35,9 +35,9 @@ class AuthRepositoryImpl(private val authApiService: AuthenticationService,
             authApiService.authenticate(input.toLoginRequest())
         }.map {
             withContext(io){
-                Log.d(TAG, "Persisting AND Mapping values")
-                it.authToken?.access?.let { access ->
-                    accessTokenStore.setAccessToken(access)
+                it.authToken?.let { access ->
+                    accessTokenStore.setAccessToken(access.access)
+                    accessTokenStore.setRefreshToken(access.refresh)
                 }
                 userDao.save(it.toUserEntity())
                 it.toLoginOutput()
@@ -49,7 +49,6 @@ class AuthRepositoryImpl(private val authApiService: AuthenticationService,
     override suspend fun getProfile(userId: String): RepoResult<LoginOutput> {
         return withContext(io){
             userDao.getProfile(userId).firstOrNull()?.let {
-
                 RepoResult.Success(data = it.toLoginOutput())
             } ?: RepoResult.Error(StringTokens.Auth.NoProfileWithUserId)
         }

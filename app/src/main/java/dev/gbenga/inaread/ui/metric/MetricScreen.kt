@@ -121,7 +121,7 @@ fun ApplianceItem(modifier: Modifier = Modifier, appliance: Appliance){
                 Icon(painter = painterResource(R.drawable.outline_electric_meter_24),
                     contentDescription = "Electric rating",
                     modifier = Modifier.align(Alignment.TopCenter).size(DimenTokens.Icon.Medium))
-                Text(appliance.rating,
+                Text(appliance.rating.toPlainString(),
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.W700),
                     modifier = Modifier.align(Alignment.BottomCenter))
             }
@@ -156,6 +156,9 @@ fun YearlyUsageCard(modifier: Modifier = Modifier,
 fun PreviewApplianceItem(){
     ApplianceItem(
         Modifier,
-        Appliance("Fan", "200kWh", createdOn = "12 January, 2026")
+        Appliance(name="Fan", rating = 200.toBigDecimal(),
+            ratingUnit="KwH",
+            applianceTypeId =12,
+            createdOn = "12 January, 2026")
     )
 }

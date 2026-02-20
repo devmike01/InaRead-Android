@@ -1,30 +1,38 @@
 package dev.gbenga.inaread.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.gbenga.inaread.data.MeterSummaryRepositoryImpl
+import dev.gbenga.inaread.data.MeterUsageRepositoryImpl
 import dev.gbenga.inaread.data.datastore.AccessTokenStore
+import dev.gbenga.inaread.data.datastore.UserDataStoreImpl
 import dev.gbenga.inaread.data.db.UserDao
+import dev.gbenga.inaread.data.mapper.RepoResult
+import dev.gbenga.inaread.data.model.ApplianceResponse
+import dev.gbenga.inaread.data.model.ApplianceResponseData
+import dev.gbenga.inaread.data.model.AppliancesRequest
 import dev.gbenga.inaread.data.network.AuthenticationService
+import dev.gbenga.inaread.data.network.MeterUsageStatisticService
+import dev.gbenga.inaread.data.repository.AllUnitUsageRepository
 import dev.gbenga.inaread.data.repository.AuthRepositoryImpl
-import dev.gbenga.inaread.data.repository.MetricsRepositoryImpl
 import dev.gbenga.inaread.data.repository.SettingsRepositoryImpl
 import dev.gbenga.inaread.di.annotations.IOCoroutineContext
-import dev.gbenga.inaread.domain.datastore.InaEncryptedPrefs
 import dev.gbenga.inaread.domain.datastore.FakeUserDataStore
 import dev.gbenga.inaread.domain.datastore.UserDataStore
-import dev.gbenga.inaread.domain.repository.AllUnitUsageRepository
+import dev.gbenga.inaread.domain.repository.AppliancesRepository
 import dev.gbenga.inaread.domain.repository.AuthRepository
-import dev.gbenga.inaread.domain.repository.MeterSummaryRepository
-import dev.gbenga.inaread.domain.repository.MetricsRepository
+import dev.gbenga.inaread.domain.repository.MeterUsageRepository
 import dev.gbenga.inaread.domain.repository.SettingsRepository
 import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
-import dev.gbenga.inaread.domain.services.MeterSummaryApiService
 import dev.gbenga.inaread.domain.services.ProfileApiService
-import dev.gbenga.inaread.ui.metric.MetricsApiService
+import dev.gbenga.inaread.ui.customs.dataStore
 import dev.gbenga.inaread.ui.usage.AllUnitUsageRepositoryImpl
+import dev.gbenga.inaread.utils.UserProvider
 import kotlinx.coroutines.CoroutineDispatcher
 
 @Module
@@ -32,20 +40,20 @@ import kotlinx.coroutines.CoroutineDispatcher
 object RepositoryModule {
 
     @Provides
-    fun provideMeterSummaryRepository(meterSummaryApiService: MeterSummaryApiService,
-                                      userDataStore: UserDataStore): MeterSummaryRepository
-    = MeterSummaryRepositoryImpl(meterSummaryApiService, userDataStore)
+    fun provideMeterSummaryRepository(meterUsageApiService: MeterUsageStatisticService,
+                                      userProvider: UserProvider): MeterUsageRepository
+    = MeterUsageRepositoryImpl(meterUsageApiService, userProvider)
 
+
+//    @Provides
+//    fun provideMetricsRepository(
+//        @IOCoroutineContext ioContext: CoroutineDispatcher, userDataStore: UserDataStore,
+//        metricsApiService: MetricsApiService):
+//            MetricsRepository = MetricsRepositoryImpl(ioContext, userDataStore, metricsApiService)
 
     @Provides
-    fun provideMetricsRepository(
-        @IOCoroutineContext ioContext: CoroutineDispatcher, userDataStore: UserDataStore,
-        metricsApiService: MetricsApiService):
-            MetricsRepository = MetricsRepositoryImpl(ioContext, userDataStore, metricsApiService)
-
-    @Provides
-    fun provideFakeUserDataStore(): UserDataStore{
-        return FakeUserDataStore()
+    fun provideUserDataStoreImpl(@ApplicationContext context: Context): UserDataStore{
+        return UserDataStoreImpl(context.dataStore)
     }
 
     @Provides
@@ -57,14 +65,28 @@ object RepositoryModule {
 
 
     @Provides
-    fun provideAllUnitUsageRepository(unitUsageApiService: AllUnitUsageApiService,
-                                      userDataStore: UserDataStore,
-                                      @IOCoroutineContext io: CoroutineDispatcher): AllUnitUsageRepository{
+    fun provideAllUnitUsageRepository(applianceApiService: AllUnitUsageApiService,
+                                        userProvider: UserProvider,
+                                        @IOCoroutineContext io: CoroutineDispatcher): AllUnitUsageRepository{
         return AllUnitUsageRepositoryImpl(
 
-        unitUsageApiService, userDataStore, io)
+            applianceApiService, userProvider, io
+        )
     }
 
+    @Provides
+    fun provideAppliancesRepository(): AppliancesRepository {
+        return object : AppliancesRepository{
+            override suspend fun executeGetAppliances(): RepoResult<ApplianceResponse> {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun executeAddAppliance(request: AppliancesRequest): RepoResult<ApplianceResponseData> {
+                TODO("Not yet implemented")
+            }
+
+        }
+    }
 
     @Provides
     fun provideAuthRepository(authApiService: AuthenticationService, userDao: UserDao,

@@ -13,6 +13,7 @@ class WeekDaysUseCase @Inject constructor(private val calendarDelegate: Calendar
 
                 CalendarTileData(
                     item.month,
+                    item.ymdDate,
                     item.monthValue,
                     item.dayOfMonth,
                     false,

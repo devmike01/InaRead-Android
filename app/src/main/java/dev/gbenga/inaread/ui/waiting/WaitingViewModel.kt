@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.ui.waiting
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gbenga.inaread.domain.usecase.CheckUserAuthenticationUseCase
@@ -19,6 +20,8 @@ class WaitingViewModel @Inject constructor(private val checkAuthUseCase: CheckUs
         viewModelScope.launch {
             checkAuthUseCase().collect { isLoggedIn ->
                 setState { it.copy(isLoading = false) }
+
+                Log.d("WaitingViewModel", "CHECKING LOG IN...$isLoggedIn")
                 navigate(NavigationEvent.NavigateTaskTop(InaScreen.Dashboard
                     .takeIf { isLoggedIn } ?: InaScreen.Login))
             }

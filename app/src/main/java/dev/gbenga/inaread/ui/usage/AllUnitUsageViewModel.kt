@@ -34,10 +34,10 @@ class AllUnitUsageViewModel @Inject constructor(private val getAllUnitUsageUseCa
     fun setUnitUsage(monthlyUsageRequest: MonthlyUsageRequest){
         setState { it.copy(monthlyUsage = UiStateWithIdle.Loading) }
         viewModelScope.launch {
-            val monthlyUsageUiState = uiStateWithIdleRunCatching {
-                setAllUnitUsageUseCase(monthlyUsageRequest)
-            }
-            setState { it.copy(monthlyUsage = monthlyUsageUiState) }
+//            val monthlyUsageUiState = uiStateWithIdleRunCatching {
+//                setAllUnitUsageUseCase(monthlyUsageRequest)
+//            }
+//            setState { it.copy(monthlyUsage = monthlyUsageUiState) }
         }
     }
 

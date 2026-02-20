@@ -1,9 +1,13 @@
 package dev.gbenga.inaread.ui.home
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ElectricMeter
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gbenga.inaread.R
+import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.LastPowerUsage
 import dev.gbenga.inaread.data.model.MeterMonthlyStat
 import dev.gbenga.inaread.data.model.MonthlyMeterUsage
@@ -40,45 +44,27 @@ class HomeViewModel @Inject constructor(
         const val SELECTED_CALENDAR_POS = "HomeViewModel.SELECTED_CALENDAR_POS"
     }
 
+    init {
+        populateDashboard()
+    }
 
 
     fun populateDashboard(){
-        val selectedDate = savedStateHandle.get<Int>(SELECTED_DATE)
+        val selectedDate = savedStateHandle.get<String>(SELECTED_DATE)
         val selectedPos = savedStateHandle.get<Int>(SELECTED_CALENDAR_POS)
 
         getTopbarContent()
-        getSummary(calendarProvider
-            .getCurrentDayOfMonth())
+        getSummary("2026-01-02")
 
         val scrollToPos = calendarProvider.getIndexOf(calendarProvider.getCurrentDayOfMonth())
         selectNewDay(selectedDate
-            ?: calendarProvider.getCurrentDayOfMonth(), selectedPos ?: scrollToPos)
+            ?: calendarProvider.getTodayYMD(), selectedPos ?: scrollToPos)
     }
 
     fun gotoAllUnitUsage(){
         navigate(NavigationEvent.Navigate(InaScreen.AllUnitUsage))
     }
 
-    private fun MonthlyMeterUsage.toMeterMonthlyStat(): MeterMonthlyStat {
-        return MeterMonthlyStat(
-            lifeTimeReading = ResIdInaTextIcon(
-                value = kilowatts.toString(),
-                label = "Usage(kW)", // kilowatts per period
-                color = 0xFF42A5F5,
-            ),
-            monthlyStat = ResIdInaTextIcon(
-                value = "${"\u20A6"}225",
-                label = "Naira/kW", // kilowatts per period
-                color = 0xFF42A5F5,
-            ),
-            costStat = ResIdInaTextIcon(
-                value = minorCost.toNaira(),
-                label = "Spent(\u20A6)", // kilowatts per period
-                color = 0xFF42A5F5,
-            ),
-            chartData = usages
-        )
-    }
 
     private fun Long.toNaira(): String{
         return BigDecimal(this)
@@ -120,18 +106,18 @@ class HomeViewModel @Inject constructor(
 //        sendEvent(HomeEvent.SelectDay(dayOfMonth, index))
     }
 
-    fun selectNewDay(dayOfMonth: Int, selectedPos: Int){
-        if (dayOfMonth != savedStateHandle[SELECTED_DATE]){
-            savedStateHandle[SELECTED_DATE] = dayOfMonth
+    fun selectNewDay(ymdDateStr: String, selectedPos: Int){
+        if (ymdDateStr != savedStateHandle[SELECTED_DATE]){
+            savedStateHandle[SELECTED_DATE] = ymdDateStr
             savedStateHandle[SELECTED_CALENDAR_POS] = selectedPos
         }
 
-        getSummary(dayOfMonth)
+        getSummary(ymdDateStr)
 
         setState { it.copy(daysOfMonth = it.daysOfMonth.map {  weekDay ->
             Scada.info("dayOfMonth: ${weekDay.dayOfMonth}")
-            weekDay.copy(selected = weekDay.dayOfMonth == dayOfMonth,
-                dayIsAvailable = it.daysOfMonth.any{ dOM -> dOM.dayOfMonth == dayOfMonth},
+            weekDay.copy(selected = weekDay.ymdDateStr == ymdDateStr,
+                dayIsAvailable = it.daysOfMonth.any{ dOM -> dOM.ymdDateStr == ymdDateStr},
             )
         }, selectedCalendarPos = selectedPos) }
     }
@@ -143,30 +129,30 @@ class HomeViewModel @Inject constructor(
             ) }
     }
 
-    fun getSummary(fromDayOfMonth: Int){
+    fun getSummary(fromDayOfMonth: String){
         viewModelScope.launch {
-
-            meterUseCase()
-                .map { usage ->  usage.map {
-                    val usagesByDay = it.usages.associateBy { usage -> usage.fromDayOfMonth }
-                    Pair(it.monthlyMeterUsage.toMeterMonthlyStat(),
-                        usagesByDay[fromDayOfMonth]?.toResIdIconItems() ?: emptyList())
-                } }
-                .onStart {
-                    setState { it.copy(meterUsageSummary = UiState.Loading) }
-                }
-                .catch {
-                    Scada.error("---------\nMonth_dayOfMonth: $it")
-                }
-
-                .collect { usageSummary ->
-                    Scada.info("---------\nMonth_dayOfMonth: ${usageSummary.getOrNull()?.second}")
-
+            when(val result = meterUseCase(fromDayOfMonth)){
+                is RepoResult.Success -> {
                     setState { it.copy(
-                        meterUsageSummary = usageSummary.toUiState(),
-                        selectedDateValue = calendarProvider.getFullDateFrom(fromDayOfMonth)
+                        meterUsageSummary = UiState.Success(Pair(
+                            MeterMonthlyStat(
+                                lifeTimeReading = VectorInaTextIcon(
+                                    icon = Icons.Default.ElectricMeter,
+                                    value = result.data.totalMonthPowerUsage.toPlainString(),
+                                    label = "kWh",
+                                    color = 0XFF00796B,
+                                )
+                            ),
+                            emptyList()
+                        ))
                     ) }
                 }
+                is RepoResult.Error -> {
+                    setState { it.copy(
+                        meterUsageSummary = UiState.Error(result.message)
+                    ) }
+                }
+            }
         }
     }
 

@@ -8,21 +8,17 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.gbenga.inaread.BuildConfig
 import dev.gbenga.inaread.adapters.NetworkResponseInterceptor
-import dev.gbenga.inaread.data.auth.LoginResponse
 import dev.gbenga.inaread.data.datastore.AccessTokenStore
-import dev.gbenga.inaread.data.model.ApiResult
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
 import dev.gbenga.inaread.data.model.MonthlyUsageResponse
-import dev.gbenga.inaread.data.model.ProfileResponse
+import dev.gbenga.inaread.data.network.AppliancesService
 import dev.gbenga.inaread.data.network.AuthenticationService
+import dev.gbenga.inaread.data.network.MeterUsageStatisticService
 import dev.gbenga.inaread.di.annotations.EncryptedSharedPrefs
 import dev.gbenga.inaread.domain.SecureAccessTokenStore
 import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
 import dev.gbenga.inaread.domain.services.MeterSummaryApiService
 import dev.gbenga.inaread.domain.services.ProfileApiService
-import dev.gbenga.inaread.ui.metric.MetricsApiService
-import dev.gbenga.inaread.utils.FakeMeterSummaryApiService
-import dev.gbenga.inaread.utils.FakeMetricsApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -70,10 +66,6 @@ object ApiServiceModule {
         return retrofit.create(MeterSummaryApiService::class.java)
     }
 
-    @Provides
-    fun provideMetricsApiService(retrofit: Retrofit): MetricsApiService{
-        return retrofit.create(MetricsApiService::class.java)
-    }
 
     @Provides
     fun provideSettingsRepository(retrofit: Retrofit): ProfileApiService{
@@ -83,6 +75,16 @@ object ApiServiceModule {
     @Provides
     fun provideAuthenticationService(retrofit: Retrofit): AuthenticationService {
         return retrofit.create(AuthenticationService::class.java)
+    }
+
+    @Provides
+    fun provideMeterUsageStatisticService(retrofit: Retrofit): MeterUsageStatisticService {
+        return retrofit.create(MeterUsageStatisticService::class.java);
+    }
+
+    @Provides
+    fun provideAppliancesService(retrofit: Retrofit): AppliancesService {
+        return retrofit.create(AppliancesService::class.java)
     }
 
     @Provides

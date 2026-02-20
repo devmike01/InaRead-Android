@@ -9,5 +9,11 @@ object EndPoints {
     const val SignUp = "$Auth/signup"
     const val Meter = "$NoAuth/meter"
     const val MeterTypes = "$Meter/types"
+    const val GetAppliances = "$v1/appliance"
+    const val SetAppliance = "$GetAppliances/new/bulk"
+    const val Usage = "$v1/usage"
+    const val GetAllUsages = "$Usage/all"
+    const val RecordNewUsage = "$Usage/new"
+    const val MeterType = "$Meter/types"
 
 }

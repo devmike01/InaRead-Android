@@ -12,7 +12,6 @@ import dev.gbenga.inaread.ui.signup.SignUpScreen
 import dev.gbenga.inaread.ui.theme.InaReadTheme
 import dev.gbenga.inaread.ui.usage.AllUnitUsageScreen
 import dev.gbenga.inaread.ui.waiting.WaitingScreen
-import kotlinx.serialization.Serializable
 
 fun String?.toDashboardRoute(): DashboardScreen{
     return when(this){
