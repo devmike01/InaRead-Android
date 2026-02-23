@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.data
 
+import android.util.Log
 import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.ConsumptionRecordResponse
 import dev.gbenga.inaread.data.model.MeterResponse
@@ -15,18 +16,21 @@ import dev.gbenga.inaread.utils.UserNotFoundException
 import dev.gbenga.inaread.utils.UserProvider
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.singleOrNull
 
 class MeterUsageRepositoryImpl (
     private val meterUsageApiService: MeterUsageStatisticService,
-    private val userProvider: UserProvider
+    private val userProvider: UserProvider,
+    private val userDataStore: UserDataStore,
 ) : MeterUsageRepository, NetworkRepository() {
 
 
     override suspend fun getMeterSummaryForDay(
         dateYMD: String
-    ): RepoResult<PowerUsageSummaryResponse> = safeCall {
+    ): RepoResult<List<PowerUsageSummaryResponse>> = safeCall {
         meterUsageApiService
-            .getSummary(userProvider.getCustomerId(), dateYMD)
+            .getSummary(userProvider.getCustomerId(),
+                dateYMD)
     }
 
     override suspend fun executeAddNewReading(request: PowerUsageRequest)
