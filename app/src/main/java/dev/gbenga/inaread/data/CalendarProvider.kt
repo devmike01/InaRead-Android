@@ -36,7 +36,7 @@ class CalendarProviderImpl @Inject constructor(
                     Locale.getDefault()).substring(0, 3)
             DateAndMonth(
                 dayOfMonth,
-                "${yearMonth.year}-${yearMonth.monthValue}-$dayOfMonth",
+                "${yearMonth.year}-${padStartZero(yearMonth.monthValue)}-${padStartZero(dayOfMonth)}",
                 yearMonth.monthValue,
                 monthName,
                 calendar.timeInMillis)
@@ -44,6 +44,10 @@ class CalendarProviderImpl @Inject constructor(
 
 
         return dates
+    }
+
+    private fun padStartZero(value: Int): String{
+        return "$value".padStart(2, '0')
     }
 
     override fun getTodayInMillis(): Long = System.currentTimeMillis()
