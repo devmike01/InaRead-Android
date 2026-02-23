@@ -7,7 +7,7 @@ import dev.gbenga.inaread.utils.nav.DashboardScreen
 
 data class HomeUiState(
     val daysOfMonth : CalendarTileWeekDays = emptyList(),
-    val meterUsageSummary: UiState<Pair<MeterMonthlyStat, List<ResIdInaTextIcon>>> = UiState.Loading,
+    val meterUsageSummary: UiState<Pair<UiData<MeterMonthlyStat>, UiData<List<ResIdInaTextIcon>>>> = UiState.Loading,
     val selectedDateValue: String ="",
     val greeting: String = "",
     val todaysDate: String = "",

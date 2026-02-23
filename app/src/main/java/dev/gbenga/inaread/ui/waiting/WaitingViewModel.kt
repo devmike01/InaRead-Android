@@ -18,7 +18,7 @@ class WaitingViewModel @Inject constructor(private val checkAuthUseCase: CheckUs
     }
     fun checkLogin(){
         viewModelScope.launch {
-            checkAuthUseCase().collect { isLoggedIn ->
+            checkAuthUseCase().let { isLoggedIn ->
                 setState { it.copy(isLoading = false) }
 
                 Log.d("WaitingViewModel", "CHECKING LOG IN...$isLoggedIn")

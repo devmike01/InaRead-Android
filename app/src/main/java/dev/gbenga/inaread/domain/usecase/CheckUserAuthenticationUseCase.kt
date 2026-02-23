@@ -7,7 +7,5 @@ import javax.inject.Inject
 
 class CheckUserAuthenticationUseCase @Inject constructor(private val authRepo: AuthRepository) {
 
-    operator fun invoke() =  userDataStore.getProfileId().map { customerId ->
-        customerId != null
-    }
+    suspend operator fun invoke() =  authRepo.isSignedIn()
 }

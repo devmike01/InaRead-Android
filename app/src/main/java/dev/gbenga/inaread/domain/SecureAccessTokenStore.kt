@@ -5,4 +5,5 @@ interface SecureAccessTokenStore {
     fun getAccessToken(): String?
     fun getRefreshToken(): String?
     fun setRefreshToken(token: String)
+    fun removeTokens()
 }

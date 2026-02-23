@@ -25,6 +25,7 @@ interface MeterUsageStatisticService {
     // usage/c867773d0beb4bc1877209acd959da57?date=2026-01-02
 
     @GET("${EndPoints.Usage}/{userId}")
-    fun getSummary(@Path("userId") userId: String,
-                   @Query("date") dateYMD: String): Response<ApiResult<PowerUsageSummaryResponse>>
+    suspend fun getSummary(@Path("userId") userId: String,
+                   @Query("date") dateYMD: String)
+    : Response<ApiResult<List<PowerUsageSummaryResponse>>>
 }

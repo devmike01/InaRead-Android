@@ -1,6 +1,5 @@
 package dev.gbenga.inaread.ui.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -13,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import dev.gbenga.inaread.data.repository.AuthRepositoryImpl.Companion.TAG
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.ui.customs.FailedUiStateComponent
@@ -65,11 +63,10 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(),
                     modifier = Modifier.padding(vertical = DimenTokens.Padding.Large).animateItem()){
                     UiStateWithLoadingBox(homeUiState.meterUsageSummary,
                         errorRequest = { error ->
-
-                            Log.d(TAG, "Persistingw $error")
-                            FailedUiStateComponent(error)
+                            FailedUiStateComponent(error){
+                              //  viewModel.
+                            }
                         }){ homeSummary ->
-                        Log.d(TAG, "Persisting $homeSummary")
                         HomeSummaryCard(homeSummary.second,
                             homeUiState.selectedDateValue)
                     }

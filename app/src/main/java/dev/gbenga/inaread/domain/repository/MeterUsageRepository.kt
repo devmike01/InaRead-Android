@@ -8,7 +8,7 @@ import dev.gbenga.inaread.data.model.PowerUsageSummaryResponse
 
 interface MeterUsageRepository {
 
-    suspend  fun getMeterSummaryForDay(dateYMD: String): RepoResult<PowerUsageSummaryResponse>
+    suspend  fun getMeterSummaryForDay(dateYMD: String): RepoResult<List<PowerUsageSummaryResponse>>
 
     suspend fun executeAddNewReading(request: PowerUsageRequest): RepoResult<ConsumptionRecordResponse>
 

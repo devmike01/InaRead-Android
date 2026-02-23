@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.gbenga.inaread.BuildConfig
 import dev.gbenga.inaread.adapters.NetworkResponseInterceptor
+import dev.gbenga.inaread.adapters.TokenRefreshAuthentication
 import dev.gbenga.inaread.data.datastore.AccessTokenStore
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
 import dev.gbenga.inaread.data.model.MonthlyUsageResponse
@@ -19,6 +20,9 @@ import dev.gbenga.inaread.domain.SecureAccessTokenStore
 import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
 import dev.gbenga.inaread.domain.services.MeterSummaryApiService
 import dev.gbenga.inaread.domain.services.ProfileApiService
+import dev.gbenga.inaread.domain.services.RefreshTokenApiService
+import dev.gbenga.inaread.domain.services.RefreshTokenApiServiceImpl
+import dev.gbenga.inaread.utils.UserProvider
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -43,7 +47,9 @@ object ApiServiceModule {
     }
 
     @Provides
-    fun provideOkHttpClient(accessTokenStore: SecureAccessTokenStore): OkHttpClient{
+    fun provideOkHttpClient(accessTokenStore: SecureAccessTokenStore,
+                            refreshTokenApiService: RefreshTokenApiService,
+                            userProvider: UserProvider): OkHttpClient{
         val logging = HttpLoggingInterceptor()
         logging.setLevel(level = HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient.Builder()
@@ -51,6 +57,7 @@ object ApiServiceModule {
             .readTimeout(60_000, TimeUnit.SECONDS)
             .addInterceptor(logging)
             .addInterceptor(NetworkResponseInterceptor(accessTokenStore))
+            .authenticator(TokenRefreshAuthentication(refreshTokenApiService, userProvider))
             .build()
     }
 
@@ -58,6 +65,12 @@ object ApiServiceModule {
     fun provideAccessTokenStore(@EncryptedSharedPrefs prefs: SharedPreferences): SecureAccessTokenStore{
         return AccessTokenStore(prefs);
     }
+
+    @Provides
+    fun provideRefreshTokenApiService(): RefreshTokenApiService{
+        return RefreshTokenApiServiceImpl();
+    }
+
 
 
     // Todo: To be removed

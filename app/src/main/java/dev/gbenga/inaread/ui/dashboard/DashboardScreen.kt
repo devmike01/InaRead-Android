@@ -63,7 +63,7 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel = hiltViewModel(),
                 }
 
                 composable<DashboardScreen.Settings> {
-                    SettingsScreen()
+                    SettingsScreen(navHostController = parentNavController)
                 }
 
                 composable<DashboardScreen.AllTimeUsage> {

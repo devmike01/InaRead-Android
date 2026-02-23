@@ -13,6 +13,10 @@ object StringTokens {
     const val UserNotAuthenticated = "User not found"
     const val AddMeterReading = "Add meter image"
 
+    object Button{
+        const val TryAgain = "Try again"
+    }
+
     object AddReadingImage{
         const val CancelImageDescription = "Cancel image upload"
         const val Title = "Add Meter Image for Analysis"

@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.ui.home
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ElectricMeter
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -11,6 +12,7 @@ import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.LastPowerUsage
 import dev.gbenga.inaread.data.model.MeterMonthlyStat
 import dev.gbenga.inaread.data.model.MonthlyMeterUsage
+import dev.gbenga.inaread.data.repository.AuthRepositoryImpl.Companion.TAG
 import dev.gbenga.inaread.domain.providers.CalendarProvider
 import dev.gbenga.inaread.domain.usecase.WeekDaysUseCase
 import dev.gbenga.inaread.domain.usecase.MeterSummaryUseCase
@@ -54,6 +56,7 @@ class HomeViewModel @Inject constructor(
         val selectedPos = savedStateHandle.get<Int>(SELECTED_CALENDAR_POS)
 
         getTopbarContent()
+
         getSummary("2026-01-02")
 
         val scrollToPos = calendarProvider.getIndexOf(calendarProvider.getCurrentDayOfMonth())
@@ -133,21 +136,38 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             when(val result = meterUseCase(fromDayOfMonth)){
                 is RepoResult.Success -> {
+                    val summaries = result.data.firstOrNull()
                     setState { it.copy(
-                        meterUsageSummary = UiState.Success(Pair(
-                            MeterMonthlyStat(
-                                lifeTimeReading = VectorInaTextIcon(
-                                    icon = Icons.Default.ElectricMeter,
-                                    value = result.data.totalMonthPowerUsage.toPlainString(),
-                                    label = "kWh",
-                                    color = 0XFF00796B,
-                                )
-                            ),
-                            emptyList()
+                        meterUsageSummary =  UiState.Success(Pair(
+                            summaries?.let { summary ->
+                                UiData.Content(MeterMonthlyStat(
+                                    lifeTimeReading = VectorInaTextIcon(
+                                        icon = Icons.Default.ElectricMeter,
+                                        value = summary.totalMonthPowerUsage.toPlainString(),
+                                        label = "kWh",
+                                        color = 0XFF00796B,
+                                    ),
+                                    monthlyStat = VectorInaTextIcon(
+                                        icon = Icons.Default.ElectricMeter,
+                                        value = summary.periodInDays,
+                                        label = "Period",
+                                        color = 0XFF00796B,
+                                    ),
+                                    costStat = VectorInaTextIcon(
+                                        icon = Icons.Default.ElectricMeter,
+                                        value = summary.costPerKwh.toPlainString(),
+                                        label = "Cost/KWh",
+                                        color = 0XFF00796B,
+                                    ),
+                                )) } ?: UiData.EmptyContent,
+                            UiData.Content(
+                                emptyList()
+                            )
                         ))
                     ) }
                 }
                 is RepoResult.Error -> {
+                    Log.d("RepoResult", "RepoResult: ${result.message}")
                     setState { it.copy(
                         meterUsageSummary = UiState.Error(result.message)
                     ) }

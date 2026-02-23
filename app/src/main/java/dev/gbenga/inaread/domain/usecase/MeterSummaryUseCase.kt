@@ -11,7 +11,7 @@ import javax.inject.Inject
 class MeterSummaryUseCase @Inject constructor(private val meterUsageRepository: MeterUsageRepository) {
 
     // MonthlyMeterUsage
-    suspend operator fun invoke(dateYMD: String): RepoResult<PowerUsageSummaryResponse>{
+    suspend operator fun invoke(dateYMD: String): RepoResult<List<PowerUsageSummaryResponse>>{
         return meterUsageRepository
             .getMeterSummaryForDay(dateYMD);
     }

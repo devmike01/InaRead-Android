@@ -29,29 +29,41 @@ import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.InaCard
 
 @Composable
-fun LifeTimeStats(meterMonthlyStat: MeterMonthlyStat, modifier: Modifier = Modifier) {
+fun LifeTimeStats(meterMonthlyStatData: UiData<MeterMonthlyStat>, modifier: Modifier = Modifier) {
     ConstraintLayout(modifier = modifier.fillMaxWidth()) {
         val (lifetime, monthly, cost) = createRefs()
-        LifeTimeReadingCard(meterMonthlyStat.lifeTimeReading,
-            meterMonthlyStat.chartData,
-            modifier = Modifier.constrainAs(lifetime){
-            start.linkTo(parent.start,)
-        }.fillMaxWidth(.5f)
-                .height(210.dp))
+        when(meterMonthlyStatData){
+            is UiData.Content<MeterMonthlyStat> -> {
+                val meterMonthlyStat =  meterMonthlyStatData.data
+                LifeTimeReadingCard(
+                    meterMonthlyStat.lifeTimeReading,
+                    meterMonthlyStat.chartData,
+                    modifier = Modifier.constrainAs(lifetime){
+                        start.linkTo(parent.start,)
+                    }.fillMaxWidth(.5f)
+                        .height(210.dp))
 
-        NoChartCard(meterMonthlyStat.monthlyStat,
-            Modifier.constrainAs(monthly){
-            top.linkTo(parent.top)
-            end.linkTo(parent.end,)
-            start.linkTo(lifetime.end, margin = DimenTokens.Padding.Normal)
-        })
+                NoChartCard(
+                    meterMonthlyStat.monthlyStat,
+                    Modifier.constrainAs(monthly){
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end,)
+                        start.linkTo(lifetime.end, margin = DimenTokens.Padding.Normal)
+                    })
 
-        NoChartCard(meterMonthlyStat.costStat, Modifier
-            .padding(vertical = DimenTokens.Padding.Small).constrainAs(cost){
-            end.linkTo(parent.end,)
-            start.linkTo(lifetime.end, margin = DimenTokens.Padding.Normal)
-            top.linkTo(monthly.bottom)
-        })
+                NoChartCard(
+                    meterMonthlyStat.costStat, Modifier
+                    .padding(vertical = DimenTokens.Padding.Small).constrainAs(cost){
+                        end.linkTo(parent.end,)
+                        start.linkTo(lifetime.end, margin = DimenTokens.Padding.Normal)
+                        top.linkTo(monthly.bottom)
+                    })
+            }
+            is UiData.EmptyContent -> {
+
+            }
+        }
+
     }
 }
 
@@ -125,26 +137,28 @@ fun LifeTimeReadingCard(lifeTimeReading: InaTextIcon,
 @Preview
 @Composable
 fun PreviewLifeTimeReadingCard(){
-    LifeTimeStats(MeterMonthlyStat(
-        lifeTimeReading = VectorInaTextIcon(
-            icon = Icons.Default.FavoriteBorder,
-            value = "76",
-            label = "kWh",
-            color = 0XFF00796B,
-        ),
-        monthlyStat = VectorInaTextIcon(
-            icon = Icons.Default.BarChart,
-            value = "76",
-            label = "kWh",
-            color = 0xFFAD1457,
-        ),
-        costStat = VectorInaTextIcon(
-            icon = Icons.Default.CandlestickChart,
-            value = "76",
-            label = "kWh",
-            color = 0xFF00796B,
-        ),
-        chartData = listOf(10f, 40f, 20f, 60f, 30f, 80f, 10f, 40f, 20f, 60f, 30f, 80f),
+    LifeTimeStats(UiData.Content(
+        MeterMonthlyStat(
+            lifeTimeReading = VectorInaTextIcon(
+                icon = Icons.Default.FavoriteBorder,
+                value = "76",
+                label = "kWh",
+                color = 0XFF00796B,
+            ),
+            monthlyStat = VectorInaTextIcon(
+                icon = Icons.Default.BarChart,
+                value = "76",
+                label = "kWh",
+                color = 0xFFAD1457,
+            ),
+            costStat = VectorInaTextIcon(
+                icon = Icons.Default.CandlestickChart,
+                value = "76",
+                label = "kWh",
+                color = 0xFF00796B,
+            ),
+            chartData = listOf(10f, 40f, 20f, 60f, 30f, 80f, 10f, 40f, 20f, 60f, 30f, 80f),
 
-        ))
+            )
+    ))
 }

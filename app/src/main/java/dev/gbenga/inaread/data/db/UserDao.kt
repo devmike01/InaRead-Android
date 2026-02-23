@@ -10,7 +10,10 @@ import dev.gbenga.inaread.data.db.entities.UserEntity
 interface UserDao {
 
     @Query("SELECT * FROM user WHERE customerId = :customerId")
-    fun getProfile(customerId: String): List<UserEntity>
+    fun getProfile(customerId: String): UserEntity
+
+    @Query("DELETE FROM user WHERE customerId = :customerId")
+    fun deleteByCustomerId(customerId: String)
 
     @Delete
     fun deleteProfile(userEntity: UserEntity): Int

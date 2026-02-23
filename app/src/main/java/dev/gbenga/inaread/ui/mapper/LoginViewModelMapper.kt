@@ -24,7 +24,6 @@ fun <T> RepoResult<T>.toUiState(): UiState<T> =  when(this){
 
 
 fun RepoResult<LoginOutput>.toUiStateLogin(): UiStateWithIdle<UiLogin>{
-    Log.d(TAG, "repo->: $this")
     return when(this){
         is RepoResult.Success -> {
             UiStateWithIdle.Success(data.toUILogin())

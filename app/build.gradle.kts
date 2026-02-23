@@ -34,12 +34,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://a95a-197-253-4-26.ngrok-free.app/api/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://b7eb-197-253-4-26.ngrok-free.app\"")
         }
 
         debug {
             isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"https://e6a3-197-253-4-26.ngrok-free.app/api/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://b7eb-197-253-4-26.ngrok-free.app\"")
         }
 
     }
@@ -113,6 +113,8 @@ dependencies {
     // Android crypto
     implementation(libs.androidx.crypto.security)
 
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     implementation(libs.kotlinx.serialization)
     implementation(libs.androidx.camera2)

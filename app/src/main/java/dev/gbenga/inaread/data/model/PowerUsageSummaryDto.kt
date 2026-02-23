@@ -4,10 +4,10 @@ import java.math.BigDecimal
 
 data class PowerUsageSummaryResponse(
     val periodInDays: String,
-    val costPerKwh: Double,
+    val costPerKwh: BigDecimal,
     val meterType: String,
     val totalMonthPowerUsage: BigDecimal,
     val fromDate: String,
     val toDate: String,
-    val totalSpent: Double
+    val totalSpent: BigDecimal
 )

@@ -18,4 +18,8 @@ interface AuthRepository {
 
     suspend fun signUp(request: SignUpRequest) : RepoResult<SignUpOutput>
 
+    suspend fun signOut(): RepoResult<String>
+
+    suspend fun isSignedIn(): Boolean
+
 }

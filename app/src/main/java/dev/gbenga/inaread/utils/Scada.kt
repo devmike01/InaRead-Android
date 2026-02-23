@@ -7,7 +7,6 @@ object Scada {
 
     private fun getNameOfCaller(): String {
         return Thread.currentThread().getStackTrace().also {
-            Log.d("Scada", "Scada: $it")
         }[3].methodName
     }
 

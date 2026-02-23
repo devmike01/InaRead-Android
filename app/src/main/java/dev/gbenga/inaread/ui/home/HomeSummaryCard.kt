@@ -24,7 +24,7 @@ import dev.gbenga.inaread.ui.customs.XYAxisCenter
 import java.util.Locale
 
 @Composable
-fun HomeSummaryCard(cardItems: MeterUsageSummary, monthName: String) {
+fun HomeSummaryCard(cardItems: UiData<MeterUsageSummary>, monthName: String) {
 
     InaCard() {
         Row(horizontalArrangement = Arrangement.SpaceBetween,
@@ -34,7 +34,7 @@ fun HomeSummaryCard(cardItems: MeterUsageSummary, monthName: String) {
 
 
             MayBeEmptyContent(
-                data = cardItems,
+                uiData = cardItems,
                 content = { item ->
                     HomeSummaryCardItem(item)
                 },
@@ -101,29 +101,35 @@ fun PreviewHomeSummaryCardItem(){
     ))
 }
 
-@Preview
-@Composable
-fun PreviewHomeSummaryCard(){
-    HomeSummaryCard((1..3).map{
-        val nextDouble = kotlin.random
-            .Random
-            .nextDouble(0.1,100.0)
-        VectorInaTextIcon(
-            Icons.Outlined.ElectricMeter,
-            "%.2f".format(Locale.US, nextDouble)
-           , "Kilowatts",
-            color = 0xFFF50057
-        )
-    }, "January")
-}
+//@Preview
+//@Composable
+//fun PreviewHomeSummaryCard(){
+//    HomeSummaryCard((1..3).map{
+//        val nextDouble = kotlin.random
+//            .Random
+//            .nextDouble(0.1,100.0)
+//        VectorInaTextIcon(
+//            Icons.Outlined.ElectricMeter,
+//            "%.2f".format(Locale.US, nextDouble)
+//           , "Kilowatts",
+//            color = 0xFFF50057
+//        )
+//    }, "January")
+//}
 
 @Composable
 fun <D> MayBeEmptyContent(
-    data: List<D>,
+    uiData: UiData<List<D>>,
     content: @Composable (D) -> Unit,
     emptyContent: @Composable () -> Unit){
-    if (data.isEmpty()){
-        return emptyContent()
+
+    when(uiData){
+        is UiData.Content -> {
+            uiData.data.forEach { content(it) }
+        }
+        is UiData.EmptyContent -> {
+            emptyContent()
+        }
     }
-    data.forEach { content(it) }
+
 }

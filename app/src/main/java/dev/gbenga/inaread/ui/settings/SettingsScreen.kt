@@ -16,10 +16,13 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,10 +36,14 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import dev.gbenga.inaread.data.model.SettingKeys
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.HorizontalCenter
 import dev.gbenga.inaread.ui.customs.InaCard
 import dev.gbenga.inaread.ui.customs.UiStateWithLoadingBox
+import dev.gbenga.inaread.ui.dialogs.LoadingDialog
 import dev.gbenga.inaread.ui.home.InitialComponent
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
 import dev.gbenga.inaread.ui.home.VectorInaTextIcon
@@ -44,16 +51,49 @@ import dev.gbenga.inaread.ui.metric.AllTimeTitle
 import dev.gbenga.inaread.ui.theme.Indigo50
 import dev.gbenga.inaread.ui.theme.White
 import dev.gbenga.inaread.utils.Scada
+import dev.gbenga.inaread.utils.rememberNavigationDelegate
 
 @Composable
-fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
+fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel(),
+                   navHostController: NavController
+) {
 
     val uiState by settingsViewModel.state.collectAsStateWithLifecycle()
+    val snackbarHost = remember { SnackbarHostState() }
+    var isLoading by remember { mutableStateOf(false) }
+
+    val navDelegate = rememberNavigationDelegate(navHostController)
 
     val onItemClick = remember {
-        { value: String -> /* do something here */ }
+        { action: SettingKeys ->
+            when(action){
+                SettingKeys.SIGN_OUT -> {
+                    settingsViewModel.logOut()
+                }
+                else -> {}
+            }
+        }
     }
 
+    UnitLaunchEffect {
+        settingsViewModel.navigator.collect {
+            navDelegate.handleEvents(it)
+        }
+    }
+
+    UnitLaunchEffect {
+        settingsViewModel.snackBarEvent.collect {
+            snackbarHost.showSnackbar(it)
+        }
+    }
+
+    UnitLaunchEffect {
+        settingsViewModel.loadingEvent.collect {
+            isLoading = it
+        }
+    }
+
+    LoadingDialog(isLoading)
 
     Column(modifier = Modifier
         .padding(DimenTokens.Padding.Small)
@@ -92,7 +132,7 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
 @Composable
 fun LazyItemScope.SettingsContent(
     settingsViewModel: SettingsViewModel,
-    onItemClick: (String) -> Unit
+    onItemClick: (SettingKeys) -> Unit
 ) {
     val settingsMenu by settingsViewModel.menuItems.collectAsStateWithLifecycle(
         initialValue = emptyList()
@@ -183,7 +223,7 @@ fun TitledColumn(
 @Composable
 fun SettingsMenu(
     modifier: Modifier, items: List<VectorInaTextIcon>,
-    onItemClick: (String) -> Unit
+    onItemClick: (SettingKeys) -> Unit
 ) {
     InaCard(
         modifier = modifier
@@ -196,7 +236,10 @@ fun SettingsMenu(
                     modifier = Modifier
                         .fillMaxSize()
                         .clickable {
-                            onItemClick.invoke(item.value)
+                            item.key?.let {
+                                onItemClick.invoke(it as SettingKeys)
+                            }
+
                         },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -271,10 +314,4 @@ fun ProfileSummary(modifier: Modifier, initial: String, profileName: String, pro
         }
     }
 
-}
-
-@Preview
-@Composable
-fun PreviewSettingsScreen() {
-    SettingsScreen()
 }

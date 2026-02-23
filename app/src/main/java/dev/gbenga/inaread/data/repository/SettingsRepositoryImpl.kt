@@ -1,6 +1,7 @@
 package dev.gbenga.inaread.data.repository
 
 import dev.gbenga.inaread.data.model.ProfileResponse
+import dev.gbenga.inaread.data.model.SettingKeys
 import dev.gbenga.inaread.data.model.SettingsMenu
 import dev.gbenga.inaread.domain.datastore.UserDataStore
 import dev.gbenga.inaread.domain.services.ProfileApiService
@@ -22,8 +23,8 @@ class SettingsRepositoryImpl(
 
     override fun getSettingsMenu(): List<SettingsMenu> {
         return listOf(
-            SettingsMenu("Dark Mode", "true"),
-            SettingsMenu("Logout",)
+            SettingsMenu("Dark Mode", "true", SettingKeys.THEME_MODE),
+            SettingsMenu("Logout", key = SettingKeys.SIGN_OUT)
         )
     }
 

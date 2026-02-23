@@ -17,12 +17,14 @@ import dev.gbenga.inaread.data.network.AuthenticationService
 import dev.gbenga.inaread.domain.datastore.InaEncryptedPrefs
 import dev.gbenga.inaread.domain.repository.AuthRepository
 import dev.gbenga.inaread.tokens.StringTokens
+import dev.gbenga.inaread.utils.UserNotFoundException
+import dev.gbenga.inaread.utils.UserProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 class AuthRepositoryImpl(private val authApiService: AuthenticationService,
                          private val userDao: UserDao,
-                         private val accessTokenStore: AccessTokenStore,
+                         private val userProvider: UserProvider,
                          private val io: CoroutineDispatcher
 ) : AuthRepository, NetworkRepository() {
 
@@ -36,25 +38,42 @@ class AuthRepositoryImpl(private val authApiService: AuthenticationService,
         }.map {
             withContext(io){
                 it.authToken?.let { access ->
-                    accessTokenStore.setAccessToken(access.access)
-                    accessTokenStore.setRefreshToken(access.refresh)
+                    userProvider.setAccessToken(access.access)
+                    userProvider.setRefreshToken(access.refresh)
                 }
+
+                userProvider.setCustomerId(it.customerId)
                 userDao.save(it.toUserEntity())
                 it.toLoginOutput()
             }
         }
 
 
-
     override suspend fun getProfile(userId: String): RepoResult<LoginOutput> {
         return withContext(io){
-            userDao.getProfile(userId).firstOrNull()?.let {
+            userDao.getProfile(userId).let {
                 RepoResult.Success(data = it.toLoginOutput())
-            } ?: RepoResult.Error(StringTokens.Auth.NoProfileWithUserId)
+            }
         }
     }
 
     override suspend fun signUp(request: SignUpRequest): RepoResult<SignUpOutput> = safeCall {
         authApiService.signUp(request)
     }.map { it.toSignUpOutput() }
+
+    override suspend fun signOut(): RepoResult<String> = safeCall {
+        authApiService.signOut(userProvider.getCustomerId()).also {
+            userProvider.removeTokens()
+            userDao.deleteByCustomerId(userProvider.getCustomerId())
+        }
+    }
+
+    override suspend fun isSignedIn(): Boolean {
+        return try {
+            userProvider.getAccessToken()
+            true
+        }catch (unf: UserNotFoundException){
+            false
+        }
+    }
 }

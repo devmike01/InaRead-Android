@@ -1,8 +1,6 @@
 package dev.gbenga.inaread.di
 
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +20,6 @@ import dev.gbenga.inaread.data.repository.AllUnitUsageRepository
 import dev.gbenga.inaread.data.repository.AuthRepositoryImpl
 import dev.gbenga.inaread.data.repository.SettingsRepositoryImpl
 import dev.gbenga.inaread.di.annotations.IOCoroutineContext
-import dev.gbenga.inaread.domain.datastore.FakeUserDataStore
 import dev.gbenga.inaread.domain.datastore.UserDataStore
 import dev.gbenga.inaread.domain.repository.AppliancesRepository
 import dev.gbenga.inaread.domain.repository.AuthRepository
@@ -30,6 +27,7 @@ import dev.gbenga.inaread.domain.repository.MeterUsageRepository
 import dev.gbenga.inaread.domain.repository.SettingsRepository
 import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
 import dev.gbenga.inaread.domain.services.ProfileApiService
+import dev.gbenga.inaread.domain.services.RefreshTokenApiService
 import dev.gbenga.inaread.ui.customs.dataStore
 import dev.gbenga.inaread.ui.usage.AllUnitUsageRepositoryImpl
 import dev.gbenga.inaread.utils.UserProvider
@@ -41,8 +39,9 @@ object RepositoryModule {
 
     @Provides
     fun provideMeterSummaryRepository(meterUsageApiService: MeterUsageStatisticService,
-                                      userProvider: UserProvider): MeterUsageRepository
-    = MeterUsageRepositoryImpl(meterUsageApiService, userProvider)
+                                      userProvider: UserProvider,
+                                      userDataStore: UserDataStore): MeterUsageRepository
+    = MeterUsageRepositoryImpl(meterUsageApiService, userProvider, userDataStore)
 
 
 //    @Provides
@@ -90,11 +89,13 @@ object RepositoryModule {
 
     @Provides
     fun provideAuthRepository(authApiService: AuthenticationService, userDao: UserDao,
-                              inaEncryptedPrefs: AccessTokenStore,
+                              userProvider: UserProvider,
                               @IOCoroutineContext io: CoroutineDispatcher)
     : AuthRepository = AuthRepositoryImpl(
         authApiService, userDao,
-        accessTokenStore = inaEncryptedPrefs,
+        userProvider,
         io)
+
+
 }
 

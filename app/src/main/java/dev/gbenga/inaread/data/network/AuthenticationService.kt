@@ -7,7 +7,9 @@ import dev.gbenga.inaread.data.auth.SignUpResponse
 import dev.gbenga.inaread.data.model.ApiResult
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface AuthenticationService {
 
@@ -17,4 +19,6 @@ interface AuthenticationService {
     @POST(EndPoints.SignUp)
     suspend fun signUp(@Body request: SignUpRequest): Response<ApiResult<SignUpResponse>>
 
+    @GET("${EndPoints.SignOut}/{customerId}")
+    suspend fun signOut(@Path("customerId") customerId: String): Response<ApiResult<String>>
 }
