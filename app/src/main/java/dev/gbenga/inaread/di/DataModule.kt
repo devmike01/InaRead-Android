@@ -17,6 +17,7 @@ import dev.gbenga.inaread.data.CalendarProviderImpl
 import dev.gbenga.inaread.data.ImagePickerProviderImpl
 import dev.gbenga.inaread.data.datastore.AccessTokenStore
 import dev.gbenga.inaread.data.db.InaReadDatabase
+import dev.gbenga.inaread.data.db.PowerUsageSummaryDao
 import dev.gbenga.inaread.data.db.UserDao
 import dev.gbenga.inaread.data.security.InaEncryptedPrefsImpl
 import dev.gbenga.inaread.di.annotations.EncryptedSharedPrefs
@@ -48,6 +49,11 @@ object DataModule {
     @Provides
     fun provideUserDao(db: InaReadDatabase): UserDao{
         return db.userDao()
+    }
+
+    @Provides
+    fun providePowerUsageSummaryDao(db: InaReadDatabase): PowerUsageSummaryDao {
+        return db.powerUsageSummary()
     }
 
     @Provides
