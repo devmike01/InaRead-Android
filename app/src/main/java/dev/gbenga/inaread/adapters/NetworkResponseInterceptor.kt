@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.adapters
 
+import android.util.Log
 import dev.gbenga.inaread.domain.SecureAccessTokenStore
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -12,9 +13,11 @@ class NetworkResponseInterceptor(
         val originalRequest = chain.request()
         val token = accessTokenStore.getAccessToken()
 
+        Log.d("intercept::", "${token}")
+
         val newRequest = if (!token.isNullOrBlank()){
             originalRequest.newBuilder()
-                .addHeader("Authorization", token)
+                .header("Authorization", "Bearer $token")
                 .build()
         }else{
             originalRequest
