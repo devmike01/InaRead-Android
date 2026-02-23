@@ -31,4 +31,11 @@ class AccessTokenStore(private val cryptoSharedPrefs: SharedPreferences) : Secur
             putString(REFRESH_TOKEN, token)
         }
     }
+
+    override fun removeTokens() {
+        cryptoSharedPrefs.edit{
+            remove(REFRESH_TOKEN)
+            remove(ACCESS_TOKEN)
+        }
+    }
 }
