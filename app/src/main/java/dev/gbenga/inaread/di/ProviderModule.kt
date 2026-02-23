@@ -18,6 +18,7 @@ object ProviderModule {
     fun provideUserProvider(userDataStore: UserDataStore,
                             userDao: UserDao,
                             accessTokenStore: SecureAccessTokenStore): UserProvider {
-        return UserProviderImpl(userDataStore, userDao, accessTokenStore);
+        return UserProviderImpl(userDataStore, userDao,
+            accessTokenStore);
     }
 }
