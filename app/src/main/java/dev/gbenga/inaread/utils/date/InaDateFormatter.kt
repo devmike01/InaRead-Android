@@ -11,6 +11,12 @@ class InaDateFormatter @Inject constructor(private val sdf: SimpleDateFormat) {
         return sdf.format(dateInMillis)
     }
 
+    fun ddMMM(dateStr: String): String{
+        sdf.applyPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        val parsedDate = sdf.parse(dateStr)
+        sdf.applyPattern("dd/MMM")
+        return parsedDate?.let { sdf.format(it) } ?: ""
+    }
 
     fun ddMMM(date: Date): String{
         sdf.applyPattern("dd/MMM")

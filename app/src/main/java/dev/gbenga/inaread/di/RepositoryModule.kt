@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import dev.gbenga.inaread.data.MeterUsageRepositoryImpl
 import dev.gbenga.inaread.data.datastore.AccessTokenStore
 import dev.gbenga.inaread.data.datastore.UserDataStoreImpl
+import dev.gbenga.inaread.data.db.PowerUsageSummaryDao
 import dev.gbenga.inaread.data.db.UserDao
 import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.ApplianceResponse
@@ -40,8 +41,9 @@ object RepositoryModule {
     @Provides
     fun provideMeterSummaryRepository(meterUsageApiService: MeterUsageStatisticService,
                                       userProvider: UserProvider,
-                                      userDataStore: UserDataStore): MeterUsageRepository
-    = MeterUsageRepositoryImpl(meterUsageApiService, userProvider, userDataStore)
+                                      powerUsageSummaryDao: PowerUsageSummaryDao,): MeterUsageRepository
+    = MeterUsageRepositoryImpl(meterUsageApiService, userProvider,
+        powerUsageSummaryDao)
 
 
 //    @Provides

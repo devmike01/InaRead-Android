@@ -82,9 +82,11 @@ private fun NoChartCard(itemData: InaTextIcon,
                 start.linkTo(parent.start)
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
-            }.size(DimenTokens.Icon.Large))
+            }.size(DimenTokens.Icon.Medium))
 
-            Column(modifier = Modifier.constrainAs(stats){
+            Column(modifier = Modifier
+                .padding(start = DimenTokens.Padding.Small)
+                .constrainAs(stats){
                 start.linkTo(chartIcon.end)
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)

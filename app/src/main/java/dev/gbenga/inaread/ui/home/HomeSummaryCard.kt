@@ -3,24 +3,32 @@ package dev.gbenga.inaread.ui.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ElectricMeter
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.InaCard
 import dev.gbenga.inaread.ui.customs.XYAxisCenter
+import dev.gbenga.inaread.ui.theme.Indigo200
+import dev.gbenga.inaread.ui.theme.Indigo50
+import dev.gbenga.inaread.ui.theme.White
 import java.util.Locale
 
 @Composable
@@ -35,8 +43,8 @@ fun HomeSummaryCard(cardItems: UiData<MeterUsageSummary>, monthName: String) {
 
             MayBeEmptyContent(
                 uiData = cardItems,
-                content = { item ->
-                    HomeSummaryCardItem(item)
+                content = {isLast,  item ->
+                    HomeSummaryCardItem(isLast, item)
                 },
                 emptyContent ={
                     XYAxisCenter (
@@ -53,17 +61,28 @@ fun HomeSummaryCard(cardItems: UiData<MeterUsageSummary>, monthName: String) {
 
 
 @Composable
-fun HomeSummaryCardItem(data: InaTextIcon){
-    Column(modifier = Modifier
-        .wrapContentSize()
-        .padding(DimenTokens.Padding.Small),
-        verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.XSmall),
-        horizontalAlignment = Alignment.Start) {
-        InaIcon(data = data)
+fun HomeSummaryCardItem(isLast: Boolean, data: InaTextIcon){
+    Row(verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start) {
+        Column(modifier = Modifier
+            .wrapContentSize()
+            .padding(vertical = DimenTokens.Padding.Small)
+            .padding(end = DimenTokens.Padding.Normal),
+            verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.XSmall),
+            horizontalAlignment = Alignment.Start) {
+            InaIcon(data = data)
 
-        Text(data.value.padStart(2, '0'),
-            style = MaterialTheme.typography.titleMedium,)
-        Text(data.label, style = MaterialTheme.typography.bodySmall)
+            Text(data.value.padStart(2, '0'),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.W600
+                ),)
+            Text(data.label, style = MaterialTheme.typography.bodySmall)
+        }
+        if (!isLast){
+            VerticalDivider(thickness = .4.dp, color = Indigo200,
+                modifier = Modifier.height(50.dp)
+                    .wrapContentWidth())
+        }
     }
 }
 
@@ -94,7 +113,7 @@ fun InaIcon(data: InaTextIcon, modifier: Modifier = Modifier){
 @Preview
 @Composable
 fun PreviewHomeSummaryCardItem(){
-    HomeSummaryCardItem(VectorInaTextIcon(
+    HomeSummaryCardItem(false, VectorInaTextIcon(
         Icons.Outlined.ElectricMeter,
         "45.9", "Kilowatts",
         color = 0xFFF50057
@@ -120,12 +139,13 @@ fun PreviewHomeSummaryCardItem(){
 @Composable
 fun <D> MayBeEmptyContent(
     uiData: UiData<List<D>>,
-    content: @Composable (D) -> Unit,
+    content: @Composable (Boolean, D) -> Unit,
     emptyContent: @Composable () -> Unit){
 
     when(uiData){
         is UiData.Content -> {
-            uiData.data.forEach { content(it) }
+            uiData.data.forEachIndexed {index, data ->
+                content(index ==  uiData.data.size - 1, data) }
         }
         is UiData.EmptyContent -> {
             emptyContent()

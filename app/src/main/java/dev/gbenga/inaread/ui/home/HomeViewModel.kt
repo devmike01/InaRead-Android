@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ElectricMeter
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Money
+import androidx.compose.material.icons.filled.Timeline
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,17 +19,21 @@ import dev.gbenga.inaread.domain.providers.CalendarProvider
 import dev.gbenga.inaread.domain.usecase.WeekDaysUseCase
 import dev.gbenga.inaread.domain.usecase.MeterSummaryUseCase
 import dev.gbenga.inaread.ui.customs.toUiState
+import dev.gbenga.inaread.ui.theme.DeepOrange
 import dev.gbenga.inaread.utils.InaReadViewModel
 import dev.gbenga.inaread.utils.InaReadViewModelV2
 import dev.gbenga.inaread.utils.NavigationEvent
 import dev.gbenga.inaread.utils.Scada
 import dev.gbenga.inaread.utils.UiState
+import dev.gbenga.inaread.utils.date.InaDateFormatter
+import dev.gbenga.inaread.utils.ext.naira
 import dev.gbenga.inaread.utils.nav.InaScreen
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.math.RoundingMode
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,6 +42,7 @@ class HomeViewModel @Inject constructor(
     private val meterUseCase: MeterSummaryUseCase,
     private val calendarProvider: CalendarProvider,
     private val savedStateHandle: SavedStateHandle,
+    private val inaDateFormatter: InaDateFormatter
 ) : InaReadViewModelV2<HomeUiState>(
     HomeUiState()
 ) {
@@ -57,7 +64,8 @@ class HomeViewModel @Inject constructor(
 
         getTopbarContent()
 
-        getSummary("2026-01-02")
+        getSummary(calendarProvider
+            .getTodayYMD())
 
         val scrollToPos = calendarProvider.getIndexOf(calendarProvider.getCurrentDayOfMonth())
         selectNewDay(selectedDate
@@ -115,6 +123,9 @@ class HomeViewModel @Inject constructor(
             savedStateHandle[SELECTED_CALENDAR_POS] = selectedPos
         }
 
+
+        // c867773d0beb4bc1877209acd959da57
+
         getSummary(ymdDateStr)
 
         setState { it.copy(daysOfMonth = it.daysOfMonth.map {  weekDay ->
@@ -134,30 +145,41 @@ class HomeViewModel @Inject constructor(
 
     fun getSummary(fromDayOfMonth: String){
         viewModelScope.launch {
+            setState{it.copy( meterUsageSummary = UiState.Loading)}
             when(val result = meterUseCase(fromDayOfMonth)){
                 is RepoResult.Success -> {
+
                     val summary = result.data.firstOrNull()
                     setState { it.copy(
+
                         meterUsageSummary =  UiState.Success(Pair(
                             summary?.let { summary ->
                                 UiData.Content(MeterMonthlyStat(
+                                    chartData = listOf(0F,
+                                        summary.totalMonthPowerUsage
+                                            .minus(BigDecimal(12)).setScale(2,
+                                            RoundingMode.HALF_EVEN).toFloat(),
+                                        summary.totalMonthPowerUsage.setScale(2,
+                                            RoundingMode.HALF_EVEN).toFloat()),
                                     lifeTimeReading = VectorInaTextIcon(
                                         icon = Icons.Default.ElectricMeter,
-                                        value = summary.totalMonthPowerUsage.toPlainString(),
+                                        value = summary.totalMonthPowerUsage
+                                            .setScale(2, RoundingMode.HALF_EVEN)
+                                            .toPlainString(),
                                         label = "kWh",
-                                        color = 0XFF00796B,
+                                        color = 0xFFFF5722,
                                     ),
                                     monthlyStat = VectorInaTextIcon(
-                                        icon = Icons.Default.ElectricMeter,
+                                        icon = Icons.Default.Timeline,
                                         value = summary.periodInDays,
-                                        label = "Period",
-                                        color = 0XFF00796B,
+                                        label = "Period(days)",
+                                        color = 0xFFFF5722,
                                     ),
                                     costStat = VectorInaTextIcon(
-                                        icon = Icons.Default.ElectricMeter,
-                                        value = summary.costPerKwh.toPlainString(),
+                                        icon = Icons.Default.Money,
+                                        value = summary.costPerKwh.naira(),
                                         label = "Cost/KWh",
-                                        color = 0XFF00796B,
+                                        color = 0xFFFF5722,
                                     ),
                                 )) } ?: UiData.EmptyContent,
                             summary?.let {
@@ -165,21 +187,21 @@ class HomeViewModel @Inject constructor(
                                     listOf(
                                         ResIdInaTextIcon(
                                             icon = R.drawable.outline_money_bag_24,
-                                            value = summary.totalSpent.toPlainString(),
+                                            value = summary.totalSpent.naira(),
                                             label = "Total spend",
-                                            color = 0XFF00796B,
+                                            color = 0xFFFF5722,
                                         ),
                                         ResIdInaTextIcon(
                                             icon = R.drawable.outline_electric_bolt_24,
                                             value = summary.meterType,
                                             label = "Subscription type",
-                                            color = 0XFF00796B,
+                                            color = 0xFFFF5722,
                                         ),
-                                        ResIdInaTextIcon(
-                                            icon = R.drawable.outline_electric_bolt_24,
-                                            value = "${summary.fromDate}",
-                                            label = "New date",
-                                            color = 0XFF00796B,
+                                        ResIdInaTextIcon( //MMM d
+                                            icon = R.drawable.outline_calendar_today_24,
+                                            value = inaDateFormatter.ddMMM(summary.toDate),
+                                            label = "From",
+                                            color = 0xFFFF5722,
                                         )
                                     )
                                 )

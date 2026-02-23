@@ -15,4 +15,6 @@ interface MeterUsageRepository {
     suspend fun executeGetUsageByUser(): RepoResult<List<PowerUsageResponse>>
 
     suspend fun executeGetMeterTypes(): RepoResult<List<String>>
+
+    suspend fun wipePowerUsageTable()
 }
