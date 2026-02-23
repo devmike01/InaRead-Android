@@ -3,6 +3,7 @@ package dev.gbenga.inaread.data.datastore
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.gbenga.inaread.domain.datastore.UserDataStore
 import kotlinx.coroutines.flow.Flow
@@ -25,5 +26,12 @@ class UserDataStoreImpl(private val profileDataStore : DataStore<Preferences>) :
     override fun getProfileId(): Flow<String?> = profileDataStore.data.map { prefs ->
         prefs[USER_ID_STORE]
     }
+
+    override suspend fun removeUserProfileId() {
+        profileDataStore.edit { prefs ->
+            prefs.remove(USER_ID_STORE)
+        }
+    }
+
 
 }
