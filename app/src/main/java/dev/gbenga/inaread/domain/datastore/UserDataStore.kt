@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.flowOf
 interface UserDataStore {
     suspend fun setProfileId(profileId: String)
     fun getProfileId(): Flow<String?>
+    suspend fun removeUserProfileId()
 }
