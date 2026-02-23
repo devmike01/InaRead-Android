@@ -62,9 +62,10 @@ class AuthRepositoryImpl(private val authApiService: AuthenticationService,
     }.map { it.toSignUpOutput() }
 
     override suspend fun signOut(): RepoResult<String> = safeCall {
-        authApiService.signOut(userProvider.getCustomerId()).also {
+        try {
+            authApiService.signOut(userProvider.getCustomerId())
+        }finally {
             userProvider.removeTokens()
-            userDao.deleteByCustomerId(userProvider.getCustomerId())
         }
     }
 
