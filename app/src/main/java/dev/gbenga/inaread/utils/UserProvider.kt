@@ -1,10 +1,15 @@
 package dev.gbenga.inaread.utils
 
+import android.util.Log
 import dev.gbenga.inaread.data.db.UserDao
 import dev.gbenga.inaread.data.db.entities.UserEntity
 import dev.gbenga.inaread.domain.SecureAccessTokenStore
 import dev.gbenga.inaread.domain.datastore.UserDataStore
+import dev.gbenga.inaread.domain.providers.CoroutineProviders
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withContext
 
 interface UserProvider {
 
@@ -33,9 +38,12 @@ interface UserProvider {
 class UserProviderImpl(
     private val userDataStore: UserDataStore,
     private val userDao: UserDao,
-    private val accessTokenStore: SecureAccessTokenStore) : UserProvider{
+    private val accessTokenStore: SecureAccessTokenStore,
+    private val io: CoroutineDispatcher = Dispatchers.IO
+) : UserProvider{
 
     override suspend fun getCustomerId(): String = getOrThrowUserNotAuth {
+        Log.d("ThrowUserNotAuth", "ThrowUserNotAuth: ${userDataStore.getProfileId().firstOrNull()}")
         userDataStore.getProfileId().firstOrNull()
     }
 
@@ -68,8 +76,11 @@ class UserProviderImpl(
     = getOrThrowUserNotAuth { accessTokenStore.getRefreshToken() }
 
     override suspend fun removeTokens() {
-        userDao.deleteByCustomerId(getCustomerId())
-        accessTokenStore.removeTokens()
+        withContext(io){
+            userDao.deleteByCustomerId(getCustomerId())
+            accessTokenStore.removeTokens()
+            userDataStore.removeUserProfileId()
+        }
     }
 
 }

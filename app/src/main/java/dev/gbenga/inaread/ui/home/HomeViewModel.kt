@@ -136,10 +136,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             when(val result = meterUseCase(fromDayOfMonth)){
                 is RepoResult.Success -> {
-                    val summaries = result.data.firstOrNull()
+                    val summary = result.data.firstOrNull()
                     setState { it.copy(
                         meterUsageSummary =  UiState.Success(Pair(
-                            summaries?.let { summary ->
+                            summary?.let { summary ->
                                 UiData.Content(MeterMonthlyStat(
                                     lifeTimeReading = VectorInaTextIcon(
                                         icon = Icons.Default.ElectricMeter,
@@ -160,9 +160,30 @@ class HomeViewModel @Inject constructor(
                                         color = 0XFF00796B,
                                     ),
                                 )) } ?: UiData.EmptyContent,
-                            UiData.Content(
-                                emptyList()
-                            )
+                            summary?.let {
+                                UiData.Content(
+                                    listOf(
+                                        ResIdInaTextIcon(
+                                            icon = R.drawable.outline_money_bag_24,
+                                            value = summary.totalSpent.toPlainString(),
+                                            label = "Total spend",
+                                            color = 0XFF00796B,
+                                        ),
+                                        ResIdInaTextIcon(
+                                            icon = R.drawable.outline_electric_bolt_24,
+                                            value = summary.meterType,
+                                            label = "Subscription type",
+                                            color = 0XFF00796B,
+                                        ),
+                                        ResIdInaTextIcon(
+                                            icon = R.drawable.outline_electric_bolt_24,
+                                            value = "${summary.fromDate}",
+                                            label = "New date",
+                                            color = 0XFF00796B,
+                                        )
+                                    )
+                                )
+                            }?: UiData.EmptyContent,
                         ))
                     ) }
                 }

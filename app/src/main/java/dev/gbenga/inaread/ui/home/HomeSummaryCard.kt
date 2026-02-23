@@ -62,7 +62,7 @@ fun HomeSummaryCardItem(data: InaTextIcon){
         InaIcon(data = data)
 
         Text(data.value.padStart(2, '0'),
-            style = MaterialTheme.typography.headlineMedium,)
+            style = MaterialTheme.typography.titleMedium,)
         Text(data.label, style = MaterialTheme.typography.bodySmall)
     }
 }

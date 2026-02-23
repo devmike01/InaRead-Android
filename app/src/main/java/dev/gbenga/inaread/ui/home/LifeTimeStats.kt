@@ -75,25 +75,27 @@ private fun NoChartCard(itemData: InaTextIcon,
         ConstraintLayout(modifier = Modifier
             .fillMaxWidth(.44f)
             .height(100.dp)
-            .padding(start = DimenTokens.Padding.Normal)) {
+            .padding(start = DimenTokens.Padding.Small)) {
             val (stats, chartIcon) = createRefs()
-            Column(modifier = Modifier.constrainAs(stats){
+
+            InaIcon(itemData, modifier = Modifier.constrainAs(chartIcon){
                 start.linkTo(parent.start)
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+            }.size(DimenTokens.Icon.Large))
+
+            Column(modifier = Modifier.constrainAs(stats){
+                start.linkTo(chartIcon.end)
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
             }) {
                 Text(itemData.value,
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.headlineSmall
                         .copy(fontWeight = FontWeight.W600))
                 Text(itemData.label,
                     style = MaterialTheme.typography.bodySmall
                         .copy(fontWeight = FontWeight.W600),)
             }
-            InaIcon(itemData, modifier = Modifier.constrainAs(chartIcon){
-                end.linkTo(parent.end, margin = DimenTokens.Padding.XSmall)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }.size(90.dp))
 
         }
     }
