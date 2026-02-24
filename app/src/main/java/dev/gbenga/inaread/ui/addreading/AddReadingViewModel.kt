@@ -3,7 +3,9 @@ package dev.gbenga.inaread.ui.addreading
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.gbenga.inaread.data.model.PowerUsageRequest
 import dev.gbenga.inaread.domain.providers.ImagePickerProvider
+import dev.gbenga.inaread.domain.usecase.MeterUsageRecordingUseCase
 import dev.gbenga.inaread.utils.InaReadViewModel
 import dev.gbenga.inaread.utils.Scada
 import kotlinx.coroutines.launch
@@ -11,13 +13,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddReadingViewModel @Inject constructor(
+    private val meterUsageRecordingUseCase: MeterUsageRecordingUseCase,
     private val imagePickerProvider: ImagePickerProvider) : InaReadViewModel<AddReadingState, AddReadingEvent>(AddReadingState()) {
 
 
     fun addImage(imageUri: Uri?){
         viewModelScope.launch {
             imageUri?.let { imageUri->
-
                 val selectedImagePath = imagePickerProvider
                     .getAbsolutePathFor(imageUri)
                 Scada.info("AddReadingEvent: $selectedImagePath")
@@ -36,6 +38,13 @@ class AddReadingViewModel @Inject constructor(
                 .takeIf { state.record ==  MeterReadingRecord.OCR}
                 ?: MeterReadingRecord.OCR
         ) }
+    }
+
+
+    fun recordReading(request: PowerUsageRequest){
+        viewModelScope.launch {
+            meterUsageRecordingUseCase(request)
+        }
     }
 
     private fun toggleImage(enabled: Boolean){

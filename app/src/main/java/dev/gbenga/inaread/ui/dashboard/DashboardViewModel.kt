@@ -76,7 +76,7 @@ class DashboardViewModel @Inject constructor(
 
     fun gotoNewPage(route: DashboardScreen){
         setState { it.copy(selectedRoute = route) }
-        navigate(NavigationEvent.Navigate(route))
+        navigate(NavigationEvent.NavigateTaskTop(route))
     }
 
 

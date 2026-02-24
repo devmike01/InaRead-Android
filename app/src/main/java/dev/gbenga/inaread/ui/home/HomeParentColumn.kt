@@ -10,6 +10,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.HorizontalCenter
 import dev.gbenga.inaread.ui.theme.Indigo50
@@ -41,7 +43,7 @@ fun HomeParentColumn(title: String,
         }
         Text(titleSubTitle, style = MaterialTheme.typography
             .bodyMedium.copy(fontWeight = FontWeight.W400,
-                color = Indigo50),
+                color = Indigo50,),
             textAlign = TextAlign.Center)
         content()
     }

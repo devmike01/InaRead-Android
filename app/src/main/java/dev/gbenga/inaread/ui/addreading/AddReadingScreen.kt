@@ -7,8 +7,11 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -22,6 +25,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -85,9 +89,11 @@ fun AddReadingScreenContent(uiState: AddReadingState,
                             removeImageRequest: () -> Unit,
                             showImagePickerRequest: () -> Unit){
 
-    Box(modifier = Modifier.fillMaxSize()){
+    val fromDate = remember { mutableStateOf("") }
+    val toDate = remember { mutableStateOf("") }
 
-        TextButton(onClick = onChangeReadingMode,
+    Box(modifier = Modifier.fillMaxSize()){
+        OutlinedButton (onClick = onChangeReadingMode,
             modifier = Modifier.align(
             Alignment.TopEnd
         ). padding(DimenTokens.Padding.Small)) {
@@ -101,9 +107,9 @@ fun AddReadingScreenContent(uiState: AddReadingState,
                     .copy(fontWeight = FontWeight.W600))
         }
 
-
         HomeParentColumn(
             modifier = Modifier
+                .padding(top = DimenTokens.Padding.Small)
                 .align(Alignment.Center)
                 .wrapContentHeight(),
             title = StringTokens.AddReadingImage.Title,
@@ -112,9 +118,9 @@ fun AddReadingScreenContent(uiState: AddReadingState,
             AnimatedContent(uiState.record) { meterRecordToggle ->
 
             ConstraintLayout(modifier = Modifier
-                .padding(top = DimenTokens.Padding.Large)
+                .padding(top = DimenTokens.Padding.Small)
                 .wrapContentHeight(),) {
-                val (addImageBtn, readImgBtn, switchBtn) = createRefs()
+                val (addImageBtn, readImgBtn) = createRefs()
 
               if (meterRecordToggle == MeterReadingRecord.OCR){
                         UploadImageButton(
@@ -148,6 +154,19 @@ fun AddReadingScreenContent(uiState: AddReadingState,
                 }
 
 
+            }
+            Spacer(modifier = Modifier.padding(DimenTokens.Padding.Small))
+            DatePickerDocked(modifier = Modifier, labelText = "From", fromDate)
+            Spacer(modifier = Modifier.padding(DimenTokens.Padding.Small))
+            DatePickerDocked(modifier = Modifier, labelText = "To",toDate)
+            Spacer(modifier = Modifier.padding(DimenTokens.Padding.Large))
+            Button(onClick = {
+
+            }, Modifier.fillMaxWidth()
+                .height(DimenTokens.Button.Normal),
+                shape = RoundedCornerShape(DimenTokens.Radius.xSmall)
+            ) {
+                Text("Record reading")
             }
         }
     }

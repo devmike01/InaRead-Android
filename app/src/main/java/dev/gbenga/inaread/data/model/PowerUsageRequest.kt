@@ -5,6 +5,6 @@ data class PowerUsageRequest(
     val meterCategoryId: Long,
     val fromDate: LocalDate,
     val toDate: LocalDate,
-    val customerId: String,
+    val customerId: String, // This is set at the repository
     val readingText: String
 )

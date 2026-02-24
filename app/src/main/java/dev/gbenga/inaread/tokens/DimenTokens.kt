@@ -64,4 +64,8 @@ object DimenTokens {
     object UnitUsage {
         val CardHeight = 115.dp
     }
+
+    object Button{
+        val Normal = 50.dp
+    }
 }
