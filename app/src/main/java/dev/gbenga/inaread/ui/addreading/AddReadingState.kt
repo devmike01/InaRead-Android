@@ -7,8 +7,13 @@ data class AddReadingState(
     val meterImagePath: String? = null,
     val meterInfo: UIMeterReadingInfo = UIMeterReadingInfo(),
     val enableReadImage: Boolean = false,
+    val record: MeterReadingRecord = MeterReadingRecord.MANUAL,
     ): InaReadUiState
 
+
+enum class MeterReadingRecord{
+    MANUAL, OCR
+}
 
 val previewAddReadingState = AddReadingState(
     meterImagePath = null,
@@ -16,5 +21,6 @@ val previewAddReadingState = AddReadingState(
         "500.33kWh",
         from = "2 January, 2026",
         to = "13 January, 2026",
-    )
+    ),
+    record = MeterReadingRecord.MANUAL
 )
