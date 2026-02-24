@@ -80,7 +80,7 @@ class MeterUsageRepositoryImpl (
 
     override suspend fun executeAddNewReading(request: PowerUsageRequest)
     : RepoResult<ConsumptionRecordResponse> = safeCall {
-        meterUsageApiService.setNewReading(request)
+        meterUsageApiService.setNewReading(request.copy(customerId = userProvider.getCustomerId()))
     }
 
     override suspend fun executeGetUsageByUser()
