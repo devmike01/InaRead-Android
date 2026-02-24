@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddReadingViewModel @Inject constructor(private val imagePickerProvider: ImagePickerProvider) : InaReadViewModel<AddReadingState, AddReadingEvent>(AddReadingState()) {
+class AddReadingViewModel @Inject constructor(
+    private val imagePickerProvider: ImagePickerProvider) : InaReadViewModel<AddReadingState, AddReadingEvent>(AddReadingState()) {
 
 
     fun addImage(imageUri: Uri?){
@@ -27,6 +28,14 @@ class AddReadingViewModel @Inject constructor(private val imagePickerProvider: I
             toggleImage(imageUri != null)
         }
 
+    }
+
+    fun toggleRecordMeterReading(){
+        setState { state -> state.copy(
+            record = MeterReadingRecord.MANUAL
+                .takeIf { state.record ==  MeterReadingRecord.OCR}
+                ?: MeterReadingRecord.OCR
+        ) }
     }
 
     private fun toggleImage(enabled: Boolean){
