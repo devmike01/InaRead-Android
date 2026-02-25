@@ -8,7 +8,7 @@ data class Appliance(  val name: String,
                        val rating: BigDecimal,
                        val applianceTypeId: Long,
                        val ratingUnit: String,
-    val createdOn: String)
+    val createdOn: String?)
 
 
 
