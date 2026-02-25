@@ -1,6 +1,7 @@
 package dev.gbenga.inaread.domain.services
 
 import dev.gbenga.inaread.data.model.ApiResult
+import dev.gbenga.inaread.data.model.Appliance
 import dev.gbenga.inaread.data.model.ApplianceResponse
 import dev.gbenga.inaread.data.model.ApplianceResponseData
 import dev.gbenga.inaread.data.model.AppliancesRequest
@@ -13,8 +14,8 @@ import retrofit2.http.Path
 
 interface AppliancesApiService {
 
-    @GET(EndPoints.GetAppliances.plus("/{userId}"))
-    suspend fun getAppliances(@Path("userId") userId: String): Response<ApiResult<ApplianceResponse>>
+    @GET(EndPoints.GetAppliances.plus("/{userId}")) // RepoResult<List<Appliance>>
+    suspend fun getAppliances(@Path("userId") userId: String): Response<ApiResult<List<Appliance>>>
 
     @POST(EndPoints.SetAppliance)
     suspend fun addAppliances(@Body request: AppliancesRequest): Response<ApiResult<ApplianceResponseData>>

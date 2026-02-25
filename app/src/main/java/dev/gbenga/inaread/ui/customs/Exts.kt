@@ -54,6 +54,7 @@ suspend  fun <T> uiStateRunCatching(block: suspend () -> T): UiState<T>{
     }
 }
 
+@Deprecated("No longer need. Exception is now been handled on repository level.")
 suspend  fun <T> uiStateWithIdleRunCatching(block: suspend () -> T): UiStateWithIdle<T>{
     return try {
         UiStateWithIdle.Success(block())
