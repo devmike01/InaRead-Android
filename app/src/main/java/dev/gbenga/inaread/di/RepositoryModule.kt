@@ -17,6 +17,7 @@ import dev.gbenga.inaread.data.model.AppliancesRequest
 import dev.gbenga.inaread.domain.services.AuthenticationApiService
 import dev.gbenga.inaread.domain.services.MeterUsageStatisticService
 import dev.gbenga.inaread.data.repository.AllUnitUsageRepository
+import dev.gbenga.inaread.data.repository.AppliancesRepositoryImpl
 import dev.gbenga.inaread.data.repository.AuthRepositoryImpl
 import dev.gbenga.inaread.data.repository.SettingsRepositoryImpl
 import dev.gbenga.inaread.di.annotations.IOCoroutineContext
@@ -26,6 +27,7 @@ import dev.gbenga.inaread.domain.repository.AuthRepository
 import dev.gbenga.inaread.domain.repository.MeterUsageRepository
 import dev.gbenga.inaread.domain.repository.SettingsRepository
 import dev.gbenga.inaread.domain.services.AllUsageApiService
+import dev.gbenga.inaread.domain.services.AppliancesApiService
 import dev.gbenga.inaread.domain.services.ProfileApiService
 import dev.gbenga.inaread.ui.customs.dataStore
 import dev.gbenga.inaread.ui.usage.AllUnitUsageRepositoryImpl
@@ -74,17 +76,9 @@ object RepositoryModule {
     }
 
     @Provides
-    fun provideAppliancesRepository(): AppliancesRepository {
-        return object : AppliancesRepository{
-            override suspend fun executeGetAppliances(): RepoResult<ApplianceResponse> {
-                TODO("Not yet implemented")
-            }
-
-            override suspend fun executeAddAppliance(request: AppliancesRequest): RepoResult<ApplianceResponseData> {
-                TODO("Not yet implemented")
-            }
-
-        }
+    fun provideAppliancesRepository(appliancesApiService: AppliancesApiService,
+                                    userProvider: UserProvider): AppliancesRepository {
+        return AppliancesRepositoryImpl(appliancesApiService, userProvider)
     }
 
     @Provides
