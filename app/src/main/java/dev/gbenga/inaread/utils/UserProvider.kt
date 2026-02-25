@@ -33,6 +33,8 @@ interface UserProvider {
     suspend fun getRefreshToken(): String
 
     suspend fun removeTokens()
+
+    suspend fun getMeterCategoryId(): Int
 }
 
 class UserProviderImpl(
@@ -43,8 +45,9 @@ class UserProviderImpl(
 ) : UserProvider{
 
     override suspend fun getCustomerId(): String = getOrThrowUserNotAuth {
-        Log.d("ThrowUserNotAuth", "ThrowUserNotAuth: ${userDataStore.getProfileId().firstOrNull()}")
-        userDataStore.getProfileId().firstOrNull()
+        withContext(io){
+            userDataStore.getProfileId().firstOrNull()
+        }
     }
 
     override suspend fun setCustomerId(customerId: String) {
@@ -80,6 +83,12 @@ class UserProviderImpl(
             userDao.deleteByCustomerId(getCustomerId())
             accessTokenStore.removeTokens()
             userDataStore.removeUserProfileId()
+        }
+    }
+
+    override suspend fun getMeterCategoryId(): Int {
+        return withContext(io){
+            userDao.getProfile(getCustomerId()).meterCategoryId
         }
     }
 

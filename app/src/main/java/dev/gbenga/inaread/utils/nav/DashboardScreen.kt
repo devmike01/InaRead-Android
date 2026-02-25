@@ -1,9 +1,11 @@
 package dev.gbenga.inaread.utils.nav
 
+import androidx.compose.runtime.Stable
 import kotlinx.serialization.Serializable
 
 
 @Serializable
+@Stable
 sealed interface DashboardScreen : InaScreen {
 
     val key: String

@@ -4,10 +4,13 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -31,9 +34,9 @@ import dev.gbenga.inaread.utils.nav.DashboardScreen
 
 @Composable
 fun HomeBottomNav(modifier: Modifier = Modifier,
-                  content: @Composable () -> Unit)  {
+                  content: LazyListScope.() -> Unit)  {
 
-    Row(
+    LazyRow(
         modifier = modifier
             .drawBehind {
                 drawBottomNavBackground(0xFF263238.color())
@@ -55,23 +58,23 @@ fun HomeBottomNav(modifier: Modifier = Modifier,
 
 @Composable
 fun InaBottomNavItem(inaTextIcon: InaBottomNavItemData,
-                     selected: (DashboardScreen) -> Boolean,
-                     route: DashboardScreen,
-                     onClick: (DashboardScreen) -> Unit){
+                     selected: Boolean,
+                     onClick: () -> Unit){
     val containerColor = MaterialTheme.colorScheme.tertiary.takeIf {
-        selected(route)
+        selected
     } ?: Color.Transparent
+
     Button(
         modifier = Modifier,
         contentPadding = PaddingValues(horizontal = DimenTokens.Padding.Small,
             vertical = DimenTokens.Padding.Small),
-        onClick = { onClick(route) },
+        onClick = onClick,
         shape = RoundedCornerShape(DimenTokens.Radius.large),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor
         ),
         elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = 4.dp.takeIf {  selected(route) } ?: 0.dp
+            defaultElevation = 4.dp.takeIf {  selected } ?: 0.dp
         )
         ) {
 
@@ -82,11 +85,11 @@ fun InaBottomNavItem(inaTextIcon: InaBottomNavItemData,
                 modifier = Modifier
                     .size(26.dp)
                     .padding(end = DimenTokens.Padding.XSmall),
-                tint = Color.White.takeIf {  selected(route) } ?: Color(0x77FFFFFF)
+                tint = Color.White.takeIf {  selected } ?: Color(0x77FFFFFF)
             )
         }
 
-        AnimatedVisibility( selected(route)) {
+        AnimatedVisibility( selected) {
             Text(inaTextIcon.label, maxLines = 1,
                 style = MaterialTheme.typography.bodySmall
                     .copy(color = Color.White))

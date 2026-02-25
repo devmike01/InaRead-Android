@@ -5,5 +5,5 @@ import dev.gbenga.inaread.utils.InaReadUiState
 import dev.gbenga.inaread.utils.UiState
 import dev.gbenga.inaread.utils.UiStateWithIdle
 
-data class AllUnitUsageUiState(val monthlyUsageItems: UiStateWithIdle<List<MonthlyUsage>> = UiStateWithIdle.Loading,
+data class AllUnitUsageUiState(val monthlyUsageItems: UiState<List<MonthlyUsage>> = UiState.Loading,
     val monthlyUsage: UiStateWithIdle<MonthlyUsage> = UiStateWithIdle.Idle) : InaReadUiState

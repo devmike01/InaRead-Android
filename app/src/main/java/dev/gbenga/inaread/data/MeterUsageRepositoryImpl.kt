@@ -9,11 +9,10 @@ import dev.gbenga.inaread.data.model.MeterResponse
 import dev.gbenga.inaread.data.model.PowerUsageRequest
 import dev.gbenga.inaread.data.model.PowerUsageResponse
 import dev.gbenga.inaread.data.model.PowerUsageSummaryResponse
-import dev.gbenga.inaread.data.network.MeterUsageStatisticService
+import dev.gbenga.inaread.domain.services.MeterUsageStatisticService
 import dev.gbenga.inaread.data.repository.NetworkRepository
 import dev.gbenga.inaread.domain.datastore.UserDataStore
 import dev.gbenga.inaread.domain.repository.MeterUsageRepository
-import dev.gbenga.inaread.domain.services.MeterSummaryApiService
 import dev.gbenga.inaread.utils.UserNotFoundException
 import dev.gbenga.inaread.utils.UserProvider
 import kotlinx.coroutines.CoroutineDispatcher
@@ -80,7 +79,9 @@ class MeterUsageRepositoryImpl (
 
     override suspend fun executeAddNewReading(request: PowerUsageRequest)
     : RepoResult<ConsumptionRecordResponse> = safeCall {
-        meterUsageApiService.setNewReading(request.copy(customerId = userProvider.getCustomerId()))
+        meterUsageApiService.setNewReading(request.copy(
+            meterCategoryId = userProvider.getMeterCategoryId(),
+            customerId = userProvider.getCustomerId()))
     }
 
     override suspend fun executeGetUsageByUser()

@@ -24,7 +24,7 @@ fun HomeParentColumn(title: String,
                      content: @Composable () -> Unit) {
     HorizontalCenter(
         modifier = modifier
-            .padding(DimenTokens.Padding.Large)
+            .padding(DimenTokens.Padding.Normal)
     ) {
         val (titleFont, titleWeight) = MaterialTheme.typography.headlineLarge.let {
             Pair(it.fontSize, it.fontWeight)

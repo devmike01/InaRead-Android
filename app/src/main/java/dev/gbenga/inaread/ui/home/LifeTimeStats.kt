@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,9 +28,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import dev.gbenga.inaread.data.model.MeterMonthlyStat
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.InaCard
+import dev.gbenga.inaread.ui.customs.XYAxisCenter
 
 @Composable
-fun LifeTimeStats(meterMonthlyStatData: UiData<MeterMonthlyStat>, modifier: Modifier = Modifier) {
+fun LifeTimeStats(meterMonthlyStatData: UiData<MeterMonthlyStat>,
+                  modifier: Modifier = Modifier) {
     ConstraintLayout(modifier = modifier.fillMaxWidth()) {
         val (lifetime, monthly, cost) = createRefs()
         when(meterMonthlyStatData){
@@ -60,7 +63,15 @@ fun LifeTimeStats(meterMonthlyStatData: UiData<MeterMonthlyStat>, modifier: Modi
                     })
             }
             is UiData.EmptyContent -> {
-
+                InaCard {
+                    XYAxisCenter (
+                        modifier = Modifier
+                            .padding(DimenTokens.Padding.Small)
+                            .height(DimenTokens.Size.emptyData)) {
+                        Text("You don't have any reading for the selected month",
+                            textAlign = TextAlign.Center)
+                    }
+                }
             }
         }
 

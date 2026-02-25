@@ -28,6 +28,7 @@ object DimenTokens {
         val Small = 25.dp
         val Large = 45.dp
         val Medium = 35.dp
+        val XLarge = 65.dp
     }
 
     object Radius{

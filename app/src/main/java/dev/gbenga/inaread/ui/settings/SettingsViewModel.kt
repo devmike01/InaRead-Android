@@ -12,6 +12,7 @@ import dev.gbenga.inaread.utils.InaReadViewModel
 import dev.gbenga.inaread.utils.InaReadViewModelV2
 import dev.gbenga.inaread.utils.NavigationEvent
 import dev.gbenga.inaread.utils.nav.InaScreen
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -26,20 +27,31 @@ class SettingsViewModel @Inject constructor(private val getProfileUseCase: GetPr
      //       val profile = state.map { it.profile }.distinctUntilChanged()
     val menuItems = state.map { it.settingMenu }.distinctUntilChanged()
 
+    init {
+        populateSettings()
+        populateProfile()
+    }
 
     fun populateSettings(){
-        viewModelScope.launch {
+        val settingsMenu = getSettingsMenuUseCase().map { menu ->
+            VectorInaTextIcon(
+                null, menu.value ?: "",
+                menu.name, 0xFFFFFFFF,
+                key = menu.key
+            )
+        }
+
+        setState { it.copy(
+            settingMenu = settingsMenu) }
+
+    }
+
+    private fun populateProfile(){
+
+        viewModelScope.launch(Dispatchers.IO) {
             val profile = uiStateWithIdleRunCatching { getProfileUseCase() }
-            val settingsMenu = getSettingsMenuUseCase().map { menu ->
-                VectorInaTextIcon(
-                    null, menu.value ?: "",
-                    menu.name, 0xFFFFFFFF,
-                    key = menu.key
-                )
-            }
             setState { it.copy(
-                profile = profile,
-                settingMenu = settingsMenu) }
+                profile = profile,) }
         }
     }
 

@@ -1,8 +1,6 @@
 package dev.gbenga.inaread.data.repository
 
-import android.util.Log
 import dev.gbenga.inaread.data.auth.SignUpRequest
-import dev.gbenga.inaread.data.datastore.AccessTokenStore
 import dev.gbenga.inaread.data.db.UserDao
 import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.mapper.map
@@ -13,16 +11,14 @@ import dev.gbenga.inaread.data.mapper.toUserEntity
 import dev.gbenga.inaread.data.model.LoginInput
 import dev.gbenga.inaread.data.model.LoginOutput
 import dev.gbenga.inaread.data.model.SignUpOutput
-import dev.gbenga.inaread.data.network.AuthenticationService
-import dev.gbenga.inaread.domain.datastore.InaEncryptedPrefs
+import dev.gbenga.inaread.domain.services.AuthenticationApiService
 import dev.gbenga.inaread.domain.repository.AuthRepository
-import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.utils.UserNotFoundException
 import dev.gbenga.inaread.utils.UserProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class AuthRepositoryImpl(private val authApiService: AuthenticationService,
+class AuthRepositoryImpl(private val authApiService: AuthenticationApiService,
                          private val userDao: UserDao,
                          private val userProvider: UserProvider,
                          private val io: CoroutineDispatcher
@@ -62,11 +58,12 @@ class AuthRepositoryImpl(private val authApiService: AuthenticationService,
     }.map { it.toSignUpOutput() }
 
     override suspend fun signOut(): RepoResult<String> = safeCall {
-        try {
-            authApiService.signOut(userProvider.getCustomerId())
-        }finally {
-            userProvider.removeTokens()
-        }
+        authApiService.signOut(userProvider.getCustomerId())
+            .apply {
+                if (isSuccessful){
+                    userProvider.removeTokens()
+                }
+            }
     }
 
     override suspend fun isSignedIn(): Boolean {

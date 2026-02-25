@@ -2,6 +2,7 @@ package dev.gbenga.inaread.utils.date
 
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class InaDateFormatter @Inject constructor(private val sdf: SimpleDateFormat) {
@@ -12,7 +13,7 @@ class InaDateFormatter @Inject constructor(private val sdf: SimpleDateFormat) {
     }
 
     fun ddMMM(dateStr: String): String{
-        sdf.applyPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
         val parsedDate = sdf.parse(dateStr)
         sdf.applyPattern("dd/MMM")
         return parsedDate?.let { sdf.format(it) } ?: ""

@@ -3,10 +3,12 @@ package dev.gbenga.inaread.utils.nav
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.gbenga.inaread.ui.dashboard.DashboardScreenNavGraph
+import dev.gbenga.inaread.ui.dashboard.DashboardViewModel
 import dev.gbenga.inaread.ui.login.LoginScreen
 import dev.gbenga.inaread.ui.signup.SignUpScreen
 import dev.gbenga.inaread.ui.theme.InaReadTheme
@@ -28,6 +30,7 @@ fun String?.toDashboardRoute(): DashboardScreen{
 fun InaNavGraph() {
 
     val navController = rememberNavController()
+    val dashboardNagGraphVM: DashboardViewModel = hiltViewModel()
 
     NavHost(navController, startDestination = InaScreen.Waiting,
         enterTransition = {
@@ -57,7 +60,7 @@ fun InaNavGraph() {
 
     ){
         composable<InaScreen.Dashboard>{
-            DashboardScreenNavGraph(parentNavController = navController)
+            DashboardScreenNavGraph(dashboardNagGraphVM, parentNavController = navController)
         }
 
         composable<InaScreen.ForgotPassword> {

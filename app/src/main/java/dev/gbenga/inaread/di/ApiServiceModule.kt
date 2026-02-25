@@ -12,13 +12,12 @@ import dev.gbenga.inaread.adapters.TokenRefreshAuthentication
 import dev.gbenga.inaread.data.datastore.AccessTokenStore
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
 import dev.gbenga.inaread.data.model.MonthlyUsageResponse
-import dev.gbenga.inaread.data.network.AppliancesService
-import dev.gbenga.inaread.data.network.AuthenticationService
-import dev.gbenga.inaread.data.network.MeterUsageStatisticService
+import dev.gbenga.inaread.domain.services.AppliancesApiService
+import dev.gbenga.inaread.domain.services.AuthenticationApiService
+import dev.gbenga.inaread.domain.services.MeterUsageStatisticService
 import dev.gbenga.inaread.di.annotations.EncryptedSharedPrefs
 import dev.gbenga.inaread.domain.SecureAccessTokenStore
-import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
-import dev.gbenga.inaread.domain.services.MeterSummaryApiService
+import dev.gbenga.inaread.domain.services.AllUsageApiService
 import dev.gbenga.inaread.domain.services.ProfileApiService
 import dev.gbenga.inaread.domain.services.RefreshTokenApiService
 import dev.gbenga.inaread.domain.services.RefreshTokenApiServiceImpl
@@ -72,22 +71,14 @@ object ApiServiceModule {
     }
 
 
-
-    // Todo: To be removed
-    @Provides
-    fun provideMeterSummaryApiService(retrofit: Retrofit): MeterSummaryApiService{
-        return retrofit.create(MeterSummaryApiService::class.java)
-    }
-
-
     @Provides
     fun provideSettingsRepository(retrofit: Retrofit): ProfileApiService{
         return retrofit.create(ProfileApiService::class.java)
     }
 
     @Provides
-    fun provideAuthenticationService(retrofit: Retrofit): AuthenticationService {
-        return retrofit.create(AuthenticationService::class.java)
+    fun provideAuthenticationService(retrofit: Retrofit): AuthenticationApiService {
+        return retrofit.create(AuthenticationApiService::class.java)
     }
 
     @Provides
@@ -96,25 +87,13 @@ object ApiServiceModule {
     }
 
     @Provides
-    fun provideAppliancesService(retrofit: Retrofit): AppliancesService {
-        return retrofit.create(AppliancesService::class.java)
+    fun provideAppliancesService(retrofit: Retrofit): AppliancesApiService {
+        return retrofit.create(AppliancesApiService::class.java)
     }
 
     @Provides
-    fun provideUnitUsageApiService(): AllUnitUsageApiService {
-        return object : AllUnitUsageApiService {
-            override suspend fun getAllMonthlyUsage(userId: String): List<MonthlyUsageResponse> {
-                return sampleMonthlyUsageList
-            }
-
-            override suspend fun uploadMonthlyUsage(
-                userId: String,
-                monthlyUsageRequest: MonthlyUsageRequest
-            ): MonthlyUsageResponse {
-                TODO("Not yet implemented")
-            }
-
-        }
+    fun provideAllUsageApiService(retrofit: Retrofit): AllUsageApiService {
+        return retrofit.create(AllUsageApiService::class.java)
     }
 
 

@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.ui.customs
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.CircularProgressIndicator
@@ -14,8 +15,7 @@ fun <T> UiStateWithLoadingBox(uiState: UiState<T>,
                    content: @Composable (T) -> Unit,) {
     when(uiState){
         is UiState.Loading ->{
-            HorizontalCenter(modifier = Modifier.wrapContentHeight()
-                .fillMaxWidth()) {
+            HorizontalCenter(modifier = Modifier.fillMaxSize()) {
                 CircularProgressIndicator()
             }
         }

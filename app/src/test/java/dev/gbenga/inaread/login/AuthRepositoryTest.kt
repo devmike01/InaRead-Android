@@ -10,7 +10,7 @@ import dev.gbenga.inaread.data.db.entities.UserEntity
 import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.mapper.toLoginInput
 import dev.gbenga.inaread.data.model.ApiResult
-import dev.gbenga.inaread.data.network.AuthenticationService
+import dev.gbenga.inaread.domain.services.AuthenticationApiService
 import dev.gbenga.inaread.data.repository.AuthRepositoryImpl
 import dev.gbenga.inaread.domain.repository.AuthRepository
 import io.mockk.coEvery
@@ -21,7 +21,6 @@ import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -30,7 +29,7 @@ import org.junit.Test
 class AuthRepositoryTest {
 
     private lateinit var authRepository: AuthRepository
-    private val authApiService = mockk<AuthenticationService>()
+    private val authApiService = mockk<AuthenticationApiService>()
 
     private val userDao = mockk<UserDao>()
 

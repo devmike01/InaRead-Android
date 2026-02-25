@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -19,11 +20,24 @@ import dev.gbenga.inaread.ui.customs.TitledColumn
 import dev.gbenga.inaread.ui.customs.UiStateWithLoadingBox
 import dev.gbenga.inaread.utils.rememberNavigationDelegate
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(),
-               parentNavController: NavController) {
+fun HomeScreen(viewModel: HomeViewModel,
+               parentNavController: NavController,
+               showSnackBarMessage: (String) -> Unit) {
     val homeUiState by viewModel.state.collectAsStateWithLifecycle()
+
+    UnitLaunchEffect {
+        viewModel.snackBarEvent.collect { message ->
+            showSnackBarMessage(message)
+        }
+    }
+
+    UnitLaunchEffect {
+        viewModel.receiveMessage()
+    }
+
 
     HomeScaffold(HomeScaffoldConfig(
         title = homeUiState.todaysDate,
@@ -34,8 +48,10 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(),
         val navigatorDelegate = rememberNavigationDelegate(parentNavController)
 
         UnitLaunchEffect {
-            viewModel.navigator.collect {
-                navigatorDelegate.handleEvents(it)
+            launch {
+                viewModel.navigator.collect {
+                    navigatorDelegate.handleEvents(it)
+                }
             }
         }
 

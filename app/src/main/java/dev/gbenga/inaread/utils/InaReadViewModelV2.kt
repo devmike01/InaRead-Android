@@ -23,7 +23,7 @@ abstract class InaReadViewModelV2 <S: InaReadUiState>(initialState: S) : ViewMod
     private val _snackbarEvent = MutableSharedFlow<String>(
         replay = 0,
         extraBufferCapacity = 2,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
+        onBufferOverflow = BufferOverflow.DROP_LATEST
     )
     private val _loadingEvent = MutableSharedFlow<Boolean>(
         replay = 0,

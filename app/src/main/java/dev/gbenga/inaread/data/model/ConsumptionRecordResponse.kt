@@ -9,8 +9,8 @@ data class ConsumptionRecordResponse(
     val consumptionKwh: BigDecimal,
     val costPerKWh: BigDecimal,
     val totalCost: BigDecimal,
-    val fromDate: LocalDate,
-    val toDate: LocalDate,
-    val createdAt: Instant,
-    val updatedAt: Instant? = null
+    val fromDate: String,
+    val toDate: String,
+    val createdAt: String,
+    val updatedAt: String? = null
 )

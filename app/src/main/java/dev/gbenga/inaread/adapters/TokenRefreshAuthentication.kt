@@ -55,7 +55,6 @@ class TokenRefreshAuthentication(
                         .build()
 
                 }catch (e: Exception){
-                    Log.d("authenticate>>", "authenticate")
                     if (BuildConfig.DEBUG){
                         e.printStackTrace()
                     }

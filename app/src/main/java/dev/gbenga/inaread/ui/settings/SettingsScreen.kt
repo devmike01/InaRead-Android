@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.ui.settings
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,13 +32,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import dev.gbenga.inaread.data.model.SettingKeys
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.HorizontalCenter
@@ -52,17 +51,19 @@ import dev.gbenga.inaread.ui.theme.Indigo50
 import dev.gbenga.inaread.ui.theme.White
 import dev.gbenga.inaread.utils.Scada
 import dev.gbenga.inaread.utils.rememberNavigationDelegate
+import kotlinx.coroutines.launch
 
 @Composable
-fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel(),
+fun SettingsScreen(settingsViewModel: SettingsViewModel,
                    navHostController: NavController
 ) {
 
-    val uiState by settingsViewModel.state.collectAsStateWithLifecycle()
+    //val uiState by settingsViewModel.state.collectAsStateWithLifecycle()
     val snackbarHost = remember { SnackbarHostState() }
     var isLoading by remember { mutableStateOf(false) }
 
     val navDelegate = rememberNavigationDelegate(navHostController)
+
 
     val onItemClick = remember {
         { action: SettingKeys ->
@@ -76,20 +77,22 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel(),
     }
 
     UnitLaunchEffect {
-        settingsViewModel.navigator.collect {
-            navDelegate.handleEvents(it)
+        launch {
+            settingsViewModel.navigator.collect {
+                navDelegate.handleEvents(it)
+            }
         }
-    }
 
-    UnitLaunchEffect {
-        settingsViewModel.snackBarEvent.collect {
-            snackbarHost.showSnackbar(it)
+        launch {
+            settingsViewModel.snackBarEvent.collect {
+                snackbarHost.showSnackbar(it)
+            }
         }
-    }
 
-    UnitLaunchEffect {
-        settingsViewModel.loadingEvent.collect {
-            isLoading = it
+        launch {
+            settingsViewModel.loadingEvent.collect {
+                isLoading = it
+            }
         }
     }
 
@@ -98,10 +101,6 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel(),
     Column(modifier = Modifier
         .padding(DimenTokens.Padding.Small)
         .fillMaxSize()) {
-
-        UnitLaunchEffect {
-            settingsViewModel.populateSettings()
-        }
 
         TitledColumn(
             title ="Your Profile and Settings",
@@ -130,7 +129,7 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel = hiltViewModel(),
 
 
 @Composable
-fun LazyItemScope.SettingsContent(
+fun SettingsContent(
     settingsViewModel: SettingsViewModel,
     onItemClick: (SettingKeys) -> Unit
 ) {
@@ -140,7 +139,7 @@ fun LazyItemScope.SettingsContent(
 
     AllTimeTitle("Settings")
     SettingsMenu(
-        Modifier.animateItem(),
+        Modifier,
         settingsMenu,
         onItemClick
     )
@@ -222,7 +221,8 @@ fun TitledColumn(
 
 @Composable
 fun SettingsMenu(
-    modifier: Modifier, items: List<VectorInaTextIcon>,
+    modifier: Modifier,
+    items: List<VectorInaTextIcon>,
     onItemClick: (SettingKeys) -> Unit
 ) {
     InaCard(

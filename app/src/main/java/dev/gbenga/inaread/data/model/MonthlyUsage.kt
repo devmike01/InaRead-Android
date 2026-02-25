@@ -6,7 +6,10 @@ data class MonthlyUsage (
     val cost: String,
     val day: String,
     val dayOfMonth: String,
-    val month: String
+    val month: String,
+    val fromDate: String,
+    val toDate: String,
+    val meterType: String,
 )
 
 

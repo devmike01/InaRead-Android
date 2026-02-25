@@ -20,8 +20,6 @@ class WaitingViewModel @Inject constructor(private val checkAuthUseCase: CheckUs
         viewModelScope.launch {
             checkAuthUseCase().let { isLoggedIn ->
                 setState { it.copy(isLoading = false) }
-
-                Log.d("WaitingViewModel", "CHECKING LOG IN...$isLoggedIn")
                 navigate(NavigationEvent.NavigateTaskTop(InaScreen.Dashboard
                     .takeIf { isLoggedIn } ?: InaScreen.Login))
             }

@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.ui.addreading
 
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.Button
@@ -26,14 +28,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,60 +56,126 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import dev.gbenga.inaread.R
+import dev.gbenga.inaread.data.model.PowerUsageRequest
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.tokens.StringTokens
 import dev.gbenga.inaread.ui.customs.color
+import dev.gbenga.inaread.ui.dialogs.LoadingDialog
 import dev.gbenga.inaread.ui.home.HomeParentColumn
+import dev.gbenga.inaread.ui.home.UnitLaunchEffect
 import dev.gbenga.inaread.ui.meterui.MeterFace
+import dev.gbenga.inaread.ui.theme.Dark
+import dev.gbenga.inaread.ui.theme.White
 import dev.gbenga.inaread.utils.Scada
+import dev.gbenga.inaread.utils.UiStateWithIdle
+import dev.gbenga.inaread.utils.rememberNavigationDelegate
+import java.time.Instant
+import java.time.LocalTime
+import java.time.ZoneOffset
 
 @Composable
-fun AddReadingScreen(viewModel: AddReadingViewModel = hiltViewModel()) {
+fun AddReadingScreen(viewModel: AddReadingViewModel,
+                     dashboardNavController: NavController) {
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
-    val meterRecord = remember { mutableStateOf("") }
+    val meterRecord = rememberSaveable { mutableStateOf("") }
+    var fromDate by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
+    var toDate by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
+    val isLoading by remember { derivedStateOf { uiState.recordMeterSubmission is UiStateWithIdle.Loading } }
+    val navigationDelegate = rememberNavigationDelegate(dashboardNavController)
+
+    LaunchedEffect(meterRecord.value, fromDate, toDate) {
+        viewModel.toggleSumitButton(meterRecord.value, fromDate, toDate)
+    }
+
+    UnitLaunchEffect {
+        viewModel.navigator.collect {
+            navigationDelegate.handleEvents(it)
+        }
+    }
+
+    LoadingDialog(isLoading)
 
     val pickMultipleMedia =
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             viewModel.addImage(uri)
         }
 
-    AddReadingScreenContent(uiState = uiState, removeImageRequest = {
-        viewModel.removeImage()
-    },
-onChangeReadingMode = {
-    viewModel.toggleRecordMeterReading()
-},
-        manualRecordTextState = meterRecord) {
-        pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        AddReadingScreenContent(
+            uiState = uiState, removeImageRequest = {
+                viewModel.removeImage()
+            },
+            onChangeReadingMode = {
+                viewModel.toggleRecordMeterReading()
+            },
+            manualRecordTextState = meterRecord.value,
+            toDate = toDate,
+            fromDate = fromDate,
+            onFromDateChanged = {
+                fromDate = it
+            },
+            onToDateChanged = {
+                toDate = it
+            },
+
+            onSubmitClick = {
+                viewModel.recordReading(
+                    fromDate, toDate, meterRecord.value
+                )
+            },
+            onInputUsage = {
+                meterRecord.value = it
+                //  viewModel.removeImage()
+            }) {
+            pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+
     }
 
 }
 
 
 @Composable
-fun AddReadingScreenContent(uiState: AddReadingState,
-                            manualRecordTextState: MutableState<String>,
-                            onChangeReadingMode: () -> Unit,
-                            removeImageRequest: () -> Unit,
-                            showImagePickerRequest: () -> Unit){
+fun AddReadingScreenContent(
+    uiState: AddReadingState,
+    manualRecordTextState: String,
+    fromDate: Long,
+    toDate: Long,
+    onSubmitClick: () -> Unit,
+    onFromDateChanged: (Long) -> Unit,
+    onToDateChanged: (Long) -> Unit,
+    onInputUsage: (String) -> Unit,
+    onChangeReadingMode: () -> Unit,
+    removeImageRequest: () -> Unit,
+    showImagePickerRequest: () -> Unit
+) {
 
-    val fromDate = remember { mutableStateOf("") }
-    val toDate = remember { mutableStateOf("") }
 
-    Box(modifier = Modifier.fillMaxSize()){
-        OutlinedButton (onClick = onChangeReadingMode,
-            modifier = Modifier.align(
-            Alignment.TopEnd
-        ). padding(DimenTokens.Padding.Small)) {
-            Icon(Icons.Default.SwapHoriz,
-                contentDescription = "Toggle reading")
-            Text("Toggle ${"Manual".takeIf { uiState.record == MeterReadingRecord.OCR }
-                ?: "OCR"}",
+    Box(modifier = Modifier.fillMaxSize()) {
+        OutlinedButton(
+            onClick = onChangeReadingMode,
+            modifier = Modifier
+                .align(
+                    Alignment.TopEnd
+                )
+                .padding(
+                    vertical = DimenTokens.Padding.Small,
+                    horizontal = DimenTokens.Padding.XSmall
+                )
+        ) {
+            Icon(
+                Icons.Default.SwapHoriz,
+                contentDescription = "Toggle reading"
+            )
+            Text(
+                "Toggle ${
+                    "Manual".takeIf { uiState.record == MeterReadingRecord.OCR }
+                        ?: "OCR"
+                }",
                 style = MaterialTheme
                     .typography
                     .titleSmall
@@ -109,46 +184,37 @@ fun AddReadingScreenContent(uiState: AddReadingState,
 
         HomeParentColumn(
             modifier = Modifier
-                .padding(top = DimenTokens.Padding.Small)
-                .align(Alignment.Center)
+                 .padding(top = DimenTokens.Padding.XLarge)
+                .align(Alignment.TopCenter)
                 .wrapContentHeight(),
             title = StringTokens.AddReadingImage.Title,
             subTitle = StringTokens.AddReadingImage.Subtitle
-        ){
+        ) {
             AnimatedContent(uiState.record) { meterRecordToggle ->
 
-            ConstraintLayout(modifier = Modifier
-                .padding(top = DimenTokens.Padding.Small)
-                .wrapContentHeight(),) {
-                val (addImageBtn, readImgBtn) = createRefs()
+                ConstraintLayout(
+                    modifier = Modifier
+                        .padding(top = DimenTokens.Padding.Small)
+                        .wrapContentHeight(),
+                ) {
+                    val (addImageBtn) = createRefs()
 
-              if (meterRecordToggle == MeterReadingRecord.OCR){
+                    if (meterRecordToggle == MeterReadingRecord.OCR) {
                         UploadImageButton(
                             uiState.meterImagePath,
-                            modifier = Modifier.constrainAs(addImageBtn){
+                            modifier = Modifier.constrainAs(addImageBtn) {
                                 top.linkTo(parent.top)
                                 //bottom.linkTo(parent.bottom)
                                 start.linkTo(parent.start)
                                 end.linkTo(parent.end)
                             }, onClick = showImagePickerRequest,
-                            onRemoveImageClick = removeImageRequest)
+                            onRemoveImageClick = removeImageRequest
+                        )
 
-                        Button(
-                            enabled = uiState.enableReadImage,
-                            modifier = Modifier.constrainAs(readImgBtn){
-                                top.linkTo(addImageBtn.bottom, margin = DimenTokens.Padding.Large)
-                                //bottom.linkTo(parent.bottom, margin = DimenTokens.Padding.xXLarge)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                            },
-                            onClick = {},
-                        ) {
-                            Text(StringTokens.AddReadingImage.ReadMeterImage,
-                                style = MaterialTheme.typography.bodyLarge)
-                        }
-                    }else{
-                        MeterFace(manualRecordTextState.value) {
-                            manualRecordTextState.value = it
+
+                    } else {
+                        MeterFace(manualRecordTextState) {
+                            onInputUsage(it)
                         }
                     }
                 }
@@ -156,14 +222,27 @@ fun AddReadingScreenContent(uiState: AddReadingState,
 
             }
             Spacer(modifier = Modifier.padding(DimenTokens.Padding.Small))
-            DatePickerDocked(modifier = Modifier, labelText = "From", fromDate)
+            DatePickerFieldToModal(
+                modifier = Modifier, labelText = "From",
+                fromDate
+            ) {
+                //fromDate.value = it
+                onFromDateChanged(it)
+            }
             Spacer(modifier = Modifier.padding(DimenTokens.Padding.Small))
-            DatePickerDocked(modifier = Modifier, labelText = "To",toDate)
-            Spacer(modifier = Modifier.padding(DimenTokens.Padding.Large))
-            Button(onClick = {
-
-            }, Modifier.fillMaxWidth()
-                .height(DimenTokens.Button.Normal),
+            DatePickerFieldToModal(
+                modifier = Modifier, labelText = "To",
+                toDate
+            ) {
+                //toDate.value = it
+                onToDateChanged(it)
+            }
+            Spacer(modifier = Modifier.padding(DimenTokens.Padding.Small))
+            Button(
+                enabled = uiState.enableRecordBtn,
+                onClick = onSubmitClick, modifier = Modifier
+                    .fillMaxWidth()
+                    .height(DimenTokens.Button.Normal),
                 shape = RoundedCornerShape(DimenTokens.Radius.xSmall)
             ) {
                 Text("Record reading")
@@ -174,18 +253,25 @@ fun AddReadingScreenContent(uiState: AddReadingState,
 
 
 @Composable
-fun UploadImageButton(imagePath: String?,
-                      modifier: Modifier,
-                      onRemoveImageClick: () -> Unit,
-                      onClick: () -> Unit){
+fun UploadImageButton(
+    imagePath: String?,
+    modifier: Modifier,
+    onRemoveImageClick: () -> Unit,
+    onClick: () -> Unit
+) {
 
     val context = LocalContext.current
-    AnimatedContent(imagePath,
-        modifier = modifier.wrapContentSize()) { animatedPath ->
+    AnimatedContent(
+        imagePath,
+        modifier = modifier.wrapContentSize()
+    ) { animatedPath ->
         animatedPath?.let {
             Scada.info("animatedPath: $animatedPath")
-            Box(modifier = Modifier.size(
-                DimenTokens.Image.Large)) {
+            Box(
+                modifier = Modifier.size(
+                    DimenTokens.Image.Large
+                )
+            ) {
                 AsyncImage(
                     contentScale = ContentScale.Crop,
                     model = ImageRequest.Builder(context)
@@ -194,58 +280,83 @@ fun UploadImageButton(imagePath: String?,
                         .memoryCachePolicy(CachePolicy.DISABLED)
                         .build(),
                     contentDescription = null,
-                    modifier = Modifier.size(
-                        DimenTokens.Image.Large)
+                    modifier = Modifier
+                        .size(
+                            DimenTokens.Image.Large
+                        )
                         .clip(RoundedCornerShape(DimenTokens.Radius.large))
                 )
-                IconButton(onClick = onRemoveImageClick, modifier = Modifier.align(Alignment.TopEnd)
-                    .size(DimenTokens.Icon.Medium)) {
-                    Icon(Icons.Default.Cancel,
-                        contentDescription = StringTokens.AddReadingImage.CancelImageDescription)
+                IconButton(
+                    onClick = onRemoveImageClick,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .size(DimenTokens.Icon.Medium)
+                ) {
+                    Icon(
+                        Icons.Default.Cancel,
+                        contentDescription = StringTokens.AddReadingImage.CancelImageDescription
+                    )
                 }
             }
-        } ?: Button(onClick = onClick,
+        } ?: Button(
+            onClick = onClick,
             shape = RoundedCornerShape(DimenTokens.Radius.xLarge),
             modifier = Modifier.size(100.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = 0xFF37474F.color()
             ),
-            contentPadding = PaddingValues(DimenTokens.Padding.Large),
+            contentPadding = PaddingValues(DimenTokens.Padding.Small),
             elevation = ButtonDefaults.elevatedButtonElevation(
                 defaultElevation = 10.dp
             )
-        ){
-            Image(painter = painterResource(R.drawable.add_meter_reader_face_ic),
+        ) {
+            Icon(
+                Icons.Default.Add,
                 contentDescription = StringTokens.AddMeterReading,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(DimenTokens.Icon.Large))
+                tint = White,
+                //contentScale = ContentScale.Fit,
+                modifier = Modifier.size(DimenTokens.Icon.Large)
+            )
 
         }
     }
 }
 
 
-
-
-
 @Composable
 @Preview
-fun PreviewAddReadingScreenContent(){
-    AddReadingScreenContent(previewAddReadingState,
+fun PreviewAddReadingScreenContent() {
+    AddReadingScreenContent(
+        previewAddReadingState,
         removeImageRequest = {},
         onChangeReadingMode = {},
-        manualRecordTextState = remember { mutableStateOf("") }){
+        onInputUsage = {},
+        fromDate = 0L,
+        toDate = 0L,
+        onToDateChanged = {},
+        onSubmitClick = {},
+        onFromDateChanged = {},
+        manualRecordTextState = ""
+    ) {
     }
 }
 
 
 @Composable
 @Preview
-fun PreviewAddReadingScreenContentWithImage(){
-    AddReadingScreenContent(previewAddReadingState.copy(meterImagePath = "file://android_asset/preview_meter_reading.png"),
+fun PreviewAddReadingScreenContentWithImage() {
+    AddReadingScreenContent(
+        previewAddReadingState.copy(meterImagePath = "file://android_asset/preview_meter_reading.png"),
         removeImageRequest = {},
         onChangeReadingMode = {},
-        manualRecordTextState = remember { mutableStateOf("") }){
+        onInputUsage = {},
+        fromDate = 0L,
+        toDate = 0L,
+        onToDateChanged = {},
+        onFromDateChanged = {},
+        onSubmitClick = {},
+        manualRecordTextState = ""
+    ) {
 
     }
 }

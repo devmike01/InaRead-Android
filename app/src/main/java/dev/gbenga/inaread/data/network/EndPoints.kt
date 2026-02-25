@@ -17,5 +17,5 @@ object EndPoints {
     const val MeterType = "$Meter/types"
     const val RefreshToken = "$Auth/refresh/token"
     const val SignOut = "$Auth/logout"
-
+    const val AllPowerUsage = "$Usage/all"
 }

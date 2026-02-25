@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.gbenga.inaread.tokens.DimenTokens
@@ -34,7 +35,7 @@ import java.util.Locale
 @Composable
 fun HomeSummaryCard(cardItems: UiData<MeterUsageSummary>, monthName: String) {
 
-    InaCard() {
+    InaCard {
         Row(horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .padding(DimenTokens.Padding.Small)
@@ -50,8 +51,9 @@ fun HomeSummaryCard(cardItems: UiData<MeterUsageSummary>, monthName: String) {
                     XYAxisCenter (
                         modifier = Modifier
                             .height(DimenTokens.Size.emptyData)) {
-                        Text("You don't have any reading for the month of" +
-                                " $monthName")
+                        Text("You don't have any reading for the selected month." +
+                                " $monthName",
+                            textAlign = TextAlign.Center)
                     }
                 }
             )

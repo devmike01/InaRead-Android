@@ -13,8 +13,6 @@ class NetworkResponseInterceptor(
         val originalRequest = chain.request()
         val token = accessTokenStore.getAccessToken()
 
-        Log.d("intercept::", "${token}")
-
         val newRequest = if (!token.isNullOrBlank()){
             originalRequest.newBuilder()
                 .header("Authorization", "Bearer $token")

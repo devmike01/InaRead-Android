@@ -1,6 +1,7 @@
 package dev.gbenga.inaread.ui.usage
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -9,10 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -36,42 +35,47 @@ import dev.gbenga.inaread.ui.customs.InaScaffoldConfig
 import dev.gbenga.inaread.ui.customs.UiStateWithLoadingBox
 import dev.gbenga.inaread.ui.customs.color
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
-import dev.gbenga.inaread.utils.Scada
 import dev.gbenga.inaread.utils.rememberNavigationDelegate
 
 @Composable
 fun AllUnitUsageScreen(viewModel: AllUnitUsageViewModel = hiltViewModel(),
                        navigator: NavController) {
+
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val navigatorDelegate = rememberNavigationDelegate(navigator)
+
+    UnitLaunchEffect {
+        viewModel.navigator.collect {
+            navigatorDelegate.handleEvents(it)
+        }
+    }
+
+
     InaScaffold(
         modifier = Modifier
             .fillMaxSize(),
         inaScaffoldConfig = InaScaffoldConfig(
-            title = "2026 Unit Usage",
+            title = "Lifetime Electricity Usages",
             navigationClick = {
                 viewModel.goBack()
             }
         )) { paddingValues ->
-            val uiState by viewModel.state.collectAsStateWithLifecycle()
-        val navigatorDelegate = rememberNavigationDelegate(navigator)
 
-        UnitLaunchEffect {
-            viewModel.fetchUnitUsages()
-            viewModel.navigator.collect {
-                navigatorDelegate.handleEvents(it)
-            }
-        }
-
-
-        UiStateWithLoadingBox(uiState.monthlyUsageItems,
-            errorRequest = {
-            Text(it, style = MaterialTheme.typography.bodySmall
-                .copy(color = MaterialTheme.colorScheme.tertiary))
-        },) {  monthlyUsages ->
-            Scada.info("monthlyUsages -> $monthlyUsages")
-            LazyColumn(modifier = Modifier.padding(paddingValues), verticalArrangement = Arrangement
-                .spacedBy(DimenTokens.Padding.XSmall) ) {
-                items(monthlyUsages.size){
-                    UsageCardItem(item = monthlyUsages[it])
+        Box(modifier = Modifier.padding(paddingValues)){
+            UiStateWithLoadingBox(uiState.monthlyUsageItems,
+                errorRequest = {
+                    Text(it, style = MaterialTheme.typography.bodySmall
+                        .copy(color = MaterialTheme.colorScheme.tertiary))
+                },) {  monthlyUsages ->
+                LazyColumn(modifier = Modifier, verticalArrangement = Arrangement
+                    .spacedBy(DimenTokens.Padding.XSmall) ) {
+                    items(monthlyUsages.size){
+                        UsageCardItem(
+                            item = monthlyUsages[it],
+                            onClick = {
+                                TODO("Implement the details screen")
+                            })
+                    }
                 }
             }
         }
@@ -80,25 +84,30 @@ fun AllUnitUsageScreen(viewModel: AllUnitUsageViewModel = hiltViewModel(),
 }
 
 @Composable
-fun UsageCardItem(modifier: Modifier = Modifier, item: MonthlyUsage){
+fun UsageCardItem(modifier: Modifier = Modifier,
+                  onClick: () -> Unit,
+                  item: MonthlyUsage){
     InaCard(modifier = modifier
         .height(DimenTokens.UnitUsage.CardHeight)
         .fillMaxWidth()
-        .padding(DimenTokens.Padding.Small)) {
-        Row(modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically) {
-            DateItem(day = item.day,
-                month = item.month,
-                dayOfMonth = item.dayOfMonth)
-            VerticalDivider(modifier = Modifier
-                .padding(DimenTokens.Padding.Small)
-                .fillMaxHeight(), thickness = .5.dp,
-                color = 0xFF9FA8DA.color())
-            DetailItem(
-                usedPower = item.kilowatt,
-                period = item.period,
-                cost = item.cost
-            )
+        .padding(horizontal = DimenTokens.Padding.Small)
+        .padding(top = DimenTokens.Padding.Small)) {
+        TextButton(onClick = onClick) {
+            Row(modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically) {
+                DateItem(day = item.day,
+                    month = item.month)
+
+                VerticalDivider(modifier = Modifier
+                    .padding(DimenTokens.Padding.Small)
+                    .fillMaxHeight(), thickness = .5.dp,
+                    color = 0xFF9FA8DA.color())
+                DetailItem(
+                    usedPower = item.kilowatt,
+                    period = item.period,
+                    cost = item.cost
+                )
+            }
         }
     }
 }
@@ -108,7 +117,7 @@ fun DetailItem(modifier: Modifier = Modifier,
                usedPower: String, period: String, cost: String){
     val detailString = buildAnnotatedString {
         withStyle(style = SpanStyle(
-            fontSize = MaterialTheme.typography.titleLarge.fontSize
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
         )){
             append(usedPower)
         }
@@ -116,7 +125,8 @@ fun DetailItem(modifier: Modifier = Modifier,
         append("(KWh)")
 
         withStyle(style = SpanStyle(
-            fontSize = MaterialTheme.typography.titleLarge.fontSize
+            fontSize = MaterialTheme.typography.titleLarge.fontSize,
+            color = MaterialTheme.colorScheme.primary
         )){
             append(" IN ")
         }
@@ -126,7 +136,12 @@ fun DetailItem(modifier: Modifier = Modifier,
         )){
             append("$period\n")
         }
-        append("Costs ")
+
+        withStyle(style = SpanStyle(
+            color = MaterialTheme.colorScheme.primary
+        )){
+            append("Costs ")
+        }
         withStyle(style = SpanStyle(
             fontSize = MaterialTheme.typography.titleLarge.fontSize
         )){
@@ -145,25 +160,29 @@ fun DetailItem(modifier: Modifier = Modifier,
 @Composable
 fun DateItem(modifier: Modifier =Modifier,
              day: String,
-             dayOfMonth: String,
-             month: String){
+             month: String,){
     Column(
         modifier = modifier.padding(DimenTokens.Padding.Small)
     ) {
         val dateString = buildAnnotatedString {
-            append("$day\n\n")
             withStyle(style = SpanStyle(
-                fontSize = DimenTokens.FontSize.HeadlineMedium
+                fontSize = DimenTokens.FontSize.HeadlineMedium,
+                color = MaterialTheme.colorScheme.primary
             )){
-                append("$dayOfMonth\n")
+                append("$day\n\n")
             }
-            append(month)
+
+            withStyle(style = SpanStyle(
+                fontSize = DimenTokens.FontSize.BodyMedium
+            )){
+                append(month)
+            }
         }
         Text(dateString, style = MaterialTheme
             .typography.bodySmall.copy(
                 color = 0XffE8EAF6.color(),
                 fontSize = DimenTokens.FontSize.BodySmall,
-                lineHeight = 1.3.em
+                lineHeight = 1.1.em
                 ),
             textAlign = TextAlign.Center)
     }

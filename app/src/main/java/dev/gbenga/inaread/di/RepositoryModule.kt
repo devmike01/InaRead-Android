@@ -7,7 +7,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.gbenga.inaread.data.MeterUsageRepositoryImpl
-import dev.gbenga.inaread.data.datastore.AccessTokenStore
 import dev.gbenga.inaread.data.datastore.UserDataStoreImpl
 import dev.gbenga.inaread.data.db.PowerUsageSummaryDao
 import dev.gbenga.inaread.data.db.UserDao
@@ -15,8 +14,8 @@ import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.ApplianceResponse
 import dev.gbenga.inaread.data.model.ApplianceResponseData
 import dev.gbenga.inaread.data.model.AppliancesRequest
-import dev.gbenga.inaread.data.network.AuthenticationService
-import dev.gbenga.inaread.data.network.MeterUsageStatisticService
+import dev.gbenga.inaread.domain.services.AuthenticationApiService
+import dev.gbenga.inaread.domain.services.MeterUsageStatisticService
 import dev.gbenga.inaread.data.repository.AllUnitUsageRepository
 import dev.gbenga.inaread.data.repository.AuthRepositoryImpl
 import dev.gbenga.inaread.data.repository.SettingsRepositoryImpl
@@ -26,9 +25,8 @@ import dev.gbenga.inaread.domain.repository.AppliancesRepository
 import dev.gbenga.inaread.domain.repository.AuthRepository
 import dev.gbenga.inaread.domain.repository.MeterUsageRepository
 import dev.gbenga.inaread.domain.repository.SettingsRepository
-import dev.gbenga.inaread.domain.services.AllUnitUsageApiService
+import dev.gbenga.inaread.domain.services.AllUsageApiService
 import dev.gbenga.inaread.domain.services.ProfileApiService
-import dev.gbenga.inaread.domain.services.RefreshTokenApiService
 import dev.gbenga.inaread.ui.customs.dataStore
 import dev.gbenga.inaread.ui.usage.AllUnitUsageRepositoryImpl
 import dev.gbenga.inaread.utils.UserProvider
@@ -66,7 +64,7 @@ object RepositoryModule {
 
 
     @Provides
-    fun provideAllUnitUsageRepository(applianceApiService: AllUnitUsageApiService,
+    fun provideAllUnitUsageRepository(applianceApiService: AllUsageApiService,
                                         userProvider: UserProvider,
                                         @IOCoroutineContext io: CoroutineDispatcher): AllUnitUsageRepository{
         return AllUnitUsageRepositoryImpl(
@@ -90,7 +88,7 @@ object RepositoryModule {
     }
 
     @Provides
-    fun provideAuthRepository(authApiService: AuthenticationService, userDao: UserDao,
+    fun provideAuthRepository(authApiService: AuthenticationApiService, userDao: UserDao,
                               userProvider: UserProvider,
                               @IOCoroutineContext io: CoroutineDispatcher)
     : AuthRepository = AuthRepositoryImpl(

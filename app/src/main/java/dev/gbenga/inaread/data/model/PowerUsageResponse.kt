@@ -9,7 +9,7 @@ data class PowerUsageResponse(
     val costPerKwh: BigDecimal,
     val meterType: String,
     val totalMonthPowerUsage: BigDecimal,
-    val fromDate: Instant,
-    val toDate: Instant,
+    val fromDate: String,
+    val toDate: String,
     val totalSpent: BigDecimal
 )

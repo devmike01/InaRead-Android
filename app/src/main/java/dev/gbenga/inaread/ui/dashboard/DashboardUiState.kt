@@ -6,7 +6,8 @@ import dev.gbenga.inaread.utils.nav.DashboardScreen
 
 data class DashboardUiState (
     val selectedRoute: DashboardScreen = DashboardScreen.HomeScreen(),
-    val dashboardButtons: List<DashboardNavData> = emptyList()
+    val dashboardButtons: List<DashboardNavData> = emptyList(),
+    val initialListLoad: Boolean = true
 ): InaReadUiState
 
 data class DashboardNavData(

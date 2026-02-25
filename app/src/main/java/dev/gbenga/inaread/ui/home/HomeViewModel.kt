@@ -10,6 +10,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gbenga.inaread.R
+import dev.gbenga.inaread.data.datastore.Messenger
 import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.LastPowerUsage
 import dev.gbenga.inaread.data.model.MeterMonthlyStat
@@ -28,6 +29,7 @@ import dev.gbenga.inaread.utils.UiState
 import dev.gbenga.inaread.utils.date.InaDateFormatter
 import dev.gbenga.inaread.utils.ext.naira
 import dev.gbenga.inaread.utils.nav.InaScreen
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -42,7 +44,8 @@ class HomeViewModel @Inject constructor(
     private val meterUseCase: MeterSummaryUseCase,
     private val calendarProvider: CalendarProvider,
     private val savedStateHandle: SavedStateHandle,
-    private val inaDateFormatter: InaDateFormatter
+    private val inaDateFormatter: InaDateFormatter,
+    private val messenger: Messenger
 ) : InaReadViewModelV2<HomeUiState>(
     HomeUiState()
 ) {
@@ -58,6 +61,17 @@ class HomeViewModel @Inject constructor(
     }
 
 
+
+    fun receiveMessage(){
+        viewModelScope.launch {
+            //delay(1000)
+            messenger.receiveMessage().collect { message ->
+                message?.let {
+                    showUiMessage(message = message)
+                }
+            }
+        }
+    }
     fun populateDashboard(){
         val selectedDate = savedStateHandle.get<String>(SELECTED_DATE)
         val selectedPos = savedStateHandle.get<Int>(SELECTED_CALENDAR_POS)
@@ -80,31 +94,6 @@ class HomeViewModel @Inject constructor(
     private fun Long.toNaira(): String{
         return BigDecimal(this)
             .divide(100.toBigDecimal()).toPlainString()
-    }
-
-    private fun LastPowerUsage.toResIdIconItems(): List<ResIdInaTextIcon>{
-        val powerCostInNaira = minorCost.toNaira()
-
-        return listOf(
-            ResIdInaTextIcon(
-                value = kilowatts.toString(),
-                label = "Usage(kW)", // kilowatts per period
-                color = 0xFFFFB74D,
-                icon = R.drawable.outline_electric_bolt_24
-            ),
-            ResIdInaTextIcon(
-                value = periodInDays.toString(),
-                label = "Period(days)", // kilowatts per month
-                color = 0xffC5CAE9,
-                icon = R.drawable.outline_calendar_today_24
-            ),
-            ResIdInaTextIcon(
-                value = powerCostInNaira,
-                label = "Cost(Naira)", // kilowatts per month
-                color = 0xFF4CAF50,
-                icon = R.drawable.outline_money_bag_24
-            )
-        )
     }
 
     fun selectDay(dayOfMonth: Int, index: Int){
@@ -199,7 +188,7 @@ class HomeViewModel @Inject constructor(
                                         ),
                                         ResIdInaTextIcon( //MMM d
                                             icon = R.drawable.outline_calendar_today_24,
-                                            value = inaDateFormatter.ddMMM(summary.toDate),
+                                            value = inaDateFormatter.ddMMM(summary.fromDate),
                                             label = "From",
                                             color = 0xFFFF5722,
                                         )
@@ -210,7 +199,6 @@ class HomeViewModel @Inject constructor(
                     ) }
                 }
                 is RepoResult.Error -> {
-                    Log.d("RepoResult", "RepoResult: ${result.message}")
                     setState { it.copy(
                         meterUsageSummary = UiState.Error(result.message)
                     ) }

@@ -5,14 +5,6 @@ import dev.gbenga.inaread.data.model.LastPowerUsage
 import dev.gbenga.inaread.data.model.MeterResponse
 import dev.gbenga.inaread.data.model.MonthChartResponse
 import dev.gbenga.inaread.data.model.MonthlyMeterUsage
-import dev.gbenga.inaread.domain.services.MeterSummaryApiService
-
-class FakeMeterSummaryApiService : MeterSummaryApiService {
-
-    override suspend fun fetchMeterSummary(userId: String): MeterResponse {
-        return fakeMeterResponse
-    }
-}
 
 
 val monthChartList = listOf(

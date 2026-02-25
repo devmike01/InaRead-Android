@@ -18,7 +18,9 @@ class SettingsRepositoryImpl(
 ) : SettingsRepository {
 
     override suspend fun getUserProfile(): ProfileResponse = useUserIdInIO {
-        profileApiService.getProfile()
+        withContext(ioContext){
+            profileApiService.getProfile()
+        }
     }
 
     override fun getSettingsMenu(): List<SettingsMenu> {

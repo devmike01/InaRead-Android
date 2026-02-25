@@ -7,18 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -30,10 +25,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.sp
 import dev.gbenga.inaread.R
 import dev.gbenga.inaread.tokens.DimenTokens
-import dev.gbenga.inaread.ui.addreading.DatePickerDocked
 import dev.gbenga.inaread.ui.theme.Indigo200
-import dev.gbenga.inaread.ui.theme.Indigo400
-import java.text.DecimalFormat
+import dev.gbenga.inaread.ui.theme.White
 
 @Composable
 fun MeterFace(value: String, onValueChange: (String) -> Unit) {
@@ -65,7 +58,7 @@ fun MeterFace(value: String, onValueChange: (String) -> Unit) {
                     ))
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Indigo400
+                    focusedBorderColor = White
                 ),
                 textStyle = MaterialTheme.typography.headlineLarge.copy(
                     fontFamily = calculatorFont,
@@ -75,9 +68,12 @@ fun MeterFace(value: String, onValueChange: (String) -> Unit) {
                 ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 onValueChange = { input ->
-                    val d = DecimalFormat("0.00")
-                    if (decimalRegex.matches(input)) {
-                        onValueChange(input)
+                    val formattedInp = input.toDoubleOrNull()?.let {
+                        "%.2f".format(it)
+                    }
+
+                    if (formattedInp != null && decimalRegex.matches(formattedInp)) {
+                        onValueChange(formattedInp)
                     }
                 }, modifier = Modifier
                     .fillMaxSize()
