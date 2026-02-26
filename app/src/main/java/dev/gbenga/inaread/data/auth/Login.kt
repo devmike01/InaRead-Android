@@ -26,13 +26,16 @@ data class UiLogin(
 
 data class LoginResponse(
     val customerId: String,
+    val username: String,
+    val email: String,
+    val password: String? = null,
     val meterNo: String,
     val countryId: String,
     val meterCategoryId: Int,
     val createdAt: String,
+    val updatedAt: String,
     val enabled: Boolean,
-    val username: String,
-    val email: String,
+    val locked: Boolean,
     val authToken : AccessToken?,
 
 )
