@@ -19,12 +19,14 @@ class Messenger(private val dataStore : DataStore<Preferences>) {
         dataStore.edit { it[MESSENGER] = message }
     }
 
-    suspend fun receiveMessage(): Flow<String?>{
+    suspend fun clearMessage(){
+        dataStore.edit { it.remove(MESSENGER) }
+    }
+
+    fun receiveMessage(): Flow<String?>{
         //  dataStore.edit { it.remove(MESSENGER) }
         return dataStore.data.map {
             prefs -> prefs[MESSENGER]
-        }.apply {
-            dataStore.edit { it.remove(MESSENGER) }
         }
     }
 
