@@ -17,11 +17,17 @@ data class ProfileRequest(
 
 @Immutable
 data class Profile(
-    val username: String ="",
-    val email: String ="",
+    val customerId: String,
+    val username: String,
+    val email: String,
+    val meterNo: String,
+    val countryId: String,
+    val meterCategoryId: Int,
+    val createdAt: String,
+    val updatedAt: String,
+    val enabled: Boolean,
+    val locked: Boolean,
     val initial: String =""
 ){
-    companion object {
-        val EMPTY = Profile("", "", "")
-    }
+
 }
