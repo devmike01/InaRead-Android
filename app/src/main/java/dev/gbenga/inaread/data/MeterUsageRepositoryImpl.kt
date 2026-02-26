@@ -1,25 +1,19 @@
 package dev.gbenga.inaread.data
 
-import android.util.Log
 import dev.gbenga.inaread.data.db.PowerUsageSummaryDao
 import dev.gbenga.inaread.data.db.entities.PowerUsageSummaryEntity
 import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.ConsumptionRecordResponse
-import dev.gbenga.inaread.data.model.MeterResponse
 import dev.gbenga.inaread.data.model.PowerUsageRequest
 import dev.gbenga.inaread.data.model.PowerUsageResponse
 import dev.gbenga.inaread.data.model.PowerUsageSummaryResponse
+import dev.gbenga.inaread.data.model.YearlyUsageResponse
 import dev.gbenga.inaread.domain.services.MeterUsageStatisticService
 import dev.gbenga.inaread.data.repository.NetworkRepository
-import dev.gbenga.inaread.domain.datastore.UserDataStore
 import dev.gbenga.inaread.domain.repository.MeterUsageRepository
-import dev.gbenga.inaread.utils.UserNotFoundException
 import dev.gbenga.inaread.utils.UserProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.withContext
 
 class MeterUsageRepositoryImpl (
@@ -51,7 +45,7 @@ class MeterUsageRepositoryImpl (
                }
        } ?: safeCall {
                 meterUsageApiService
-                    .getSummary(dateYMD = dateYMD,
+                    .getSummaryOfMonthByDate(dateYMD = dateYMD,
                         userId = userProvider.getCustomerId())
             }.apply {
                 if (this is RepoResult.Success){
@@ -84,9 +78,14 @@ class MeterUsageRepositoryImpl (
             customerId = userProvider.getCustomerId()))
     }
 
-    override suspend fun executeGetUsageByUser()
+    override suspend fun executeGetMonthlyUsage()
     : RepoResult<List<PowerUsageResponse>> = safeCall  {
         meterUsageApiService.getAllUsage(userProvider.getCustomerId())
+    }
+
+    override suspend fun executeGetYearlyUsage(year: Int): RepoResult<List<YearlyUsageResponse>> = safeCall {
+        meterUsageApiService
+            .getAllUsageForYear(userProvider.getCustomerId(), year)
     }
 
     override suspend fun executeGetMeterTypes()
