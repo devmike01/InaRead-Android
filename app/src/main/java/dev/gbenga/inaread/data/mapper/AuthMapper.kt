@@ -58,7 +58,8 @@ fun LoginResponse.toUserEntity(): UserEntity{
         meterCategoryId=meterCategoryId,
         createdAt=createdAt,
         enabled=enabled,
-        locked = false
+        locked = false,
+        updatedAt = updatedAt,
     )
 }
 

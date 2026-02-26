@@ -103,7 +103,7 @@ fun SettingsScreen(settingsViewModel: SettingsViewModel,
         .fillMaxSize()) {
 
         TitledColumn(
-            title ="Your Profile and Settings",
+            title ="My Profile and Settings",
             subTitle = "Change from light to dark mode. Edit your profile and many more.",
         ) {
             LazyColumn(

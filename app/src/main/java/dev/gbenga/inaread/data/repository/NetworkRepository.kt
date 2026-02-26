@@ -2,6 +2,7 @@ package dev.gbenga.inaread.data.repository
 
 import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.ApiResult
 import dev.gbenga.inaread.data.repository.AuthRepositoryImpl.Companion.TAG
@@ -40,6 +41,8 @@ abstract class NetworkRepository(val gson: Gson = Gson()) {
 
                 RepoResult.Error(error ?: StringTokens.UnknownErrorOccured)
             }
+        }catch (jE: JsonSyntaxException){
+            RepoResult.Error(StringTokens.ServerErrorOccured)
         }catch (exception: Exception){
             exception.printStackTrace()
             RepoResult.Error(StringTokens.UnknownErrorOccured)

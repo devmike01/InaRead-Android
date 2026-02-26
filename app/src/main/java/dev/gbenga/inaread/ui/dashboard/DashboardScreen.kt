@@ -37,6 +37,7 @@ import dev.gbenga.inaread.ui.home.HomeViewModel
 import dev.gbenga.inaread.ui.home.InaBottomNavItem
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
 import dev.gbenga.inaread.ui.metric.MetricScreen
+import dev.gbenga.inaread.ui.metric.MetricViewModel
 import dev.gbenga.inaread.ui.settings.SettingsScreen
 import dev.gbenga.inaread.ui.settings.SettingsViewModel
 import dev.gbenga.inaread.ui.theme.Dark
@@ -95,6 +96,7 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel,
             val settingsViewModel: SettingsViewModel = hiltViewModel()
             val homeViewModel: HomeViewModel = hiltViewModel()
             val addReadingViewModel: AddReadingViewModel = hiltViewModel()
+            val metricViewModel: MetricViewModel = hiltViewModel()
 
             NavHost(navController, startDestination = startDestination){
                 composable<DashboardScreen.HomeScreen> {
@@ -119,7 +121,7 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel,
                 }
 
                 composable<DashboardScreen.AddReading> {
-                    AddReadingScreen(addReadingViewModel, dashboardNavController = navController)
+                    AddReadingScreen(addReadingViewModel, parentNavigator = parentNavController)
                 }
 
                 composable<DashboardScreen.Settings> {
@@ -127,7 +129,7 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel,
                 }
 
                 composable<DashboardScreen.AllTimeUsage> {
-                    MetricScreen()
+                    MetricScreen(metricViewModel)
                 }
             }
             PageHandler(viewModel)

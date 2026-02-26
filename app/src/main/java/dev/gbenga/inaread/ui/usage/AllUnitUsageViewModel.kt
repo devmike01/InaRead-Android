@@ -3,6 +3,7 @@ package dev.gbenga.inaread.ui.usage
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.gbenga.inaread.data.datastore.Messenger
 import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.MonthlyUsage
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
@@ -24,13 +25,28 @@ import javax.inject.Inject
 @HiltViewModel
 class AllUnitUsageViewModel @Inject constructor(
     private val getAllUnitUsageUseCase: GetAllUnitUsageUseCase,
-    private val setAllUnitUsageUseCase: SetAllUnitUsageUseCase,
-    private val inaDateFormatter: InaDateFormatter
+    private val inaDateFormatter: InaDateFormatter,
+    private val messenger: Messenger
 ) : InaReadViewModelV2<AllUnitUsageUiState> (AllUnitUsageUiState()){
 
 
     init {
         fetchUnitUsages()
+        receiveMessage()
+    }
+
+    fun receiveMessage(){
+        viewModelScope.launch {
+            messenger.receiveMessage().collect {
+                showUiMessage(it)
+            }
+        }
+    }
+
+    fun showSnackBarMessage(message: String){
+       viewModelScope.launch {
+           messenger.sendMessage(message = message)
+       }
     }
 
     fun fetchUnitUsages(){
@@ -42,7 +58,7 @@ class AllUnitUsageViewModel @Inject constructor(
                         val fromDates = inaDateFormatter
                             .ddMMM(it.fromDate)
                             .split("/")
-                        Log.d("fromDates", "fromDates: ${it.totalSpent}")
+
                         MonthlyUsage(
                             kilowatt = it.totalMonthPowerUsage.toPlainString(),
                             period = it.periodInDays,

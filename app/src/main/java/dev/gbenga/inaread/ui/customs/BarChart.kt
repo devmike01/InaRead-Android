@@ -59,6 +59,29 @@ fun BarChart(
             strokeWidth = 2f
         )
 
+
+        if (data.isEmpty()){
+            drawText(
+                textMeasurer = textMeasurer,
+                text = AnnotatedString("No data available"),
+                style = labelStyle,
+                topLeft = Offset(
+                    size.width / 2,
+                    size.height /2
+                )
+            )
+        }
+
+        drawText(
+            textMeasurer = textMeasurer,
+            text = AnnotatedString("KWh"),
+            style = labelStyle,
+            topLeft = Offset(
+                2.dp.toPx(),
+                chartHeight + 4.dp.toPx()
+            )
+        )
+
         for (i in 0..steps) {
             val value = maxValue * i / steps
             val y = chartHeight - (chartHeight * i / steps)

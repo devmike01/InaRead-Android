@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.ui.metric
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,47 +50,72 @@ import dev.gbenga.inaread.ui.theme.Indigo400
 import dev.gbenga.inaread.ui.theme.Indigo900
 
 @Composable
-fun MetricScreen(viewModel: MetricViewModel = hiltViewModel()) {
-
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
-
+fun MetricScreen(viewModel: MetricViewModel) {
 
     Column {
-        val yearState = rememberYearPickerState()
 
-        YearPicker(yearState,
-            modifier = Modifier.padding(
-                bottom = DimenTokens.Padding.Normal)){
+        YearPickerBar(viewModel)
 
-        }
+        MetricScreenContent(viewModel = viewModel)
 
-        LazyColumn(modifier = Modifier.fillMaxSize()
-            .padding(horizontal = DimenTokens.Padding.Normal),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.Normal)) {
+    }
+}
 
-            item {
-                AllTimeTitle("Your Usage for the year")
-                UiStateWithLoadingBox(uiState.monthChartValues,
+@Composable
+fun YearPickerBar(viewModel: MetricViewModel){
+
+    val yearState = rememberYearPickerState()
+
+    LaunchedEffect(yearState.state) {
+        viewModel.getYearlyUsage(yearState.state)
+    }
+
+    YearPicker(yearState,
+        modifier = Modifier.padding(
+            bottom = DimenTokens.Padding.Normal)){
+
+    }
+}
+
+@Composable
+fun MetricScreenContent(viewModel: MetricViewModel){
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    LazyColumn(modifier = Modifier.fillMaxSize()
+        .padding(horizontal = DimenTokens.Padding.Normal),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(DimenTokens.Padding.Normal)) {
+
+        item {
+            AllTimeTitle("My Usage for the year")
+            AnimatedContent(uiState.monthChartValues) { monthChartValues ->
+                UiStateWithLoadingBox(monthChartValues,
                     errorRequest = {
-
+                        Box(modifier = Modifier.fillMaxSize()){
+                            Text(it, modifier = Modifier.align(Alignment.Center))
+                        }
                     }) {
                     BarChart(it,
                         modifier = Modifier.animateItem())
                 }
-
             }
 
-            item {
-                AllTimeTitle("Your Appliances")
-                UiStateWithLoadingBox(uiState.appliances, errorRequest = {
-                    // TODO: Handle error
-                }) { appliances ->
-                    appliances.forEach {
-                        ApplianceItem(
-                            modifier = Modifier.animateItem(),
-                            appliance = it)
-                    }
+
+        }
+
+        item {
+            AllTimeTitle("My Appliances")
+            UiStateWithLoadingBox(uiState.appliances, errorRequest = {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(it)
+                }
+            }) { appliances ->
+                appliances.forEach {
+                    ApplianceItem(
+                        modifier = Modifier.animateItem(),
+                        appliance = it)
                 }
             }
         }
@@ -118,7 +145,7 @@ fun ApplianceItem(modifier: Modifier = Modifier, appliance: Appliance){
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(DimenTokens.Padding.Normal),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.spacedBy(DimenTokens.Padding.Normal),
             verticalAlignment = Alignment.CenterVertically) {
 
 

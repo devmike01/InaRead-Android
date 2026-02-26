@@ -80,14 +80,14 @@ import java.time.ZoneOffset
 
 @Composable
 fun AddReadingScreen(viewModel: AddReadingViewModel,
-                     dashboardNavController: NavController) {
+                     parentNavigator: NavController) {
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val meterRecord = rememberSaveable { mutableStateOf("") }
     var fromDate by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
     var toDate by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
     val isLoading by remember { derivedStateOf { uiState.recordMeterSubmission is UiStateWithIdle.Loading } }
-    val navigationDelegate = rememberNavigationDelegate(dashboardNavController)
+    val navigationDelegate = rememberNavigationDelegate(parentNavigator)
 
     LaunchedEffect(meterRecord.value, fromDate, toDate) {
         viewModel.toggleSumitButton(meterRecord.value, fromDate, toDate)

@@ -7,7 +7,7 @@ import dev.gbenga.inaread.data.db.converters.BigDecimalConverter
 import dev.gbenga.inaread.data.db.entities.PowerUsageSummaryEntity
 import dev.gbenga.inaread.data.db.entities.UserEntity
 
-@Database(entities = [UserEntity::class, PowerUsageSummaryEntity::class], version = 3, exportSchema = false)
+@Database(entities = [UserEntity::class, PowerUsageSummaryEntity::class], version = 4, exportSchema = false)
 @TypeConverters(BigDecimalConverter::class)
 abstract class InaReadDatabase : RoomDatabase() {
 

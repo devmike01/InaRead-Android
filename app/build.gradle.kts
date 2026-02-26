@@ -34,12 +34,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://3a20-197-253-4-26.ngrok-free.app\"")
+            buildConfigField("String", "BASE_URL", "\"https://9aea-197-253-4-26.ngrok-free.app\"")
         }
 
         debug {
             isMinifyEnabled = false
-            buildConfigField("String", "BASE_URL", "\"https://3a20-197-253-4-26.ngrok-free.app\"")
+            buildConfigField("String", "BASE_URL", "\"https://9aea-197-253-4-26.ngrok-free.app\"")
         }
 
     }

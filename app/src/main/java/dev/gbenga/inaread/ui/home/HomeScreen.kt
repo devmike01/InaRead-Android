@@ -43,7 +43,7 @@ fun HomeScreen(viewModel: HomeViewModel,
         title = homeUiState.todaysDate,
         subTitle = homeUiState.greeting,
         navigationClick = {}
-    ), profileInitial = "G"){
+    ), profileInitial = homeUiState.nameInitial){
 
         val navigatorDelegate = rememberNavigationDelegate(parentNavController)
 

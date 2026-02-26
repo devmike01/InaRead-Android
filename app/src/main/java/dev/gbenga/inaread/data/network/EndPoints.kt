@@ -12,10 +12,15 @@ object EndPoints {
     const val GetAppliances = "$v1/appliance"
     const val SetAppliance = "$GetAppliances/new/bulk"
     const val Usage = "$v1/usage"
+
+    const val UsageMonthly = "$v1/usage/monthly"
+    const val UsageYearly = "$v1/usage/yearly"
+
     const val GetAllUsages = "$Usage/all"
     const val RecordNewUsage = "$Usage/new"
     const val MeterType = "$Meter/types"
     const val RefreshToken = "$Auth/refresh/token"
     const val SignOut = "$Auth/logout"
     const val AllPowerUsage = "$Usage/all"
+    const val Profile = "$Auth/login"
 }

@@ -15,6 +15,7 @@ import dev.gbenga.inaread.utils.Scada
 import dev.gbenga.inaread.utils.UiStateWithIdle
 import dev.gbenga.inaread.utils.date.InaDateFormatter
 import dev.gbenga.inaread.utils.nav.DashboardScreen
+import dev.gbenga.inaread.utils.nav.InaScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -69,8 +70,8 @@ class AddReadingViewModel @Inject constructor(
                     setState {
                         it.copy(recordMeterSubmission = UiStateWithIdle.Success(repo.data))
                     }
-                    navigate(NavigationEvent.NavigateTaskTop(DashboardScreen.HomeScreen()))
                     showMessage("Power usage successfully recorded")
+                    navigate(NavigationEvent.NavigateTaskTop(InaScreen.Dashboard))
                 }
                 is RepoResult.Error -> {
                     showMessage(repo.message)

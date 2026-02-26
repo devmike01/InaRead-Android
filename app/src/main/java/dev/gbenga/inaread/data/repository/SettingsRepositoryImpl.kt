@@ -1,25 +1,30 @@
 package dev.gbenga.inaread.data.repository
 
-import dev.gbenga.inaread.data.model.ProfileResponse
+import dev.gbenga.inaread.data.db.entities.UserEntity
+import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.SettingKeys
 import dev.gbenga.inaread.data.model.SettingsMenu
-import dev.gbenga.inaread.domain.datastore.UserDataStore
-import dev.gbenga.inaread.domain.services.ProfileApiService
 import dev.gbenga.inaread.domain.repository.SettingsRepository
-import dev.gbenga.inaread.utils.UserNotFoundException
+import dev.gbenga.inaread.domain.services.ProfileApiService
+import dev.gbenga.inaread.tokens.StringTokens
+import dev.gbenga.inaread.utils.UserProvider
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 
 class SettingsRepositoryImpl(
     val profileApiService: ProfileApiService,
-    val userDataStore: UserDataStore,
+    val userProvider: UserProvider,
     val ioContext: CoroutineDispatcher
-) : SettingsRepository {
+) : SettingsRepository, NetworkRepository() {
 
-    override suspend fun getUserProfile(): ProfileResponse = useUserIdInIO {
-        withContext(ioContext){
-            profileApiService.getProfile()
+    override suspend fun getUserProfile(): RepoResult<UserEntity>{
+        return try {
+            withContext(ioContext){
+                val currentUser = userProvider.getCurrentUser()
+                RepoResult.Success(currentUser)
+            }
+        }catch (e: Exception){
+            RepoResult.Error(e.message ?: StringTokens.UnknownErrorOccured)
         }
     }
 
@@ -30,10 +35,4 @@ class SettingsRepositoryImpl(
         )
     }
 
-    private suspend fun <T> useUserIdInIO( block: suspend (String) -> T): T{
-        val userId = userDataStore.getProfileId().firstOrNull() ?: throw UserNotFoundException()
-        return withContext(ioContext) {
-            block(userId)
-        }
-    }
 }

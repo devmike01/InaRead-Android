@@ -79,8 +79,10 @@ abstract class InaReadViewModelV2 <S: InaReadUiState>(initialState: S) : ViewMod
         }
     }
 
-    protected fun showUiMessage(message: String){
-        _snackbarEvent.tryEmit(message)
+    protected fun showUiMessage(message: String?){
+        message?.let {
+            _snackbarEvent.tryEmit(message)
+        }
     }
 
     protected fun showLoading(){

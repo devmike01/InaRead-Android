@@ -73,7 +73,7 @@ fun AllUnitUsageScreen(viewModel: AllUnitUsageViewModel = hiltViewModel(),
                         UsageCardItem(
                             item = monthlyUsages[it],
                             onClick = {
-                                TODO("Implement the details screen")
+                              //  TODO("Implement the details screen")
                             })
                     }
                 }
@@ -145,7 +145,7 @@ fun DetailItem(modifier: Modifier = Modifier,
         withStyle(style = SpanStyle(
             fontSize = MaterialTheme.typography.titleLarge.fontSize
         )){
-            append("$cost NGN")
+            append(cost)
         }
     }
     Text(modifier = modifier,

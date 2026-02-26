@@ -1,12 +1,10 @@
 package dev.gbenga.inaread.data.model
 
 import java.math.BigDecimal
-import java.time.Instant
 
 
-data class PowerUsageResponse(
+data class YearlyUsageResponse(
     val periodInDays: String,
-    val costPerKwh: BigDecimal,
     val meterType: String,
     val totalMonthPowerUsage: BigDecimal,
     val fromDate: String,

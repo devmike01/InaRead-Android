@@ -59,9 +59,9 @@ object RepositoryModule {
 
     @Provides
     fun provideSettingsRepositoryImpl(profileApiService: ProfileApiService,
-                                      userDataStore: UserDataStore,
+                                      userProvider: UserProvider,
                                       @IOCoroutineContext ioContext: CoroutineDispatcher): SettingsRepository {
-        return SettingsRepositoryImpl(profileApiService, userDataStore, ioContext)
+        return SettingsRepositoryImpl(profileApiService, userProvider, ioContext)
     }
 
 

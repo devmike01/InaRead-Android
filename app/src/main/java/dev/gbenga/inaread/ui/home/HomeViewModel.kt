@@ -17,6 +17,7 @@ import dev.gbenga.inaread.data.model.MeterMonthlyStat
 import dev.gbenga.inaread.data.model.MonthlyMeterUsage
 import dev.gbenga.inaread.data.repository.AuthRepositoryImpl.Companion.TAG
 import dev.gbenga.inaread.domain.providers.CalendarProvider
+import dev.gbenga.inaread.domain.usecase.GetProfileUseCase
 import dev.gbenga.inaread.domain.usecase.WeekDaysUseCase
 import dev.gbenga.inaread.domain.usecase.MeterSummaryUseCase
 import dev.gbenga.inaread.ui.customs.toUiState
@@ -45,6 +46,7 @@ class HomeViewModel @Inject constructor(
     private val calendarProvider: CalendarProvider,
     private val savedStateHandle: SavedStateHandle,
     private val inaDateFormatter: InaDateFormatter,
+    private val getProfileUseCase: GetProfileUseCase,
     private val messenger: Messenger
 ) : InaReadViewModelV2<HomeUiState>(
     HomeUiState()
@@ -58,8 +60,23 @@ class HomeViewModel @Inject constructor(
 
     init {
         populateDashboard()
+        setProfileInitial()
     }
 
+
+    private fun setProfileInitial(){
+        viewModelScope.launch {
+            when(val profile = getProfileUseCase()){
+                is RepoResult.Success -> {
+                    setState { it.copy(nameInitial = profile.data
+                        .username[0].uppercase()) }
+                }
+                is RepoResult.Error -> {
+                    setState { it.copy(nameInitial = "n\\a") }
+                }
+            }
+        }
+    }
 
 
     fun receiveMessage(){

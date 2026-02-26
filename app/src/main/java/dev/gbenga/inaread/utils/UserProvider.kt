@@ -35,6 +35,7 @@ interface UserProvider {
     suspend fun removeTokens()
 
     suspend fun getMeterCategoryId(): Int
+
 }
 
 class UserProviderImpl(

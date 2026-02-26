@@ -11,6 +11,7 @@ data class HomeUiState(
     val selectedDateValue: String ="",
     val greeting: String = "",
     val todaysDate: String = "",
+    val nameInitial: String ="",
     val selectedCalendarPos: Int = 0,
     val selectedPage: DashboardScreen = DashboardScreen.HomeScreen(),
 ): InaReadUiState

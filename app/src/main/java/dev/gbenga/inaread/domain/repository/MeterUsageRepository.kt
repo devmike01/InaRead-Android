@@ -5,6 +5,7 @@ import dev.gbenga.inaread.data.model.ConsumptionRecordResponse
 import dev.gbenga.inaread.data.model.PowerUsageRequest
 import dev.gbenga.inaread.data.model.PowerUsageResponse
 import dev.gbenga.inaread.data.model.PowerUsageSummaryResponse
+import dev.gbenga.inaread.data.model.YearlyUsageResponse
 
 interface MeterUsageRepository {
 
@@ -12,7 +13,9 @@ interface MeterUsageRepository {
 
     suspend fun executeAddNewReading(request: PowerUsageRequest): RepoResult<ConsumptionRecordResponse>
 
-    suspend fun executeGetUsageByUser(): RepoResult<List<PowerUsageResponse>>
+    suspend fun executeGetMonthlyUsage(): RepoResult<List<PowerUsageResponse>>
+
+    suspend fun executeGetYearlyUsage(year: Int): RepoResult<List<YearlyUsageResponse>>
 
     suspend fun executeGetMeterTypes(): RepoResult<List<String>>
 
