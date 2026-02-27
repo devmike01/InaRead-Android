@@ -39,7 +39,8 @@ class MeterUsageRepositoryImpl (
                            totalMonthPowerUsage = entity.totalMonthPowerUsage,
                            fromDate = entity.fromDate,
                            toDate = entity.toDate,
-                           totalSpent = entity.totalSpent
+                           totalSpent = entity.totalSpent,
+                           monthlyUsage = entity.monthlyUsage
                        )
                    ))
                }
@@ -60,7 +61,7 @@ class MeterUsageRepositoryImpl (
                                 totalMonthPowerUsage = resData.totalMonthPowerUsage,
                                 toDate = resData.toDate,
                                 totalSpent = resData.totalSpent,
-
+                                monthlyUsage = resData.monthlyUsage
                             ))
                         }
                     }
