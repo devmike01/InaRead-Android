@@ -14,5 +14,6 @@ data class PowerUsageSummaryEntity (
     val meterType: String,
     val totalMonthPowerUsage: BigDecimal,
     val toDate: String,
-    val totalSpent: BigDecimal
+    val totalSpent: BigDecimal,
+    val monthlyUsage: List<BigDecimal>
 )
