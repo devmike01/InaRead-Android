@@ -35,6 +35,7 @@ import dev.gbenga.inaread.ui.customs.InaScaffoldConfig
 import dev.gbenga.inaread.ui.customs.UiStateWithLoadingBox
 import dev.gbenga.inaread.ui.customs.color
 import dev.gbenga.inaread.ui.home.UnitLaunchEffect
+import dev.gbenga.inaread.utils.nav.InaScreen
 import dev.gbenga.inaread.utils.rememberNavigationDelegate
 
 @Composable
@@ -73,7 +74,7 @@ fun AllUnitUsageScreen(viewModel: AllUnitUsageViewModel = hiltViewModel(),
                         UsageCardItem(
                             item = monthlyUsages[it],
                             onClick = {
-                              //  TODO("Implement the details screen")
+                                navigator.navigate(InaScreen.AllUnitUsageDetailsScreen)
                             })
                     }
                 }

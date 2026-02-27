@@ -12,6 +12,7 @@ import dev.gbenga.inaread.ui.dashboard.DashboardViewModel
 import dev.gbenga.inaread.ui.login.LoginScreen
 import dev.gbenga.inaread.ui.signup.SignUpScreen
 import dev.gbenga.inaread.ui.theme.InaReadTheme
+import dev.gbenga.inaread.ui.usage.AllUnitUsageDetails
 import dev.gbenga.inaread.ui.usage.AllUnitUsageScreen
 import dev.gbenga.inaread.ui.waiting.WaitingScreen
 
@@ -81,6 +82,10 @@ fun InaNavGraph() {
 
         composable<InaScreen.Waiting> {
             WaitingScreen(navHostController = navController)
+        }
+
+        composable<InaScreen.AllUnitUsageDetailsScreen> {
+            AllUnitUsageDetails()
         }
     }
 

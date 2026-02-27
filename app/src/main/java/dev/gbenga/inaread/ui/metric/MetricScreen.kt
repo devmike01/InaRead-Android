@@ -126,7 +126,7 @@ fun MetricScreenContent(viewModel: MetricViewModel){
 fun AllTimeTitle(title: String){
     Text(title,
         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.W700),
-        modifier = Modifier.padding(bottom = DimenTokens.Padding.Normal))
+        modifier = Modifier.padding(bottom = 15.dp))
 }
 
 

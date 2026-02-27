@@ -20,7 +20,9 @@ fun InaCard(modifier: Modifier = Modifier,
     Card(
         modifier = modifier,
         elevation = cardElevation,
-        colors = colors,) {
+        colors = colors,
+        
+        ) {
         content()
     }
 }

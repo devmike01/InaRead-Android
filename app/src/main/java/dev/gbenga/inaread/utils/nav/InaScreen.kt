@@ -22,4 +22,7 @@ sealed interface InaScreen {
 
     @Serializable
     object Waiting: InaScreen
+
+    @Serializable
+    object AllUnitUsageDetailsScreen: InaScreen
 }

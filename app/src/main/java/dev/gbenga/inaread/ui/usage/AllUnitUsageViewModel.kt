@@ -1,6 +1,5 @@
 package dev.gbenga.inaread.ui.usage
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gbenga.inaread.data.datastore.Messenger
@@ -8,18 +7,13 @@ import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.MonthlyUsage
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
 import dev.gbenga.inaread.domain.usecase.GetAllUnitUsageUseCase
-import dev.gbenga.inaread.domain.usecase.SetAllUnitUsageUseCase
-import dev.gbenga.inaread.ui.customs.uiStateWithIdleRunCatching
 import dev.gbenga.inaread.utils.InaReadViewModelV2
 import dev.gbenga.inaread.utils.NavigationEvent
-import dev.gbenga.inaread.utils.Scada
 import dev.gbenga.inaread.utils.UiState
 import dev.gbenga.inaread.utils.UiStateWithIdle
 import dev.gbenga.inaread.utils.date.InaDateFormatter
 import dev.gbenga.inaread.utils.ext.naira
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import javax.inject.Inject
 
 @HiltViewModel
