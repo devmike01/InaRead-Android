@@ -10,16 +10,17 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import java.math.BigDecimal
 
 @Composable
 fun LineChart(
-    data: List<Float>,
+    chartData: List<BigDecimal>,
     modifier: Modifier = Modifier,
     lineColor: Color = Color.Blue,
     fillColor: Color = Color.Blue.copy(alpha = 0.3f)
 ) {
+    val data = chartData.map { it.toFloat() }
     Canvas(modifier = modifier) {
-
         if (data.isEmpty()) return@Canvas
 
         val maxY = data.maxOrNull() ?: 0f
@@ -68,7 +69,8 @@ fun LineChart(
 @Composable
 fun PreviewLineChart(){
     LineChart(
-        data = listOf(10f, 40f, 20f, 60f, 30f, 80f, 10f, 40f, 20f, 60f, 30f, 80f),
+        chartData = listOf(10f, 40f, 20f, 60f, 30f, 80f,
+            10f, 40f, 20f, 60f, 30f, 80f).map { it.toBigDecimal() },
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)

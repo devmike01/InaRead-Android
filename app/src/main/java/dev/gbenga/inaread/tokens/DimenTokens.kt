@@ -17,8 +17,8 @@ object DimenTokens {
 
     object Padding {
         val XSmall = 5.dp
-        val Small = XSmall * 2
-        val Normal = Small * 2
+        val Small = XSmall * 2 // 10
+        val Normal = Small * 2 // 20
         val Large = Normal * 2
         val XLarge = Large * 2
         val xXLarge = XLarge * 2
@@ -42,6 +42,7 @@ object DimenTokens {
         val topbar = 100.dp
         val emptyData = 100.dp
         val icon = 50.dp
+        val PowerUsageCard = 200.dp
     }
 
     object CalendarItem{

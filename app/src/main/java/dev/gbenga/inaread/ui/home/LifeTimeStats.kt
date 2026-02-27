@@ -29,6 +29,7 @@ import dev.gbenga.inaread.data.model.MeterMonthlyStat
 import dev.gbenga.inaread.tokens.DimenTokens
 import dev.gbenga.inaread.ui.customs.InaCard
 import dev.gbenga.inaread.ui.customs.XYAxisCenter
+import java.math.BigDecimal
 
 @Composable
 fun LifeTimeStats(meterMonthlyStatData: UiData<MeterMonthlyStat>,
@@ -116,7 +117,7 @@ private fun NoChartCard(itemData: InaTextIcon,
 
 @Composable
 fun LifeTimeReadingCard(lifeTimeReading: InaTextIcon,
-                        data: List<Float>,
+                        data: List<BigDecimal>,
                         modifier: Modifier = Modifier){
     InaCard(modifier = modifier) {
         Column(modifier = Modifier.fillMaxSize(),
@@ -172,7 +173,7 @@ fun PreviewLifeTimeReadingCard(){
                 label = "kWh",
                 color = 0xFF00796B,
             ),
-            chartData = listOf(10f, 40f, 20f, 60f, 30f, 80f, 10f, 40f, 20f, 60f, 30f, 80f),
+            chartData = listOf(10f, 40f, 20f, 60f, 30f, 80f, 10f, 40f, 20f, 60f, 30f, 80f).map { it.toBigDecimal() },
 
             )
     ))

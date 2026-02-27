@@ -161,12 +161,8 @@ class HomeViewModel @Inject constructor(
                         meterUsageSummary =  UiState.Success(Pair(
                             summary?.let { summary ->
                                 UiData.Content(MeterMonthlyStat(
-                                    chartData = listOf(0F,
-                                        summary.totalMonthPowerUsage
-                                            .minus(BigDecimal(12)).setScale(2,
-                                            RoundingMode.HALF_EVEN).toFloat(),
-                                        summary.totalMonthPowerUsage.setScale(2,
-                                            RoundingMode.HALF_EVEN).toFloat()),
+                                    chartData = summary.monthlyUsage,
+
                                     lifeTimeReading = VectorInaTextIcon(
                                         icon = Icons.Default.ElectricMeter,
                                         value = summary.totalMonthPowerUsage

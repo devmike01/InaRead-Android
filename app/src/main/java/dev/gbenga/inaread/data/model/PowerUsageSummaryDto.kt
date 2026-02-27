@@ -9,5 +9,6 @@ data class PowerUsageSummaryResponse(
     val totalMonthPowerUsage: BigDecimal,
     val fromDate: String,
     val toDate: String,
-    val totalSpent: BigDecimal
+    val totalSpent: BigDecimal,
+    val monthlyUsage: List<BigDecimal>
 )

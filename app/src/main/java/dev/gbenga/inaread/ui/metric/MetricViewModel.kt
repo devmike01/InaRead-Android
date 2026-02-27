@@ -1,7 +1,9 @@
 package dev.gbenga.inaread.ui.metric
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gbenga.inaread.data.mapper.RepoResult
@@ -20,6 +22,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,8 +33,9 @@ class MetricViewModel @Inject constructor(
     )
     : InaReadViewModelV2<MetricUiState>(MetricUiState()) {
 
-    private var cacheChartList : List<MonthValue>? = null
+    private var cacheWithYearChart : MutableMap<Int, List<MonthValue>> = mutableMapOf()
 
+    val yearPickerState = YearPickerState()
 
     init {
         populate()
@@ -39,10 +43,14 @@ class MetricViewModel @Inject constructor(
     }
 
     fun getYearlyUsage(year: Int){
-        if (cacheChartList != null) return
-        setState { it.copy(monthChartValues = UiStateWithIdle.Loading) }
         viewModelScope.launch {
-            when(val usage = getYearlyUsageUseCase(year)){
+            setState { it.copy(monthChartValues = UiStateWithIdle.Loading) }
+            cacheWithYearChart[year]?.let { cache ->
+                setState {
+                    it.copy(monthChartValues = UiStateWithIdle
+                        .Success(cache))
+                }
+            } ?: when(val usage = getYearlyUsageUseCase(year)){
                 is RepoResult.Success -> {
                     val distinctMap = mutableMapOf<String, Float>()
                     for (yearlyResponse in  usage.data){
@@ -50,15 +58,15 @@ class MetricViewModel @Inject constructor(
                         val consumption = yearlyResponse.totalMonthPowerUsage.toFloat()
                         distinctMap.merge(month, consumption, Float::plus)
                     }
-
-
                         setState {
                         it.copy(monthChartValues = UiStateWithIdle.Success(
-                            distinctMap.map { month -> MonthValue(month.key, month.value) }.apply {
-                                cacheChartList = this
+                            distinctMap.map { month -> MonthValue(month.key, month.value) }
+                                .also { monthValues ->
+                                cacheWithYearChart[year] = monthValues
                             }
                         ))
                     }
+
                 }
                 is RepoResult.Error -> {
                     setState { it.copy(monthChartValues = UiStateWithIdle.Error(usage.message)) }
