@@ -10,9 +10,11 @@ import dev.gbenga.inaread.data.mapper.toSignUpOutput
 import dev.gbenga.inaread.data.mapper.toUserEntity
 import dev.gbenga.inaread.data.model.LoginInput
 import dev.gbenga.inaread.data.model.LoginOutput
+import dev.gbenga.inaread.data.model.NewCustomerResponse
 import dev.gbenga.inaread.data.model.SignUpOutput
 import dev.gbenga.inaread.domain.services.AuthenticationApiService
 import dev.gbenga.inaread.domain.repository.AuthRepository
+import dev.gbenga.inaread.domain.services.MeterCategoryApiService
 import dev.gbenga.inaread.utils.UserNotFoundException
 import dev.gbenga.inaread.utils.UserProvider
 import kotlinx.coroutines.CoroutineDispatcher
@@ -53,9 +55,9 @@ class AuthRepositoryImpl(private val authApiService: AuthenticationApiService,
         }
     }
 
-    override suspend fun signUp(request: SignUpRequest): RepoResult<SignUpOutput> = safeCall {
+    override suspend fun signUp(request: SignUpRequest): RepoResult<NewCustomerResponse> = safeCall {
         authApiService.signUp(request)
-    }.map { it.toSignUpOutput() }
+    }
 
     override suspend fun signOut(): RepoResult<String> = safeCall {
         authApiService.signOut(userProvider.getCustomerId())
@@ -64,6 +66,10 @@ class AuthRepositoryImpl(private val authApiService: AuthenticationApiService,
                     userProvider.removeTokens()
                 }
             }
+    }
+
+    override suspend fun getMeterTypes(): RepoResult<List<String>> = safeCall {
+        authApiService.getMeterTypes()
     }
 
     override suspend fun isSignedIn(): Boolean {
