@@ -7,14 +7,18 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import dev.gbenga.inaread.data.model.MonthlyUsage
 import dev.gbenga.inaread.ui.dashboard.DashboardScreenNavGraph
 import dev.gbenga.inaread.ui.dashboard.DashboardViewModel
 import dev.gbenga.inaread.ui.login.LoginScreen
 import dev.gbenga.inaread.ui.signup.SignUpScreen
+import dev.gbenga.inaread.ui.signup.SignUpViewModel
 import dev.gbenga.inaread.ui.theme.InaReadTheme
 import dev.gbenga.inaread.ui.usage.AllUnitUsageDetails
 import dev.gbenga.inaread.ui.usage.AllUnitUsageScreen
 import dev.gbenga.inaread.ui.waiting.WaitingScreen
+import kotlin.reflect.typeOf
 
 fun String?.toDashboardRoute(): DashboardScreen{
     return when(this){
@@ -32,11 +36,12 @@ fun InaNavGraph() {
 
     val navController = rememberNavController()
     val dashboardNagGraphVM: DashboardViewModel = hiltViewModel()
+    val signUpViewModel: SignUpViewModel = hiltViewModel()
 
     NavHost(navController, startDestination = InaScreen.Waiting,
         enterTransition = {
             slideIntoContainer(
-                AnimatedContentTransitionScope.SlideDirection.Companion.Left,
+                AnimatedContentTransitionScope.SlideDirection.Left,
                 animationSpec = tween(300)
             )
         },
@@ -73,7 +78,8 @@ fun InaNavGraph() {
         }
 
         composable<InaScreen.SignUp> {
-            SignUpScreen(navController = navController)
+            SignUpScreen(navController = navController,
+                signUpViewModel = signUpViewModel)
         }
 
         composable<InaScreen.AllUnitUsage> {
@@ -84,8 +90,14 @@ fun InaNavGraph() {
             WaitingScreen(navHostController = navController)
         }
 
-        composable<InaScreen.AllUnitUsageDetailsScreen> {
-            AllUnitUsageDetails()
+        composable<InaScreen.AllUnitUsageDetailsScreen>(
+            typeMap = mapOf(typeOf<MonthlyUsage>() to MonthlyUsageType)
+        ) {
+            val usageDetails = it.toRoute<InaScreen.AllUnitUsageDetailsScreen>()
+            AllUnitUsageDetails(usageDetails.monthlyUsage,
+                onNavBack = {
+                    navController.popBackStack()
+                })
         }
     }
 

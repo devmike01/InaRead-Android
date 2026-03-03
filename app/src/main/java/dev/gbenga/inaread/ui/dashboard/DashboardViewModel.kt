@@ -4,25 +4,19 @@ import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.gbenga.inaread.data.datastore.Messenger
-import dev.gbenga.inaread.ui.home.HomeEvent
 import dev.gbenga.inaread.ui.home.HomeViewModel
 import dev.gbenga.inaread.ui.home.InaBottomNavItemData
-import dev.gbenga.inaread.utils.InaReadViewModel
 import dev.gbenga.inaread.utils.InaReadViewModelV2
 import dev.gbenga.inaread.utils.NavigationEvent
 import dev.gbenga.inaread.utils.nav.DashboardScreen
+import dev.gbenga.inaread.utils.nav.InaScreen
 import dev.gbenga.inaread.utils.nav.toDashboardRoute
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.util.Stack
 import javax.inject.Inject
@@ -36,6 +30,10 @@ class DashboardViewModel @Inject constructor(
 
 
     private val routeStack = Stack<DashboardScreen>()
+
+    init {
+        navigateUsingSavedState()
+    }
 
 
     fun receiveMessage(){
@@ -51,6 +49,7 @@ class DashboardViewModel @Inject constructor(
 
 
     fun populateUI(){
+        routeStack.clear()
         setState { it.copy(dashboardButtons = listOf(
             DashboardNavData(
                 route = DashboardScreen.HomeScreen(),
@@ -80,7 +79,9 @@ class DashboardViewModel @Inject constructor(
                     label = "Settings",
                 )
             )
-        ), initialListLoad = true) }
+        ), initialListLoad = true,
+            selectedRoute = DashboardScreen.HomeScreen()) }
+        navigate(NavigationEvent.NavigateBack)
     }
 
     fun navigateUsingSavedState(){
@@ -102,7 +103,7 @@ class DashboardViewModel @Inject constructor(
         routeStack.push(route)
         setState { it.copy(selectedRoute = route) }
         navigate(NavigationEvent
-            .NavigateTaskTop(route))
+            .Navigate(route))
     }
 
     fun goBack(){

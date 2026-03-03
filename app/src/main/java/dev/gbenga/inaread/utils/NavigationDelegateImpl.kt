@@ -24,9 +24,10 @@ class NavigationDelegateImpl(private val navController: NavController) : Navigat
 
             is NavigationEvent.NavigateTaskTop -> {
                 navController.navigate(navigationEvent.screen){
-                    popUpTo(navigationEvent.screen){
+                    popUpTo(navController.graph.startDestinationId){
                         inclusive =true
                     }
+                    launchSingleTop = true
                 }
             }
         }

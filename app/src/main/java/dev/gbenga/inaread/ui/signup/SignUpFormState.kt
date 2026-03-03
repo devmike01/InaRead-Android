@@ -22,6 +22,9 @@ class SignUpFormState {
     var confirmPassword by mutableStateOf("")
         private set
 
+    var meterNo by mutableStateOf("")
+        private set
+
 
     fun onUsernameChanged(username: String){
         this.username = username
@@ -38,6 +41,12 @@ class SignUpFormState {
     fun onEmailChanged(email: String){
         this.email = email
     }
+
+    fun onMeterNumberChanged(meterNo: String){
+        this.meterNo = meterNo
+    }
+
+
 
 }
 

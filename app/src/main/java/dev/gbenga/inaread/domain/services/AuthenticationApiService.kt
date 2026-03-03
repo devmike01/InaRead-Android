@@ -5,6 +5,7 @@ import dev.gbenga.inaread.data.auth.LoginResponse
 import dev.gbenga.inaread.data.auth.SignUpRequest
 import dev.gbenga.inaread.data.auth.SignUpResponse
 import dev.gbenga.inaread.data.model.ApiResult
+import dev.gbenga.inaread.data.model.NewCustomerResponse
 import dev.gbenga.inaread.data.network.EndPoints
 import retrofit2.Response
 import retrofit2.http.Body
@@ -18,8 +19,12 @@ interface AuthenticationApiService {
     suspend fun authenticate(@Body loginRequest: LoginRequest): Response<ApiResult<LoginResponse>>
 
     @POST(EndPoints.SignUp)
-    suspend fun signUp(@Body request: SignUpRequest): Response<ApiResult<SignUpResponse>>
+    suspend fun signUp(@Body request: SignUpRequest): Response<ApiResult<NewCustomerResponse>>
 
     @GET("${EndPoints.SignOut}/{customerId}")
     suspend fun signOut(@Path("customerId") customerId: String): Response<ApiResult<String>>
+
+    @GET(EndPoints.MeterTypes)
+    suspend fun getMeterTypes(): Response<ApiResult<List<String>>>
+
 }

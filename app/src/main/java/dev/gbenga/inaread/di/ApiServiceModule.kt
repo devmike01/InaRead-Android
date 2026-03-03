@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
 import dev.gbenga.inaread.BuildConfig
 import dev.gbenga.inaread.adapters.NetworkResponseInterceptor
 import dev.gbenga.inaread.adapters.TokenRefreshAuthentication
+import dev.gbenga.inaread.adapters.TokenRefreshInterceptor
 import dev.gbenga.inaread.data.datastore.AccessTokenStore
 import dev.gbenga.inaread.data.model.MonthlyUsageRequest
 import dev.gbenga.inaread.data.model.MonthlyUsageResponse
@@ -18,6 +19,8 @@ import dev.gbenga.inaread.domain.services.MeterUsageStatisticService
 import dev.gbenga.inaread.di.annotations.EncryptedSharedPrefs
 import dev.gbenga.inaread.domain.SecureAccessTokenStore
 import dev.gbenga.inaread.domain.services.AllUsageApiService
+import dev.gbenga.inaread.domain.services.CountryApiService
+import dev.gbenga.inaread.domain.services.MeterCategoryApiService
 import dev.gbenga.inaread.domain.services.ProfileApiService
 import dev.gbenga.inaread.domain.services.RefreshTokenApiService
 import dev.gbenga.inaread.domain.services.RefreshTokenApiServiceImpl
@@ -56,6 +59,7 @@ object ApiServiceModule {
             .readTimeout(60_000, TimeUnit.SECONDS)
             .addInterceptor(logging)
             .addInterceptor(NetworkResponseInterceptor(accessTokenStore))
+            //.addInterceptor(TokenRefreshInterceptor(refreshTokenApiService, userProvider))
             .authenticator(TokenRefreshAuthentication(refreshTokenApiService, userProvider))
             .build()
     }
@@ -77,6 +81,11 @@ object ApiServiceModule {
     }
 
     @Provides
+    fun provideMeterCategoryApiService(retrofit: Retrofit): MeterCategoryApiService {
+        return retrofit.create(MeterCategoryApiService::class.java)
+    }
+
+    @Provides
     fun provideAuthenticationService(retrofit: Retrofit): AuthenticationApiService {
         return retrofit.create(AuthenticationApiService::class.java)
     }
@@ -94,6 +103,11 @@ object ApiServiceModule {
     @Provides
     fun provideAllUsageApiService(retrofit: Retrofit): AllUsageApiService {
         return retrofit.create(AllUsageApiService::class.java)
+    }
+
+    @Provides
+    fun provideCountryApiService(retrofit: Retrofit): CountryApiService{
+        return retrofit.create(CountryApiService::class.java)
     }
 
 

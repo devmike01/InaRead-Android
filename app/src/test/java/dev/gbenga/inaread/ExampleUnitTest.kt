@@ -1,5 +1,7 @@
 package dev.gbenga.inaread
 
+import dev.gbenga.inaread.ui.dropdown.country.CountryData
+import dev.gbenga.inaread.ui.signup.binarySearch
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -12,6 +14,8 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        println("Searched: ${listOf("Nigeria", "Togo", "Zambia").map {
+            CountryData(name = it, iso = it.substring(0, 2))
+        }.binarySearch("To")}")
     }
 }

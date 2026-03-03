@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.ui.validator
 
+import android.util.Log
 import dev.gbenga.inaread.domain.exception.ValidationError
 import dev.gbenga.inaread.tokens.StringTokens
 import javax.inject.Inject
@@ -19,13 +20,13 @@ class AuthFieldsValidator @Inject constructor() {
     }
 
     fun validateEmail(email: String): Result<String> {
-       return when {
-            email.isBlank() ->
-                Result.failure(ValidationError.EmptyField("Email"))
-            !email.isUsername() ->
-                Result.failure(ValidationError.InvalidFormat("Email"))
-            else -> Result.success(email)
-        }
+        Log.i("enableSubmit02", "${email.isEmail()}: ")
+
+       return if (email.isEmail()){
+           Result.success(email)
+       }else{
+           Result.failure(ValidationError.InvalidFormat("Email"))
+       }
     }
 
     fun validateNumberOnly(number: String): Result<String>{
@@ -71,11 +72,12 @@ class AuthFieldsValidator @Inject constructor() {
 
 
 internal fun String.isUsername(): Boolean{
-
+    if (this.length < 2) return false
     return this.all { it.isLetterOrDigit() }
 }
 
 internal fun String.isName(): Boolean{
+    if (this.length < 2) return false
     return all { it.isLetter() }
 }
 
@@ -86,11 +88,13 @@ fun String.isPassword(): Boolean {
 // michae123_#d@gma1l.com
 internal fun String.isEmail(): Boolean{
     val segments = split("@")
-    if (segments.size != 3){
+    if (segments.size != 2){
         return false
     }
-    val isInValidUsername = segments[0].length > 1
-    val isNotDomainName = segments[1].any { !it.isLetterOrDigit() }
-    val isNotDomain = segments[2].any { !it.isLetter() }
-    return !(isInValidUsername || isNotDomainName || isNotDomain)
+    val isValidUsername = segments[0].isUsername()
+    val nameAndDomain = segments[1].split(".")
+    if (nameAndDomain.size < 2) return false
+    val isDomainName = nameAndDomain[0].isUsername()
+    val isDomain = nameAndDomain[1].isName()
+    return isValidUsername && isDomainName && isDomain
 }

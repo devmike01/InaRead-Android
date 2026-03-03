@@ -16,6 +16,7 @@ object StringTokens {
 
     object Button{
         const val TryAgain = "Try again"
+        const val ShareElectricityUsage = "Share electricity usage"
     }
 
     object AddReadingImage{
@@ -39,6 +40,9 @@ object StringTokens {
 
     object SignUp{
         const val GoBack = "Go back"
+        const val SelectMeterCategoryTitle = "Select meter category"
+        const val SelectSubscriptionType = "Select subscription type"
+
     }
 
     object Auth{
@@ -46,6 +50,7 @@ object StringTokens {
         const val PasswordPlaceholder = "Enter password"
         const val ConfirmPasswordPlaceholder = "Confirm password"
         const val EmailPlaceholder = "Enter email"
+        const val MeterNumber = "Meter number"
         const val LoginTitle = "Log in with your Username"
         const val Login = "Log in"
         const val Email = "Email"

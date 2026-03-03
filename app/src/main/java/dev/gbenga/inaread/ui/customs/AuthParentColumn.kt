@@ -65,7 +65,7 @@ fun AuthTitledColumn(
                      content: @Composable () -> Unit) {
     Column (
         modifier = modifier
-            .padding(vertical = DimenTokens.Padding.Large)
+            .padding(vertical = DimenTokens.Padding.Normal)
             .wrapContentHeight(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

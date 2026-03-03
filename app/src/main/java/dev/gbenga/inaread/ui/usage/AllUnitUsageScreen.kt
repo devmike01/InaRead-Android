@@ -74,7 +74,8 @@ fun AllUnitUsageScreen(viewModel: AllUnitUsageViewModel = hiltViewModel(),
                         UsageCardItem(
                             item = monthlyUsages[it],
                             onClick = {
-                                navigator.navigate(InaScreen.AllUnitUsageDetailsScreen)
+                                navigator.navigate(
+                                    InaScreen.AllUnitUsageDetailsScreen(monthlyUsages[it]))
                             })
                     }
                 }

@@ -55,6 +55,11 @@ fun LoginScreen(
     val snackbarHost = remember { SnackbarHostState() }
     val uiState by loginViewModel.state.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        loginViewModel.receiveMessage()
+    }
+
+
     UnitLaunchEffect {
         loginViewModel.snackBarEvent.collect { msg ->
             if (msg.isNotEmpty()){
@@ -85,9 +90,6 @@ fun LoginScreen(
             val inState = remember { derivedStateOf { uiState.login } }
 
             when(val login = inState.value){
-                is UiStateWithIdle.Success<*> -> {
-                    loginViewModel.navigateToDashboard()
-                }
                 is UiStateWithIdle.Error -> {
                     loginViewModel.showSnackBar(login.requiredMessage)
                 }

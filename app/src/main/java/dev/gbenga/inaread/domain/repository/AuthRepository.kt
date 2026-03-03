@@ -8,6 +8,7 @@ import dev.gbenga.inaread.data.mapper.RepoResult
 import dev.gbenga.inaread.data.model.ApiResult
 import dev.gbenga.inaread.data.model.LoginInput
 import dev.gbenga.inaread.data.model.LoginOutput
+import dev.gbenga.inaread.data.model.NewCustomerResponse
 import dev.gbenga.inaread.data.model.SignUpOutput
 
 interface AuthRepository {
@@ -16,9 +17,11 @@ interface AuthRepository {
 
     suspend fun getProfile(userId: String): RepoResult<LoginOutput>
 
-    suspend fun signUp(request: SignUpRequest) : RepoResult<SignUpOutput>
+    suspend fun signUp(request: SignUpRequest) : RepoResult<NewCustomerResponse>
 
     suspend fun signOut(): RepoResult<String>
+
+    suspend fun getMeterTypes(): RepoResult<List<String>>
 
     suspend fun isSignedIn(): Boolean
 

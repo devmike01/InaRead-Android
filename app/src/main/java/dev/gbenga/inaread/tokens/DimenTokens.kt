@@ -42,6 +42,7 @@ object DimenTokens {
         val topbar = 100.dp
         val emptyData = 100.dp
         val icon = 50.dp
+        val LoadingHorizontal = 50.dp
         val PowerUsageCard = 200.dp
     }
 
@@ -70,4 +71,5 @@ object DimenTokens {
     object Button{
         val Normal = 50.dp
     }
+
 }

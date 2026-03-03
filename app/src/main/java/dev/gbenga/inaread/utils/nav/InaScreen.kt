@@ -1,5 +1,6 @@
 package dev.gbenga.inaread.utils.nav
 
+import dev.gbenga.inaread.data.model.MonthlyUsage
 import kotlinx.serialization.Serializable
 
 
@@ -24,5 +25,5 @@ sealed interface InaScreen {
     object Waiting: InaScreen
 
     @Serializable
-    object AllUnitUsageDetailsScreen: InaScreen
+    data class AllUnitUsageDetailsScreen(val monthlyUsage: MonthlyUsage): InaScreen
 }

@@ -22,9 +22,6 @@ interface MeterUsageStatisticService {
     @POST(EndPoints.RecordNewUsage)
     suspend fun setNewReading(@Body request: PowerUsageRequest): Response<ApiResult<ConsumptionRecordResponse>>
 
-    @GET(EndPoints.MeterType)
-    suspend fun getMeterTypes(): Response<ApiResult<List<String>>>
-
     @GET("${EndPoints.UsageMonthly}/{userId}")
     suspend fun getSummaryOfMonthByDate(@Path("userId") userId: String,
                                         @Query("date") dateYMD: String)

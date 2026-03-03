@@ -10,24 +10,26 @@ import dev.gbenga.inaread.data.MeterUsageRepositoryImpl
 import dev.gbenga.inaread.data.datastore.UserDataStoreImpl
 import dev.gbenga.inaread.data.db.PowerUsageSummaryDao
 import dev.gbenga.inaread.data.db.UserDao
-import dev.gbenga.inaread.data.mapper.RepoResult
-import dev.gbenga.inaread.data.model.ApplianceResponse
-import dev.gbenga.inaread.data.model.ApplianceResponseData
-import dev.gbenga.inaread.data.model.AppliancesRequest
 import dev.gbenga.inaread.domain.services.AuthenticationApiService
 import dev.gbenga.inaread.domain.services.MeterUsageStatisticService
 import dev.gbenga.inaread.data.repository.AllUnitUsageRepository
 import dev.gbenga.inaread.data.repository.AppliancesRepositoryImpl
 import dev.gbenga.inaread.data.repository.AuthRepositoryImpl
+import dev.gbenga.inaread.data.repository.CountryRepositoryImpl
+import dev.gbenga.inaread.data.repository.MeterCategoryRepositoryImpl
 import dev.gbenga.inaread.data.repository.SettingsRepositoryImpl
 import dev.gbenga.inaread.di.annotations.IOCoroutineContext
 import dev.gbenga.inaread.domain.datastore.UserDataStore
 import dev.gbenga.inaread.domain.repository.AppliancesRepository
 import dev.gbenga.inaread.domain.repository.AuthRepository
+import dev.gbenga.inaread.domain.repository.CountryRepository
+import dev.gbenga.inaread.domain.repository.MeterCategoryRepository
 import dev.gbenga.inaread.domain.repository.MeterUsageRepository
 import dev.gbenga.inaread.domain.repository.SettingsRepository
 import dev.gbenga.inaread.domain.services.AllUsageApiService
 import dev.gbenga.inaread.domain.services.AppliancesApiService
+import dev.gbenga.inaread.domain.services.CountryApiService
+import dev.gbenga.inaread.domain.services.MeterCategoryApiService
 import dev.gbenga.inaread.domain.services.ProfileApiService
 import dev.gbenga.inaread.ui.customs.dataStore
 import dev.gbenga.inaread.ui.usage.AllUnitUsageRepositoryImpl
@@ -91,5 +93,14 @@ object RepositoryModule {
         io)
 
 
+    @Provides
+    fun provideMeterCategoryRepository(meterCategoryApiService: MeterCategoryApiService): MeterCategoryRepository {
+        return MeterCategoryRepositoryImpl(meterCategoryApiService)
+    }
+
+    @Provides
+    fun provideCountryApiService(countryApiService: CountryApiService): CountryRepository {
+        return CountryRepositoryImpl(countryApiService)
+    }
 }
 

@@ -1,11 +1,13 @@
 package dev.gbenga.inaread.ui.customs
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import dev.gbenga.inaread.ui.signup.HorizontalLoading
 import dev.gbenga.inaread.utils.UiState
 import dev.gbenga.inaread.utils.UiStateWithIdle
 
@@ -50,5 +52,27 @@ fun <T> UiStateWithLoadingBox(uiState: UiStateWithIdle<T>,
         }
 
         else -> {}
+    }
+}
+
+
+@Composable
+fun <T> UiStateLoadingListContent(uiState: UiState<T>,
+                                  loadingItemCount: Int =4,
+                              errorRequest: @Composable (String) -> Unit,
+                              content: @Composable (T) -> Unit,) {
+    AnimatedContent(uiState) { state ->
+        when(state){
+            is UiState.Loading ->{
+                HorizontalLoading(loadingItemCount)
+            }
+            is UiState.Success -> {
+                content(state.data)
+            }
+            is UiState.Error -> {
+                errorRequest(state.message)
+            }
+
+        }
     }
 }

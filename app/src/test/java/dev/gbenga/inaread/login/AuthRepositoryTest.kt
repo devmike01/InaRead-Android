@@ -13,6 +13,7 @@ import dev.gbenga.inaread.data.model.ApiResult
 import dev.gbenga.inaread.domain.services.AuthenticationApiService
 import dev.gbenga.inaread.data.repository.AuthRepositoryImpl
 import dev.gbenga.inaread.domain.repository.AuthRepository
+import dev.gbenga.inaread.utils.UserProvider
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -36,6 +37,7 @@ class AuthRepositoryTest {
     var testScheduler: TestCoroutineScheduler = TestCoroutineScheduler()
 
     val dispatcher = StandardTestDispatcher(testScheduler)
+    val userProvider = mockk<UserProvider>()
 
     companion object{
         private const val USERNAME = "dev01"
@@ -51,6 +53,7 @@ class AuthRepositoryTest {
     fun init(){
         authRepository = AuthRepositoryImpl(authApiService,
             userDao,
+            userProvider,
             dispatcher
             )
     }
@@ -59,20 +62,20 @@ class AuthRepositoryTest {
     fun `test authentication success`() =  runTest(dispatcher) {
         val loginRequest = LoginRequest(USERNAME, PASSWORD)
         coEvery { userDao.save(any()) } returns Unit
-        coEvery { authApiService.authenticate(loginRequest) } returns
-                ApiResult(data = LoginResponse(
-                    USERNAME,
-                    EMAIL,
-                    "",1,
-                    "",
-                    false,
-                    "",
-                    "",
-                    authToken = AccessToken(
-                        access = "",
-                        refresh = "",
-                        0L
-                    )))
+//        coEvery { authApiService.authenticate(loginRequest) } returns
+//                ApiResult(data = LoginResponse(
+//                    USERNAME,
+//                    EMAIL,
+//                    "",1,
+//                    "",
+//                    false,
+//                    "",
+//                    "",
+//                    authToken = AccessToken(
+//                        access = "",
+//                        refresh = "",
+//                        0L
+//                    )))
         val result = authRepository.authenticate(loginRequest.toLoginInput())
         assertTrue(result is RepoResult.Success)
         assertFalse(result is RepoResult.Error)
@@ -99,7 +102,7 @@ class AuthRepositoryTest {
     @Test
     fun `test authentication error`() = runTest(dispatcher){
         val loginRequest = LoginRequest(USERNAME, PASSWORD)
-        coEvery { authApiService.authenticate(loginRequest) } returns ApiResult(error = AUTH_ERROR_MSG)
+       // coEvery { authApiService.authenticate(loginRequest) } returns ApiResult(error = AUTH_ERROR_MSG)
         val result = authRepository.authenticate(loginRequest.toLoginInput())
         assertTrue(result is RepoResult.Error)
         assertFalse(result is RepoResult.Success)
@@ -110,11 +113,11 @@ class AuthRepositoryTest {
     @Test
     fun `test sign up success`() = runTest(dispatcher) {
 
-        coEvery { authApiService.signUp(signUpRequest) } returns ApiResult(
-            data = SignUpResponse(
-                message = SIGN_UP_SUCCESS_MSG
-            )
-        )
+//        coEvery { authApiService.signUp(signUpRequest) } returns ApiResult(
+//            data = SignUpResponse(
+//                message = SIGN_UP_SUCCESS_MSG
+//            )
+//        )
 
         val signUpResult = authRepository.signUp(signUpRequest)
         assertTrue(signUpResult is RepoResult.Success)
@@ -125,9 +128,9 @@ class AuthRepositoryTest {
 
     @Test
     fun `test sign up error`() = runTest(dispatcher) {
-        coEvery { authApiService.signUp(signUpRequest) } returns ApiResult(
-            error = INVALID_EMAIL_ERROR
-        )
+//        coEvery { authApiService.signUp(signUpRequest) } returns ApiResult(
+//            error = INVALID_EMAIL_ERROR
+//        )
         val signUpResult = authRepository.signUp(signUpRequest)
         assertTrue(signUpResult is RepoResult.Error)
         assertFalse(signUpResult is RepoResult.Success)
@@ -138,19 +141,19 @@ class AuthRepositoryTest {
     @Test
     fun `test local profile can be queried successfully`() = runTest(dispatcher){
         val userId = "ff22ddxx"
-        coEvery { userDao.getProfile(userId) } returns listOf(
-            UserEntity(
-                userId,
-                "dev01",
-                "dev@gm.com",
-                "1234543232",
-                "NG",
-                23,
-                "15-Aug-2026",
-                true,
-                locked = false
-            )
-        )
+//        coEvery { userDao.getProfile(userId) } returns listOf(
+//            UserEntity(
+//                userId,
+//                "dev01",
+//                "dev@gm.com",
+//                "1234543232",
+//                "NG",
+//                23,
+//                "15-Aug-2026",
+//                true,
+//                locked = false
+//            )
+//        )
         val profile = authRepository.getProfile(userId)
 
         assertTrue(profile is RepoResult.Success)

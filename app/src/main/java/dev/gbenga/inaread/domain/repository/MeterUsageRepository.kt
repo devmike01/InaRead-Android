@@ -17,7 +17,5 @@ interface MeterUsageRepository {
 
     suspend fun executeGetYearlyUsage(year: Int): RepoResult<List<YearlyUsageResponse>>
 
-    suspend fun executeGetMeterTypes(): RepoResult<List<String>>
-
     suspend fun wipePowerUsageTable()
 }

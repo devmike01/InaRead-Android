@@ -54,6 +54,11 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel,
     val navigatorDelegate = rememberNavigationDelegate(navController)
     val startDestination = remember { DashboardScreen.HomeScreen() }
 
+    val settingsViewModel: SettingsViewModel = hiltViewModel()
+    val homeViewModel: HomeViewModel = hiltViewModel()
+    val addReadingViewModel: AddReadingViewModel = hiltViewModel()
+    val metricViewModel: MetricViewModel = hiltViewModel()
+
     UnitLaunchEffect {
         viewModel.navigator.collect { nav ->
             navigatorDelegate.handleEvents(nav)
@@ -63,7 +68,6 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel,
 
     LaunchedEffect(Unit) {
         launch {
-            viewModel.navigateUsingSavedState()
             viewModel.populateUI()
         }
         launch {
@@ -92,11 +96,6 @@ fun DashboardScreenNavGraph(viewModel: DashboardViewModel,
         Box(modifier = Modifier
             .padding(it)
             .fillMaxSize(),) {
-
-            val settingsViewModel: SettingsViewModel = hiltViewModel()
-            val homeViewModel: HomeViewModel = hiltViewModel()
-            val addReadingViewModel: AddReadingViewModel = hiltViewModel()
-            val metricViewModel: MetricViewModel = hiltViewModel()
 
             NavHost(navController, startDestination = startDestination){
                 composable<DashboardScreen.HomeScreen> {
@@ -155,15 +154,8 @@ fun BoxScope.PageHandler(dashboardViewModel: DashboardViewModel){
             .padding(vertical = DimenTokens.Padding.Normal),
     ){
 
-        if (dashboardUiState.initialListLoad){
-            dashboardUiState.dashboardButtons.forEach { button ->
-
-                }
-            }
         this.items(items = dashboardUiState.dashboardButtons,
-            key = {
-                it.route.key
-            }){ button ->
+            key = { it.route.key }){ button ->
             InaBottomNavItem(
                 selected = dashboardUiState.selectedRoute == button.route,
                 inaTextIcon = button.inaTextIcon

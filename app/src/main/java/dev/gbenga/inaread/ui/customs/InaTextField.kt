@@ -58,10 +58,13 @@ fun InaTextField(value: String,
 @Composable
 fun InaSingleTextField(
     modifier: Modifier =Modifier,
-    value: String,placeholder: String,
+    value: String,
+    placeholder: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
     passwordVisible: Boolean = true,
-    onValueChange: (String) -> Unit,){
+    trailingIcon: @Composable () -> Unit= {},
+    onValueChange: (String) -> Unit){
+
     TextField(value,
         modifier = modifier
             .height(DimenTokens.Auth.TextFieldHeight)
@@ -72,6 +75,7 @@ fun InaSingleTextField(
         placeholder = {
             Text(placeholder)
         },
+        trailingIcon = trailingIcon,
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = keyboardOptions,
         colors = TextFieldDefaults.colors(

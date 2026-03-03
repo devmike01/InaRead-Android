@@ -14,6 +14,7 @@ import dev.gbenga.inaread.utils.UiStateWithIdle
 import dev.gbenga.inaread.utils.date.InaDateFormatter
 import dev.gbenga.inaread.utils.ext.naira
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
 import javax.inject.Inject
 
 @HiltViewModel
@@ -60,9 +61,10 @@ class AllUnitUsageViewModel @Inject constructor(
                             dayOfMonth = fromDates[0],
                             day = fromDates.first(),
                             month = fromDates.last(),
-                            fromDate = it.fromDate,
-                            toDate = it.toDate,
-                            meterType = it.meterType
+                            fromDate = inaDateFormatter.dddMMMYyyy(it.fromDate),
+                            toDate = inaDateFormatter.dddMMMYyyy(it.toDate),
+                            meterType = it.meterType,
+                          //  powerConsumption = it.totalMonthPowerUsage.setScale(2, RoundingMode.HALF_EVEN)
                         )
                     })
                 }
