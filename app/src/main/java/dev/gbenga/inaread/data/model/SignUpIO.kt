@@ -11,5 +11,5 @@ data class SignUpInput(
 )
 
 data class SignUpOutput(
-    val message: String
+    val message: String?
 )
