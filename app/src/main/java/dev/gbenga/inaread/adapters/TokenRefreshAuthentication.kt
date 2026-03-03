@@ -20,8 +20,9 @@ class TokenRefreshAuthentication(
     private val userProvider: UserProvider,
     private val gson : Gson = Gson()) : Authenticator {
 
-    val mutex = Mutex()
-
+    companion object{
+        const val REFRESH_TOKEN = "TokenRefreshAuth"
+    }
 
     override fun authenticate(route: Route?, response: Response): Request? {
         if (responseCount(response) >= 2){
@@ -32,12 +33,14 @@ class TokenRefreshAuthentication(
         val contentBody = response.peekBody(contentSize?.toLong() ?: 500L)
         val apiResult = gson.fromJson(contentBody.string(), ApiResult::class.java)
 
+        Log.i("REFRESH_TOKEN", "refreshing auth token")
+
         return if (apiResult.error?.contains("JWT expired") == true){
             runBlocking {
                 try {
 
                     val refreshToken = RefreshTokenRequest(
-                        token = userProvider.getAccessToken(),
+                        token = userProvider.getRefreshToken(),
                         username = userProvider.getCurrentUsername()
                     )
                     val refreshTokenResponse = refreshTokenApi.refreshToken(refreshToken)
@@ -49,6 +52,9 @@ class TokenRefreshAuthentication(
                         userProvider.setRefreshToken(refresh)
                         userProvider.setAccessToken(accessToken)
                     }
+
+
+                    Log.d("authenticate#1", "$refreshTokenResponse")
 
                     response.request.newBuilder()
                         .header("Authorization", "Bearer ${userProvider.getAccessToken()}")
