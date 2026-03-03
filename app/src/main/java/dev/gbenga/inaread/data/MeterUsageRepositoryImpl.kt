@@ -89,10 +89,6 @@ class MeterUsageRepositoryImpl (
             .getAllUsageForYear(userProvider.getCustomerId(), year)
     }
 
-    override suspend fun executeGetMeterTypes()
-    : RepoResult<List<String>> = safeCall {
-        meterUsageApiService.getMeterTypes()
-    }
 
     override suspend fun wipePowerUsageTable() {
         withContext(ioContext){
